@@ -16,8 +16,8 @@ const style = {
 }
 
 export default function Dashboard(props) {
-  const [email, setEmail] = useState(""),
-    [password, setPassword] = useState(""),
+  const [email, setEmail] = useState(''),
+    [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
     handleLogin = (event) => {
       if (forgot) {

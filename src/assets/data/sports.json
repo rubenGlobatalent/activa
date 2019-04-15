@@ -1,0 +1,76 @@
+{
+    "list": [
+        {
+            "name": "Basketball"
+        },
+        {
+            "name": "Handball"
+        },
+        {
+            "name": "Baseball"
+        },
+        {
+            "name": "BMX"
+        },
+        {
+            "name": "Calisthenics"
+        },
+        {
+            "name": "Cycling"
+        },
+        {
+            "name": "Stretching"
+        },
+        {
+            "name": "Football"
+        },
+        {
+            "name": "Kayak"
+        },
+        {
+            "name": "Race walking"
+        },
+        {
+            "name": "Swimming"
+        },
+        {
+            "name": "Nordic walking"
+        },
+        {
+            "name": "Padelsurf"
+        },
+        {
+            "name": "Bodybuilding park"
+        },
+        {
+            "name": "Skating"
+        },
+        {
+            "name": "Petanque"
+        },
+        {
+            "name": "Rowing"
+        },
+        {
+            "name": "Running"
+        },
+        {
+            "name": "Skateboarding"
+        },
+        {
+            "name": "Surfing"
+        },
+        {
+            "name": "Sailing"
+        },
+        {
+            "name": "Volley"
+        },
+        {
+            "name": "Windsurf"
+        },
+        {
+            "name": "Yoga"
+        }
+    ]
+}

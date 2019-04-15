@@ -5,7 +5,7 @@ import logo from '../../assets/img/logo.png'
 
 const style = {
   icon: {
-    padding: '0 1rem 0 1rem'
+    padding: '0 1.5rem 0 1.5rem'
   },
   logo: {
     maxHeight: 'none'
@@ -15,7 +15,7 @@ const style = {
   },
   button: {
     height: '70%',
-    padding: '0 30px'
+    padding: '0 2rem'
   },
   districtButton: {
     height: '70%',
@@ -69,19 +69,15 @@ export default function Header(props) {
                 Zonas
               </button>
             </div>
+            <hr className="navbar-divider" />
             <div className="navbar-item" style={style.navbarItem}>
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
                 <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
               </button>
             </div>
             <div className="navbar-item" style={style.navbarItem}>
-              <button className={buttonClass} style={style.button}>
-                Leyenda
-              </button>
-            </div>
-            <div className="navbar-item" style={style.navbarItem}>
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('dashboard')}>
-                <span className="icon" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
+                <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
                 {user}
               </button>
             </div>
