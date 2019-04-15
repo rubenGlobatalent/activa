@@ -20,12 +20,15 @@ export default function Header(props) {
   else {
     user = 'Inicia sesión'
   }
+  const logoStyle = {
+    maxHeight: 'none'
+  };
   return (
     <header>
       <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
           <a className="navbar-item image is-64x64" href="/">
-            <img src={logo} alt="" />
+            <img src={logo} style={logoStyle} alt="" />
           </a>
 
           <button className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
