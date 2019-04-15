@@ -6,6 +6,9 @@ import logo from '../../assets/img/logo.png'
 const style= {
   icon: {
     padding: '0 1rem 0 1rem'
+  },
+  logo: {
+    maxHeight: 'none'
   }
 }
 
@@ -25,15 +28,13 @@ export default function Header(props) {
   else {
     user = 'Inicia sesión'
   }
-  const logoStyle = {
-    maxHeight: 'none'
-  };
+
   return (
     <header>
       <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
           <a className="navbar-item image is-64x64" href="/">
-            <img src={logo} style={logoStyle} alt="" />
+            <img src={logo} style={style.logo} alt="" />
           </a>
 
           <button className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
