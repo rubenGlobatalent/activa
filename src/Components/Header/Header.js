@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import logo from '../../assets/img/logo.png'
 
-const style= {
+const style = {
   icon: {
     padding: '0 1rem 0 1rem'
   },
@@ -54,6 +54,10 @@ export default function Header(props) {
                 <button className={buttonClass} onClick={() => props.toggleComponent('districtFilter')}>
                   Zonas
                 </button>
+              </div>
+            </div>
+            <div className="navbar-item">
+              <div className="buttons are-large">
                 <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
                   <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
                   Ayuda

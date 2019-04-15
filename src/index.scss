@@ -7,9 +7,9 @@ $button-hover-color: hsl(0, 0%, 100%);
 $button-color: hsl(0, 0%, 100%);
 
 $modal-card-head-background-color: hsl(0, 0%, 100%);
-$card-footer-border-top: 0px solid hsl(0, 0%, 100%);
 $modal-card-head-border-bottom: 0;
 $modal-card-foot-border-top: 0;
-$modal-background-background-color: rgba(black, 0.05);
+$modal-background-background-color: rgba(black, 0.01);
+$card-footer-border-top: 0px solid hsl(0, 0%, 100%);
 
 @import 'bulma/bulma.sass';
