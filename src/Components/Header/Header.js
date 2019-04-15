@@ -3,6 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import logo from '../../assets/img/logo.png'
 
+const style= {
+  icon: {
+    padding: '0 1rem 0 1rem'
+  }
+}
 
 export default function Header(props) {
   let navbarBurguerClass = 'navbar-burger',
@@ -46,11 +51,11 @@ export default function Header(props) {
                   Zonas
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
-                  <span className="icon"><FontAwesomeIcon icon={faQuestionCircle} /></span>
+                  <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
                   Ayuda
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('dashboard')}>
-                  <span className="icon"><FontAwesomeIcon icon={faUser} /></span>
+                  <span className="icon" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
                   {user}
                 </button>
               </div>
