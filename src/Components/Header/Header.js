@@ -12,7 +12,7 @@ const style= {
 export default function Header(props) {
   let navbarBurguerClass = 'navbar-burger',
     navbarMenuClass = 'navbar-menu',
-    buttonClass = 'button is-large is-size-7 is-uppercase',
+    buttonClass = 'button is-size-7 is-uppercase',
     user;
   if (props.visible) {
     navbarBurguerClass = navbarBurguerClass + ' is-active'
@@ -43,7 +43,7 @@ export default function Header(props) {
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="buttons are-medium">
+              <div className="buttons are-large">
                 <button className={buttonClass} onClick={() => props.toggleComponent('activityFilter')}>
                   Actividad
                 </button>
