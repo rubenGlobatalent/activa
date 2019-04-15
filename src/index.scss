@@ -6,7 +6,9 @@ $button-hover-border-color: #00aec7;
 $button-hover-color: hsl(0, 0%, 100%);
 $button-color: hsl(0, 0%, 100%);
 
-$modal-card-head-background-color: white;
-$card-footer-border-top: 0px solid white;
+$modal-card-head-background-color: hsl(0, 0%, 100%);
+$card-footer-border-top: 0px solid hsl(0, 0%, 100%);
+$modal-card-head-border-bottom: 0;
+$modal-card-foot-border-top: 0;
 
 @import 'bulma/bulma.sass';

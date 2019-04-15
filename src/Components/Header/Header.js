@@ -7,7 +7,7 @@ import logo from '../../assets/img/logo.png'
 export default function Header(props) {
   let navbarBurguerClass = 'navbar-burger',
     navbarMenuClass = 'navbar-menu',
-    buttonClass = 'button is-size-5',
+    buttonClass = 'button is-size-6',
     user;
   if (props.visible) {
     navbarBurguerClass = navbarBurguerClass + ' is-active'
