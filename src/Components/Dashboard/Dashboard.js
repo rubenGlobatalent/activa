@@ -69,7 +69,7 @@ export default function Dashboard(props) {
           <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
           <form className="modal-card" onSubmit={handleLogout}>
             <header className="modal-card-head">
-              <h2 className="modal-card-title">Panel de usuario</h2>
+              <h2 className="modal-card-title is-size-5 has-text-weight-light">Panel de usuario</h2>
               <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
             </header>
             <section className="modal-card-body">

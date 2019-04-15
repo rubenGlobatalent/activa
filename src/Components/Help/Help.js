@@ -7,7 +7,7 @@ export default function Help(props) {
                 <div className="modal-background" onClick={() => props.toggleComponent('help')}></div>
                 <article className="modal-card">
                     <header className="modal-card-head">
-                        <h2 className="modal-card-title">Ayuda</h2>
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Ayuda</h2>
                         <button className="delete" onClick={() => props.toggleComponent('help')}></button>
                     </header>
                     <section className="modal-card-body">

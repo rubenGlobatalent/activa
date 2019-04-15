@@ -18,7 +18,7 @@ export default function ActivityFilter(props) {
                 <div className="modal-background" onClick={() => props.toggleComponent('activityFilter')}></div>
                 <form className="modal-card">
                     <header className="modal-card-head">
-                        <h2 className="modal-card-title">Actividades</h2>
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Actividades</h2>
                         <button className="delete" onClick={() => props.toggleComponent('activityFilter')}></button>
                     </header>
                     <section className="modal-card-body">

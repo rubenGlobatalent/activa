@@ -7,7 +7,7 @@ import logo from '../../assets/img/logo.png'
 export default function Header(props) {
   let navbarBurguerClass = 'navbar-burger',
     navbarMenuClass = 'navbar-menu',
-    buttonClass = 'button is-size-6 has-text-weight-light',
+    buttonClass = 'button is-large is-size-7 is-uppercase',
     user;
   if (props.visible) {
     navbarBurguerClass = navbarBurguerClass + ' is-active'
@@ -46,7 +46,7 @@ export default function Header(props) {
                   Actividad
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('districtFilter')}>
-                  Zona
+                  Zonas
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
                   <span className="icon"><FontAwesomeIcon icon={faQuestionCircle} /></span>

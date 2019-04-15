@@ -18,7 +18,7 @@ export default function DistrictFilter(props) {
                 <div className="modal-background" onClick={() => props.toggleComponent('districtFilter')}></div>
                 <form className="modal-card">
                     <header className="modal-card-head">
-                        <h2 className="modal-card-title">Zonas</h2>
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Zonas</h2>
                         <button className="delete" onClick={() => props.toggleComponent('districtFilter')}></button>
                     </header>
                     <section className="modal-card-body">
