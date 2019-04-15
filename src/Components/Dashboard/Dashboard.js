@@ -5,7 +5,11 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import * as firebase from 'firebase';
 
 const style = {
-  head: {}
+  input: {
+    border: 'none',
+    boxShadow: 'none',
+    borderBottom: '1px #00aec7 solid'
+  }
 }
 
 export default function Dashboard(props) {
@@ -90,26 +94,28 @@ export default function Dashboard(props) {
           <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
           <form className="modal-card" onSubmit={handleLogin}>
             <header className="modal-card-head">
-              <h2 className="modal-card-title">Accede o crea tu cuenta</h2>
+              <h2 className="modal-card-title is-size-5 has-text-weight-light">Accede o crea tu cuenta</h2>
               <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
             </header>
             <section className="modal-card-body">
-
+            <span className="is-uppercase">
+              Introduce tu correo y tu contraseña para acceder. Si no tienes una cuenta, se creara automáticamente.
+              </span>
               <div className="field is-horizontal">
                 <div className="field-body">
                   <div className="field">
-                    <label className="label">Email</label>
+                    <label className="label has-text-weight-normal">Email</label>
                     <p className="control is-expanded has-icons-left">
-                      <input className="input" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
+                      <input className="input" type="email" placeholder="Email" style={style.input} value={email} onChange={e => setEmail(e.target.value)} required />
                       <span className="icon is-small is-left">
                         <FontAwesomeIcon icon={faEnvelope} />
                       </span>
                     </p>
                   </div>
                   <div className="field">
-                    <label className="label">Contraseña</label>
+                    <label className="label has-text-weight-normal">Contraseña</label>
                     <p className="control is-expanded has-icons-left has-icons-right">
-                      <input className="input" type="password" placeholder="Contraseña" value={password} minLength="6" onChange={e => setPassword(e.target.value)} required={!forgot} />
+                      <input className="input" type="password" placeholder="Contraseña" style={style.input} value={password} minLength="6" onChange={e => setPassword(e.target.value)} required={!forgot} />
                       <span className="icon is-small is-left">
                         <FontAwesomeIcon icon={faLock} />
                       </span>
@@ -121,8 +127,8 @@ export default function Dashboard(props) {
               <div className="field">
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" onChange={e => setForgot(e.target.checked)} />
-                    Si has olvidado tu contraseña, introduce tu e-mail, marca esta casilla y pulsa "Acceder" para recuperarla
+                    <input type="checkbox" onChange={e => setForgot(e.target.checked)}/>
+                    <span> Si has olvidado tu contraseña, introduce tu e-mail, marca esta casilla y pulsa "Acceder" para recuperarla</span>
                   </label>
                 </div>
               </div>
