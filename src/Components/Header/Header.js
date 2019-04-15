@@ -9,6 +9,18 @@ const style= {
   },
   logo: {
     maxHeight: 'none'
+  },
+  navbarItem: {
+    padding: '0'
+  },
+  button: {
+    height: '70%',
+    padding: '0 30px'
+  },
+  districtButton: {
+    height: '70%',
+    padding: '0 30px',
+    marginRight: '75px'
   }
 }
 
@@ -22,6 +34,7 @@ export default function Header(props) {
     navbarMenuClass = navbarMenuClass + ' is-active'
     buttonClass = buttonClass + ' is-fullwidth'
   }
+  let filterButtonClass = buttonClass + ' filterButton';
   if (props.user.email) {
     user = props.user.email
   }
@@ -46,23 +59,27 @@ export default function Header(props) {
 
         <div className={navbarMenuClass}>
           <div className="navbar-end">
-            <div className="navbar-item">
-              <div className="buttons are-large">
-                <button className={buttonClass} onClick={() => props.toggleComponent('activityFilter')}>
-                  Actividad
-                </button>
-                <button className={buttonClass} onClick={() => props.toggleComponent('districtFilter')}>
-                  Zonas
-                </button>
-                <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
-                  <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
-                  Ayuda
-                </button>
-                <button className={buttonClass} onClick={() => props.toggleComponent('dashboard')}>
-                  <span className="icon" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
-                  {user}
-                </button>
-              </div>
+            <div className="navbar-item" style={style.navbarItem}>
+              <button className={filterButtonClass} style={style.button} onClick={() => props.toggleComponent('activityFilter')}>
+                Actividad
+              </button>
+            </div>
+            <div className="navbar-item" style={style.navbarItem}>
+              <button className={filterButtonClass} style={style.districtButton} onClick={() => props.toggleComponent('districtFilter')}>
+                Zonas
+              </button>
+            </div>
+            <div className="navbar-item" style={style.navbarItem}>
+              <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
+                <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
+                Ayuda
+              </button>
+            </div>
+            <div className="navbar-item" style={style.navbarItem}>
+              <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('dashboard')}>
+                <span className="icon" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
+                {user}
+              </button>
             </div>
           </div>
         </div>
