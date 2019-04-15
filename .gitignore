@@ -78,5 +78,8 @@ typings/
 # Firebase cache
 .firebase/
 
-# buikd
+# build
 build/
+
+#.DS_Store
+.DS_Store
