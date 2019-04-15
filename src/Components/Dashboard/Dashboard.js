@@ -109,7 +109,7 @@ export default function Dashboard(props) {
                   <div className="field">
                     <label className="label has-text-weight-normal">Email</label>
                     <p className="control is-expanded has-icons-left">
-                      <input className="input" type="email" placeholder="Email" style={style.input} value={email} onChange={e => setEmail(e.target.value)} required />
+                      <input className="input" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
                       <span className="icon is-small is-left">
                         <FontAwesomeIcon icon={faEnvelope} />
                       </span>
@@ -118,7 +118,7 @@ export default function Dashboard(props) {
                   <div className="field">
                     <label className="label has-text-weight-normal">Contraseña</label>
                     <p className="control is-expanded has-icons-left has-icons-right">
-                      <input className="input" type="password" placeholder="Contraseña" style={style.input} value={password} minLength="6" onChange={e => setPassword(e.target.value)} required={!forgot} />
+                      <input className="input" type="password" placeholder="Contraseña" value={password} minLength="6" onChange={e => setPassword(e.target.value)} required={!forgot} />
                       <span className="icon is-small is-left">
                         <FontAwesomeIcon icon={faLock} />
                       </span>
