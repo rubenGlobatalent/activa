@@ -71,8 +71,12 @@ export default function Header(props) {
             </div>
             <div className="navbar-item" style={style.navbarItem}>
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
-                <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
-                Ayuda
+                <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
+              </button>
+            </div>
+            <div className="navbar-item" style={style.navbarItem}>
+              <button className={buttonClass} style={style.button}>
+                Leyenda
               </button>
             </div>
             <div className="navbar-item" style={style.navbarItem}>
