@@ -35,7 +35,7 @@ export default function Dashboard(props) {
               firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
                   props.toggleComponent('dashboard');
-                  NotificationManager.success('¡Autenticación correcta!')
+                  NotificationManager.success('¡Autenticación correcta!','Hola',100000000000)
                 })
                 .catch(() => {
                   NotificationManager.error('La contraseña no es correcta')
