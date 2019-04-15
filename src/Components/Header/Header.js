@@ -43,7 +43,7 @@ export default function Header(props) {
                   Actividad
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('districtFilter')}>
-                  Zona
+                  Zonas
                 </button>
                 <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
                   <span className="icon"><FontAwesomeIcon icon={faQuestionCircle} /></span>
