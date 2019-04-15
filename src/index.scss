@@ -22,3 +22,11 @@ $card-footer-border-top: 0px solid hsl(0, 0%, 100%);
 .modal-card {
     box-shadow: 5px 10px 8px #888888
 }
+
+.filterButton {
+	transition: box-shadow .2s cubic-bezier(.4,0,1,1);
+}
+
+.filterButton:hover {
+	box-shadow: 0 7px 26px -12px rgba(156,39,176,.42), 0 4px 23px 0 rgba(0,0,0,.12), 0 4px 10px -5px rgba(156,39,176,.2);
+}
