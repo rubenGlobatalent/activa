@@ -47,7 +47,7 @@ export default function Header(props) {
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="buttons are-large">
+              <div className="buttons">
                 <button className={buttonClass} onClick={() => props.toggleComponent('activityFilter')}>
                   Actividad
                 </button>
@@ -57,7 +57,7 @@ export default function Header(props) {
               </div>
             </div>
             <div className="navbar-item">
-              <div className="buttons are-large">
+              <div className="buttons">
                 <button className={buttonClass} onClick={() => props.toggleComponent('help')}>
                   <span className="icon" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
                   Ayuda
