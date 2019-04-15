@@ -9,6 +9,9 @@ const style = {
     border: 'none',
     boxShadow: 'none',
     borderBottom: '1px #00aec7 solid'
+  },
+  text: {
+    backgroundColor: 'rgb(244,244,244)'
   }
 }
 
@@ -98,9 +101,9 @@ export default function Dashboard(props) {
               <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
             </header>
             <section className="modal-card-body">
-            <span className="is-uppercase">
+            <div className="is-uppercase" style={style.text}>
               Introduce tu correo y tu contraseña para acceder. Si no tienes una cuenta, se creara automáticamente.
-              </span>
+              </div>
               <div className="field is-horizontal">
                 <div className="field-body">
                   <div className="field">
