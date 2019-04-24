@@ -24,7 +24,7 @@ export default function ActivityFilter(props) {
                     <label className="checkbox is-size-6">
                         <input type="checkbox"
                             name={activity.name}
-                            defaultChecked={filter[activity.name]}
+                            defaultChecked={selected[activity.name]}
                             onChange={e => setFilter(() => {
                                 // We create those variables because it doesn't let us directly put using dot notation
                                 // on Object.assign (which we use because spread notation throws an error after the
