@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
+// OPTIMIZE IMPORTS
+import * as turf from '@turf/turf'
+import * as firebase from 'firebase'
+
 
 export default function Form(props) {
     // Hooks
@@ -14,7 +18,31 @@ export default function Form(props) {
         [twitter, setTwitter] = useState(''),
         [facebook, setFacebook] = useState(''),
         [youtube, setYoutube] = useState(''),
-        [file, setFile] = useState(null);
+        [file, setFile] = useState(null),
+        [organizer, setOrganizer] = useState(false),
+        [terms, setTerms] = useState(false),
+
+    submitData = event => {
+        let geometry = turf.getGeom(props.feature),
+        properties = {
+            sport: sport,
+            organization: organization,
+            schedule: schedule,
+            description: description,
+            type: type,
+            twitter: twitter,
+            facebook: facebook,
+            youtube: youtube,
+            file: file,
+            organizer: organizer,
+            terms: terms
+        },
+        feature = turf.feature(geometry,properties);
+
+        firebase.firestore().collection('sports').add(feature);
+
+        event.preventDefault();
+    }
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
@@ -22,6 +50,7 @@ export default function Form(props) {
         scheduleClass = type === 'periodic' ? "field animated fadeIn faster column" : "field animated fadeOut faster column";
 
     if (props.visible) {
+
         const sports = props.data.map(sport => {
             return (
                 <option key={sport.name} value={sport.name}>{sport.name}</option>
@@ -30,7 +59,7 @@ export default function Form(props) {
         return (
             <div className="modal is-active">
                 <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
-                <form className="modal-card">
+                <form className="modal-card" onSubmit={submitData}>
                     <header className="modal-card-head">
                         <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una iniciativa</h2>
                         <button className="delete" onClick={() => props.toggleComponent('form')}></button>
@@ -127,7 +156,7 @@ export default function Form(props) {
                                 {imagePreview}
                                 <div className="file has-name is-boxed">
                                     <label className="file-label">
-                                        <input className="file-input" type="file" capture="environment" accept="image/*" onChange={e => setFile(e.target.files[0])} />
+                                        <input className="file-input" type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} />
                                         <span className="file-cta">
                                             <span className="file-icon">
                                                 <FontAwesomeIcon icon={faUpload} />
@@ -146,7 +175,7 @@ export default function Form(props) {
                         <div className="field">
                             <div className="control">
                                 <label className="checkbox">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" defaultChecked={organizer} onChange={e => setOrganizer(e.target.checked)}/>
                                     {` `}Soy el responsable de la organización de la actividad
                                 </label>
                             </div>
@@ -156,7 +185,7 @@ export default function Form(props) {
                         <div className="field">
                             <div className="control">
                                 <label className="checkbox">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" required defaultChecked={terms} onChange={e => setTerms(e.target.checked)} />
                                     {` `}Acepto los <a href="/">términos y condiciones</a> y permito que mis datos aparezcan en la web.
                                 </label>
                             </div>
@@ -167,7 +196,7 @@ export default function Form(props) {
                     <footer className="modal-card-foot buttons is-centered">
                         <div className="field is-grouped">
                             <div className="control">
-                                <button type='submit' className="button" onClick={() => console.log('File is', file)}>Enviar</button>
+                                <button type='submit' className="button">Enviar</button>
                             </div>
                             <div className="control">
                                 <button className="button is-text">Borrar</button>
