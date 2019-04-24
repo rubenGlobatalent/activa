@@ -104,7 +104,8 @@ class App extends Component {
       },
       form: {
         visible: false,
-        data: []
+        data: [],
+        feature: turf.feature({type: 'Point', coordinates: [0,0]})
       },
       steps: {
         visible: false
@@ -285,8 +286,7 @@ class App extends Component {
 
       this.map.on('draw.create', e => {
         let newFeature = e.features[0];
-        console.log(newFeature)
-        this.toggleComponent('form')
+        this.setState({form: {...this.state.form, feature: newFeature, visible: !this.state.form.visible}})
       });
     });
   }

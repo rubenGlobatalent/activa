@@ -19,7 +19,7 @@ export default function Dashboard(props) {
   const [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
-    handleLogin = (event) => {
+    handleLogin = event => {
       if (forgot) {
         firebase.auth().sendPasswordResetEmail(email)
           .then(() => {
@@ -56,7 +56,7 @@ export default function Dashboard(props) {
       }
       event.preventDefault();
     },
-    handleLogout = (event => {
+    handleLogout = event => {
       firebase.auth().signOut()
         .then(() => {
           NotificationManager.success('Desconectado. ¡Vuelve pronto!');
@@ -67,7 +67,7 @@ export default function Dashboard(props) {
           NotificationManager.error('Algo salió mal...')
         });
       event.preventDefault();
-    });
+    };
 
   if (props.visible) {
     if (props.user.email) {
