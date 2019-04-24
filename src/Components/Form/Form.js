@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { NotificationManager } from 'react-notifications'
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
@@ -33,13 +34,22 @@ export default function Form(props) {
             twitter: twitter,
             facebook: facebook,
             youtube: youtube,
-            file: file,
+            // file: file,
             organizer: organizer,
             terms: terms
         },
         feature = turf.feature(geometry,properties);
 
-        firebase.firestore().collection('sports').add(feature);
+        firebase.firestore().collection('sports').add(feature)
+        .then(() => {
+            NotificationManager.success('Actividad creada con éxito.');
+            props.toggleComponent('form')
+          })
+          .catch((error) => {
+            console.log(error)
+            props.toggleComponent('form')
+            NotificationManager.error('Ha ocurrido un error al crear la actividad.');
+          });
 
         event.preventDefault();
     }

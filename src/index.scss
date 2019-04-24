@@ -11,6 +11,11 @@ $modal-card-head-background-color: hsl(0, 0%, 100%);
 $modal-background-background-color: rgba(black, 0.02);
 $card-footer-border-top: 0px solid hsl(0, 0%, 100%);
 
+$input-border-color: transparent transparent #00aec7 transparent;
+$input-shadow: transparent;
+$input-focus-border-color: #00aec7;
+$input-hover-border-color: #00aec7;
+
 @import 'bulma/bulma.sass';
 
 .message {
