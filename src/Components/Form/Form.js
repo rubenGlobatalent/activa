@@ -56,7 +56,7 @@ export default function Form(props) {
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
-        imagePreview = file ? <figure className="image is-square"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
+        imagePreview = file ? <figure className="image is-128by128"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
         scheduleClass = type === 'periodic' ? "field animated fadeIn faster column" : "field animated fadeOut faster column";
 
     if (props.visible) {
@@ -123,7 +123,7 @@ export default function Form(props) {
 
                             <div className={scheduleClass}>
                                 <div className="control">
-                                    <textarea className="textarea" placeholder="Descripción" value={schedule} rows="3" onChange={e => setSchedule(e.target.target)}></textarea>
+                                    <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.target)}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,8 @@ export default function Form(props) {
                             </div>
                             <div className="column">
                                 {imagePreview}
-                                <div className="file has-name is-boxed">
+                                <hr className="is-invisible"/>
+                                <div className="file has-name is-boxed columns is-centered">
                                     <label className="file-label">
                                         <input className="file-input" type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} />
                                         <span className="file-cta">
