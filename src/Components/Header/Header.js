@@ -5,13 +5,7 @@ import logo from '../../assets/img/logo.png'
 
 const style = {
   icon: {
-    padding: '0 1.5rem 0 1.5rem'
-  },
-  logo: {
-    maxHeight: 'none'
-  },
-  navbarItem: {
-    padding: '0'
+    padding: '0 1.5rem 0 0'
   },
   button: {
     height: '70%',
@@ -46,8 +40,8 @@ export default function Header(props) {
     <header>
       <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
-          <a className="navbar-item image is-64x64" href="/">
-            <img src={logo} style={style.logo} alt="" />
+          <a className="navbar-item" href="/">
+            <img src={logo} alt="" />
           </a>
 
           <button className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
@@ -59,23 +53,23 @@ export default function Header(props) {
 
         <div className={navbarMenuClass}>
           <div className="navbar-end">
-            <div className="navbar-item" style={style.navbarItem}>
+            <div className="navbar-item">
               <button className={filterButtonClass} style={style.button} onClick={() => props.toggleComponent('activityFilter')}>
                 Actividad
               </button>
             </div>
-            <div className="navbar-item" style={style.navbarItem}>
+            <div className="navbar-item">
               <button className={filterButtonClass} style={style.districtButton} onClick={() => props.toggleComponent('districtFilter')}>
                 Zonas
               </button>
             </div>
             <hr className="navbar-divider" />
-            <div className="navbar-item" style={style.navbarItem}>
+            <div className="navbar-item" >
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
                 <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
               </button>
             </div>
-            <div className="navbar-item" style={style.navbarItem}>
+            <div className="navbar-item">
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('dashboard')}>
                 <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
                 {user}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Help(props) {
+export default function Sidebar(props) {
     if (props.visible) {
         return (
 null
