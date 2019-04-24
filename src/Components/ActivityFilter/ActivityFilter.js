@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default function ActivityFilter(props) {
 
@@ -9,12 +9,17 @@ export default function ActivityFilter(props) {
     ),
 
         submitFilter = () => {
-            props.updateFilters('activities',
+            props.updateFilters('activityFilter',
                 Object.entries(filter)
                     .filter(filter => filter[1])
                     .map(filter => filter[0])
             )
             props.toggleComponent('activityFilter')
+        },
+        clearFilters = () => {
+            props.clearFilters()
+            props.toggleComponent('activityFilter')
+
         }
 
     if (props.visible) {
@@ -54,6 +59,7 @@ export default function ActivityFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
+                        <button className="button" onClick={() => clearFilters()}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

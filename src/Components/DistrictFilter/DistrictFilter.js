@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default function DistrictFilter(props) {
 
@@ -7,15 +7,22 @@ export default function DistrictFilter(props) {
         )
     )
     ),
-
         submitFilter = () => {
-            props.updateFilters('districts',
+            props.updateFilters('districtFilter',
                 Object.entries(filter)
                     .filter(filter => filter[1])
                     .map(filter => filter[0])
             )
             props.toggleComponent('districtFilter')
-        }
+        },
+
+        clearFilters = () => {
+            props.clearFilters()
+            props.toggleComponent('districtFilter')
+
+        };
+
+    // useEffect({}, props.selected)
     if (props.visible) {
         const districts = props.data.map(district => {
             return (
@@ -53,6 +60,7 @@ export default function DistrictFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
+                        <button className="button" onClick={() => clearFilters()}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

@@ -78,17 +78,20 @@ class App extends Component {
     super(props);
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
+    this.clearFilters = this.clearFilters.bind(this)
     this.state = {
       header: {
         visible: false
       },
       activityFilter: {
         visible: false,
-        data: []
+        data: [],
+        selected: []
       },
       districtFilter: {
         visible: false,
-        data: []
+        data: [],
+        selected: []
       },
       help: {
         visible: false
@@ -111,21 +114,21 @@ class App extends Component {
         districts: districts,
         sports: sports.list
       },
-      filters: {
-        activities: [],
-        districts: []
-      },
       user: null,
     }
   }
 
   toggleComponent = component => {
     this.setState({ [component]: { ...this.state[component], visible: !this.state[component].visible } })
-  }
+  };
 
-  updateFilters = (filter, data) => {
-    this.setState({ filters: { ...this.state.filters, [filter]: data } })
-  }
+  updateFilters = (component, selected) => {
+    this.setState({ [component]: { ...this.state[component], selected: selected } })
+  };
+
+  clearFilters = () => {
+    this.setState({ activityFilter: {...this.state.activityFilter, selected: [] }, districtFilter: {...this.state.districtFilter, selected: [] } })
+  };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
@@ -139,7 +142,7 @@ class App extends Component {
     this.setState({
       activityFilter: {
         ...this.state.activityFilter,
-        data: sports.list
+        data: sports.list,
       },
       districtFilter: {
         ...this.state.districtFilter,
@@ -294,34 +297,36 @@ class App extends Component {
         districtFilter = ['match', ['get', 'name'], 'none', true, false],
         sourceData = this.state.data.activities;
 
-      if (this.state.filters.districts.length > 0) {
-        districtFilter = ['match', ['get', 'name'], [...this.state.filters.districts], true, false];
-         
+      if (this.state.districtFilter.selected.length > 0) {
+        districtFilter = ['match', ['get', 'name'], [...this.state.districtFilter.selected], true, false];
+
         const districtsCollection = turf.featureCollection(
           this.state.data.districts.features
-            .filter(district => this.state.filters.districts.includes(district.properties.name))
-        );
+            .filter(district => this.state.districtFilter.selected.includes(district.properties.name))
+        ),
 
-        const linesID = Array.from(new Set(turf.pointsWithinPolygon(
-          turf.explode(
-            turf.featureCollection(
-              this.state.data.activities.features
-                .filter(feature => feature.geometry.type === 'LineString')
-            )
-          ),
-          districtsCollection
-        ).features.map(feature => feature.properties.id))),
+          linesID = Array.from(new Set(turf.pointsWithinPolygon(
+            turf.explode(
+              turf.featureCollection(
+                this.state.data.activities.features
+                  .filter(feature => feature.geometry.type === 'LineString')
+              )
+            ),
+            districtsCollection
+          ).features.map(feature => feature.properties.id))),
+
           lines = this.state.data.activities.features.filter(feature => linesID.includes(feature.properties.id)),
+
           points = turf.pointsWithinPolygon(
             turf.featureCollection(this.state.data.activities.features.filter(feature => feature.geometry.type === 'Point')),
             districtsCollection
           ).features;
 
-          sourceData = turf.featureCollection([...lines,...points])
+        sourceData = turf.featureCollection([...lines, ...points])
       }
 
-      if (this.state.filters.activities.length > 0) {
-        activityFilter = ['match', ['get', 'sport'], [...this.state.filters.activities], true, false];
+      if (this.state.activityFilter.selected.length > 0) {
+        activityFilter = ['match', ['get', 'sport'], [...this.state.activityFilter.selected], true, false];
       }
 
       this.map.getSource('activities').setData(sourceData);
@@ -360,11 +365,13 @@ class App extends Component {
           {...this.state.districtFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
+          clearFilters={this.clearFilters}
         />
         <ActivityFilter
           {...this.state.activityFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
+          clearFilters={this.clearFilters}
         />
         <Sidebar
           {...this.state.sidebar}
