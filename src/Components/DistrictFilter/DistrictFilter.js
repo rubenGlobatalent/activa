@@ -15,7 +15,6 @@ export default function DistrictFilter(props) {
     if (props.visible) {
         const selected = Object.fromEntries(
             props.data
-            .sort((a, b) => a.localeCompare(b))
             .map(district => [district, props.selected.includes(district)])
         ),
         districts = props.data.map(district => {

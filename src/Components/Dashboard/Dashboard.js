@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { NotificationManager } from 'react-notifications';
+import { NotificationManager } from 'react-notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
-import * as firebase from 'firebase';
+// OPTIMIZE IMPORTS
+import * as firebase from 'firebase'
 
 const style = {
   input: {

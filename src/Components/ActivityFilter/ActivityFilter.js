@@ -15,17 +15,16 @@ export default function ActivityFilter(props) {
     if (props.visible) {
 
         const selected = Object.fromEntries(
-            props.data.map(activity => [activity.name, props.selected.includes(activity.name)])
+            props.data.map(activity => [activity, props.selected.includes(activity)])
         ),
             activities = props.data
-                .sort((a, b) => a.name.localeCompare(b.name))
                 .map(activity => {
                     return (
-                        <li key={activity.name}>
+                        <li key={activity}>
                             <label className="checkbox is-size-6">
                                 <input type="checkbox"
-                                    name={activity.name}
-                                    defaultChecked={selected[activity.name]}
+                                    name={activity}
+                                    defaultChecked={selected[activity]}
                                     onChange={e => setFilter(() => {
                                         // We create those variables because it doesn't let us directly put using dot notation
                                         // on Object.assign (which we use because spread notation throws an error after the
@@ -34,7 +33,7 @@ export default function ActivityFilter(props) {
                                             checked = e.target.checked
                                         return Object.assign(filter, { [name]: checked })
                                     })} />
-                                {` ${activity.name}`}
+                                {` ${activity}`}
                             </label>
                         </li>
                     )

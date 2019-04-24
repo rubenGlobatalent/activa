@@ -3,10 +3,9 @@ import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import { NotificationContainer } from 'react-notifications'
 import { Steps } from 'intro.js-react'
+// OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf';
-
-import 'firebase/auth'
 
 import Header from './Components/Header/Header'
 import Dashboard from './Components/Dashboard/Dashboard'
@@ -21,12 +20,12 @@ import districts from './assets/data/districts.json'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyAPcJPwwsRESS3m5NNvA5PaXTNRkSo3_AM',
-  authDomain: 'catedras-uma.firebaseapp.com',
-  databaseURL: 'https://catedras-uma.firebaseio.com',
-  projectId: 'catedras-uma',
-  storageBucket: 'catedras-uma.appspot.com',
-  messagingSenderId: '657639469404'
+  apiKey: "AIzaSyATMuKsWD1n7aeeyOYO1aVZvkFIc9bHNQA",
+  authDomain: "recomendador-534fb.firebaseapp.com",
+  databaseURL: "https://recomendador-534fb.firebaseio.com",
+  projectId: "recomendador-534fb",
+  storageBucket: "recomendador-534fb.appspot.com",
+  messagingSenderId: "428207234830"
 })
 
 const data = {
@@ -143,11 +142,11 @@ class App extends Component {
     this.setState({
       activityFilter: {
         ...this.state.activityFilter,
-        data: sports.list,
+        data: sports.list.map(sport => sport.name).sort((a, b) => a.localeCompare(b)),
       },
       districtFilter: {
         ...this.state.districtFilter,
-        data: this.state.data.districts.features.map(district => district.properties.name)
+        data: this.state.data.districts.features.map(district => district.properties.name).sort((a, b) => a.localeCompare(b))
       },
       form: {
         ...this.state.form,
