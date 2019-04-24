@@ -23,51 +23,56 @@ export default function Form(props) {
         [organizer, setOrganizer] = useState(false),
         [terms, setTerms] = useState(false),
 
-    submitData = event => {
-        let geometry = turf.getGeom(props.feature),
-        properties = {
-            sport: sport,
-            organization: organization,
-            schedule: schedule,
-            description: description,
-            type: type,
-            twitter: twitter,
-            facebook: facebook,
-            youtube: youtube,
-            // file: file,
-            organizer: organizer,
-            terms: terms
-        },
-        feature = turf.feature(geometry,properties);
+        submitData = event => {
+            let geometry = turf.getGeom(props.feature),
+                properties = {
+                    sport: sport,
+                    organization: organization,
+                    schedule: schedule,
+                    description: description,
+                    type: type,
+                    twitter: twitter,
+                    facebook: facebook,
+                    youtube: youtube,
+                    // file: file,
+                    organizer: organizer,
+                    terms: terms
+                },
+                feature = turf.feature(geometry, properties);
 
-        firebase.firestore().collection('sports').add(feature)
-        .then(() => {
-            NotificationManager.success('Actividad creada con éxito.');
-            props.toggleComponent('form')
-          })
-          .catch((error) => {
-            console.log(error)
-            props.toggleComponent('form')
-            NotificationManager.error('Ha ocurrido un error al crear la actividad.');
-          });
+            firebase.firestore().collection('sports').add(feature)
+                .then(() => {
+                    NotificationManager.success('Actividad creada con éxito.');
+                    props.toggleComponent('form')
+                })
+                .catch((error) => {
+                    console.log(error)
+                    props.toggleComponent('form')
+                    NotificationManager.error('Ha ocurrido un error al crear la actividad.');
+                });
 
-        event.preventDefault();
-    }
+            event.preventDefault();
+        }
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
-        imagePreview = file ? <figure className="image is-128by128"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
-        scheduleClass = type === 'periodic' ? "field animated fadeIn faster column" : "field animated fadeOut faster column";
+        imagePreview = file ? <figure className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
+        scheduleField = type === 'periodic' ?
+            <div className="field column animated zoomIn faster">
+                <div className="control">
+                    <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.target)}></textarea>
+                </div>
+            </div> : null;
 
     if (props.visible) {
 
         const sports = props.data.map(sport => {
             return (
-                <option key={sport.name} value={sport.name}>{sport.name}</option>
+                <option key={sport} value={sport}>{sport}</option>
             )
         })
         return (
-            <div className="modal is-active">
+            <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
                 <form className="modal-card" onSubmit={submitData}>
                     <header className="modal-card-head">
@@ -120,12 +125,8 @@ export default function Form(props) {
                                     </div>
                                 </div>
                             </div>
+                            {scheduleField}
 
-                            <div className={scheduleClass}>
-                                <div className="control">
-                                    <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.target)}></textarea>
-                                </div>
-                            </div>
                         </div>
 
                         <div className="field">
@@ -164,7 +165,7 @@ export default function Form(props) {
                             </div>
                             <div className="column">
                                 {imagePreview}
-                                <hr className="is-invisible"/>
+                                <hr className="is-invisible" />
                                 <div className="file has-name is-boxed columns is-centered">
                                     <label className="file-label">
                                         <input className="file-input" type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} />
@@ -186,7 +187,7 @@ export default function Form(props) {
                         <div className="field">
                             <div className="control">
                                 <label className="checkbox">
-                                    <input type="checkbox" defaultChecked={organizer} onChange={e => setOrganizer(e.target.checked)}/>
+                                    <input type="checkbox" defaultChecked={organizer} onChange={e => setOrganizer(e.target.checked)} />
                                     {` `}Soy el responsable de la organización de la actividad
                                 </label>
                             </div>

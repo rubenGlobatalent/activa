@@ -73,7 +73,7 @@ export default function Dashboard(props) {
   if (props.visible) {
     if (props.user.email) {
       return (
-        <div className="modal is-active">
+        <div className="modal is-active animated fadeIn faster">
           <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
           <form className="modal-card" onSubmit={handleLogout}>
             <header className="modal-card-head">

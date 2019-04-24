@@ -3,7 +3,7 @@ import React from 'react'
 export default function Help(props) {
     if (props.visible) {
         return (
-            <div className="modal is-active">
+            <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background" onClick={() => props.toggleComponent('help')}></div>
                 <article className="modal-card">
                     <header className="modal-card-head">

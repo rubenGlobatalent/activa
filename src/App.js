@@ -112,7 +112,7 @@ class App extends Component {
       data: {
         activities: turf.featureCollection([]),
         districts: districts,
-        sports: sports.list
+        sports: sports.list.map(sport => sport.name).sort((a, b) => a.localeCompare(b))
       },
       user: null,
     }
@@ -142,7 +142,7 @@ class App extends Component {
     this.setState({
       activityFilter: {
         ...this.state.activityFilter,
-        data: sports.list.map(sport => sport.name).sort((a, b) => a.localeCompare(b)),
+        data: this.state.data.sports,
       },
       districtFilter: {
         ...this.state.districtFilter,
@@ -150,7 +150,7 @@ class App extends Component {
       },
       form: {
         ...this.state.form,
-        data: sports.list
+        data: this.state.data.sports
       },
       data: {
         ...this.state.data,

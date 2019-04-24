@@ -39,7 +39,7 @@ export default function DistrictFilter(props) {
             )
         });
         return (
-            <div className="modal is-active">
+            <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background" onClick={() => props.toggleComponent('districtFilter')}></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
