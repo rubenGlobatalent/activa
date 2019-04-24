@@ -123,11 +123,11 @@ class App extends Component {
   };
 
   updateFilters = (component, selected) => {
-    this.setState({ [component]: { ...this.state[component], selected: selected } })
+    this.setState({ [component]: { ...this.state[component], selected: selected, visible: !this.state[component].visible } })
   };
 
   clearFilters = () => {
-    this.setState({ activityFilter: {...this.state.activityFilter, selected: [] }, districtFilter: {...this.state.districtFilter, selected: [] } })
+    this.setState({ activityFilter: {...this.state.activityFilter, selected: [], visible: false }, districtFilter: {...this.state.districtFilter, selected: [], visible: false } })
   };
 
   componentDidMount() {

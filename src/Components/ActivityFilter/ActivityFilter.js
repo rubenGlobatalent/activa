@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 export default function ActivityFilter(props) {
 
-    const [filter, setFilter] = useState(Object.fromEntries(
-        props.data.map(activity => [activity.name, false]
-        )
-    )
-    ),
+    const [filter, setFilter] = useState({}),
 
         submitFilter = () => {
             props.updateFilters('activityFilter',
@@ -14,16 +10,15 @@ export default function ActivityFilter(props) {
                     .filter(filter => filter[1])
                     .map(filter => filter[0])
             )
-            props.toggleComponent('activityFilter')
-        },
-        clearFilters = () => {
-            props.clearFilters()
-            props.toggleComponent('activityFilter')
-
         }
 
     if (props.visible) {
-        const activities = props.data.map(activity => {
+
+
+        const selected = Object.fromEntries(
+            props.data.map(activity => [activity.name, props.selected.includes(activity.name)])
+        ),
+        activities = props.data.map(activity => {
             return (
                 <li key={activity.name}>
                     <label className="checkbox is-size-6">
@@ -59,7 +54,7 @@ export default function ActivityFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => clearFilters()}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={() => props.clearFilters()}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

@@ -1,36 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 
 export default function DistrictFilter(props) {
 
-    const [filter, setFilter] = useState(Object.fromEntries(
-        props.data.map(district => [district, false]
-        )
-    )
-    ),
+    const [filter, setFilter] = useState({}),
+
         submitFilter = () => {
             props.updateFilters('districtFilter',
                 Object.entries(filter)
                     .filter(filter => filter[1])
                     .map(filter => filter[0])
             )
-            props.toggleComponent('districtFilter')
-        },
+        }
 
-        clearFilters = () => {
-            props.clearFilters()
-            props.toggleComponent('districtFilter')
-
-        };
-
-    // useEffect({}, props.selected)
     if (props.visible) {
-        const districts = props.data.map(district => {
+        const selected = Object.fromEntries(
+            props.data.map(district => [district, props.selected.includes(district)])
+        ),
+        districts = props.data.map(district => {
             return (
                 <li key={district}>
                     <label className="checkbox is-size-6">
                         <input type="checkbox"
                             name={district}
-                            defaultChecked={filter[district]}
+                            defaultChecked={selected[district]}
                             onChange={e => setFilter(() => {
                                 // We create those variables because it doesn't let us directly put using dot notation
                                 // on Object.assign (which we use because spread notation throws an error after the
@@ -60,7 +52,7 @@ export default function DistrictFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => clearFilters()}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={() => props.clearFilters()}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>
