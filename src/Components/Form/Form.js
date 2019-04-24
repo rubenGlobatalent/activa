@@ -17,7 +17,7 @@ export default function Form(props) {
         [organization, setOrganization] = useState(''),
         [schedule, setSchedule] = useState(''),
         [description, setDescription] = useState(''),
-        [type, setType] = useState(''),
+        [type, setType] = useState('punctual'),
         [twitter, setTwitter] = useState(''),
         [facebook, setFacebook] = useState(''),
         [youtube, setYoutube] = useState(''),
@@ -33,14 +33,15 @@ export default function Form(props) {
 
             let geometry = turf.getGeom(props.feature),
                 properties = {
+                    name: name.length > 0 ? name : null,
                     sport: sport,
-                    organization: organization,
-                    schedule: schedule,
-                    description: description,
+                    organization: organization.length > 0 ? organization : null,
+                    schedule: schedule.length > 0 ? schedule : null,
+                    description: description.length > 0 ? description : null,
                     type: type,
-                    twitter: twitter,
-                    facebook: facebook,
-                    youtube: youtube,
+                    twitter: twitter.length > 0 ? twitter : null,
+                    facebook: facebook.length > 0 ? facebook : null,
+                    youtube: youtube.length > 0 ? youtube : null,
                     organizer: organizer,
                     image: file
                 };
@@ -49,22 +50,23 @@ export default function Form(props) {
                     .on('state_changed',
                         snapshot => {
                             setProgress(100.0 * snapshot.bytesTransferred / snapshot.totalBytes)
-                            console.log(progress)
                         },
                         error => {
                             console.log(error)
                         },
                         async () => {
+                            setProgress(null)
                             try {
-                                const downloadURL = await storageRef.getDownloadURL();
+                                const downloadURL = await storageRef.getDownloadURL()
                                 await databaseRef.add(turf.feature(geometry, { ...properties, image: downloadURL }))
-                                NotificationManager.success('Actividad creada con éxito.');
+                                NotificationManager.success('Actividad creada con éxito.')
                                 props.toggleComponent('form')
+                                clearForm()
                             }
                             catch (error) {
                                 console.log(error)
                                 props.toggleComponent('form')
-                                NotificationManager.error('Ha ocurrido un error al crear la actividad.');
+                                NotificationManager.error('Ha ocurrido un error al crear la actividad.')
                             }
                         }
                     )
@@ -73,16 +75,36 @@ export default function Form(props) {
             else {
                 try {
                     await databaseRef.add(turf.feature(geometry, properties))
-                    NotificationManager.success('Actividad creada con éxito.');
+                    NotificationManager.success('Actividad creada con éxito.')
                     props.toggleComponent('form')
+                    clearForm()
                 }
                 catch (error) {
                     console.log(error)
                     props.toggleComponent('form')
-                    NotificationManager.error('Ha ocurrido un error al crear la actividad.');
+                    NotificationManager.error('Ha ocurrido un error al crear la actividad.')
                 }
 
             }
+        },
+
+        clearForm = () => {
+            // Until we do have a more elegant way to select all hooks, we will have
+            // to set them one by one by hand
+            setName('')
+            setSport('')
+            setOrganization('')
+            setSchedule('')
+            setDescription('')
+            setType('punctual')
+            setTwitter('')
+            setFacebook('')
+            setYoutube('')
+            setFile(null)
+            setOrganizer(false)
+            setTerms(false)
+            setProgress(null)
+
         }
 
     // Conditional rendering
@@ -145,13 +167,13 @@ export default function Form(props) {
                                 <div className="control">
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" name="type" value="periodic" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required name="type" value="periodic" onChange={e => setType(e.target.value)} />
                                             {` `}Periódica
                                 </label>
                                     </div>
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" name="type" value="punctual" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" defaultChecked={type === 'punctual'} required name="type" value="punctual" onChange={e => setType(e.target.value)} />
                                             {` `}Puntual
                                 </label>
                                     </div>
@@ -243,7 +265,7 @@ export default function Form(props) {
                                 <button type='submit' className={submitButtonClass}>Enviar</button>
                             </div>
                             <div className="control">
-                                <button className="button is-text">Borrar</button>
+                                <button className="button is-text" onClick={clearForm}>Borrar</button>
                             </div>
                         </div>
                     </footer>
