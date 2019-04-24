@@ -3,12 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { NotificationManager } from 'react-notifications'
+import uuidv4 from 'uuid/v4'
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
 
 export default function Form(props) {
+
     // Hooks
     const [name, setName] = useState(''),
         [sport, setSport] = useState(''),
@@ -22,8 +24,13 @@ export default function Form(props) {
         [file, setFile] = useState(null),
         [organizer, setOrganizer] = useState(false),
         [terms, setTerms] = useState(false),
+        [progress, setProgress] = useState(null),
 
-        submitData = event => {
+        submitData = async event => {
+            event.preventDefault();
+            const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
+                databaseRef = firebase.firestore().collection('sports');
+
             let geometry = turf.getGeom(props.feature),
                 properties = {
                     sport: sport,
@@ -34,24 +41,48 @@ export default function Form(props) {
                     twitter: twitter,
                     facebook: facebook,
                     youtube: youtube,
-                    // file: file,
                     organizer: organizer,
-                    terms: terms
-                },
-                feature = turf.feature(geometry, properties);
+                    image: file
+                };
+            if (file) {
+                storageRef.put(file)
+                    .on('state_changed',
+                        snapshot => {
+                            setProgress(100.0 * snapshot.bytesTransferred / snapshot.totalBytes)
+                            console.log(progress)
+                        },
+                        error => {
+                            console.log(error)
+                        },
+                        async () => {
+                            try {
+                                const downloadURL = await storageRef.getDownloadURL();
+                                await databaseRef.add(turf.feature(geometry, { ...properties, image: downloadURL }))
+                                NotificationManager.success('Actividad creada con éxito.');
+                                props.toggleComponent('form')
+                            }
+                            catch (error) {
+                                console.log(error)
+                                props.toggleComponent('form')
+                                NotificationManager.error('Ha ocurrido un error al crear la actividad.');
+                            }
+                        }
+                    )
+            }
 
-            firebase.firestore().collection('sports').add(feature)
-                .then(() => {
+            else {
+                try {
+                    await databaseRef.add(turf.feature(geometry, properties))
                     NotificationManager.success('Actividad creada con éxito.');
                     props.toggleComponent('form')
-                })
-                .catch((error) => {
+                }
+                catch (error) {
                     console.log(error)
                     props.toggleComponent('form')
                     NotificationManager.error('Ha ocurrido un error al crear la actividad.');
-                });
+                }
 
-            event.preventDefault();
+            }
         }
 
     // Conditional rendering
@@ -60,9 +91,10 @@ export default function Form(props) {
         scheduleField = type === 'periodic' ?
             <div className="field column animated zoomIn faster">
                 <div className="control">
-                    <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.target)}></textarea>
+                    <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.value)}></textarea>
                 </div>
-            </div> : null;
+            </div> : null,
+        submitButtonClass = (progress === null) ? "button" : "button is-loading";
 
     if (props.visible) {
 
@@ -136,7 +168,7 @@ export default function Form(props) {
                             </div>
                         </div>
 
-                        <div className="columns">
+                        <div className="columns is-vcentered">
                             <div className="column">
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
@@ -208,7 +240,7 @@ export default function Form(props) {
                     <footer className="modal-card-foot buttons is-centered">
                         <div className="field is-grouped">
                             <div className="control">
-                                <button type='submit' className="button">Enviar</button>
+                                <button type='submit' className={submitButtonClass}>Enviar</button>
                             </div>
                             <div className="control">
                                 <button className="button is-text">Borrar</button>

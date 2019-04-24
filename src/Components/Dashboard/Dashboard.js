@@ -21,6 +21,7 @@ export default function Dashboard(props) {
     [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
     handleLogin = event => {
+      event.preventDefault();
       if (forgot) {
         firebase.auth().sendPasswordResetEmail(email)
           .then(() => {
@@ -55,7 +56,6 @@ export default function Dashboard(props) {
             }
           })
       }
-      event.preventDefault();
     },
     handleLogout = event => {
       firebase.auth().signOut()
