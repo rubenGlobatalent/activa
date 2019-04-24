@@ -24,10 +24,11 @@ export default function Form(props) {
         [file, setFile] = useState(null),
         [organizer, setOrganizer] = useState(false),
         [terms, setTerms] = useState(false),
-        [progress, setProgress] = useState(null),
+        [progress, setProgress] = useState(false),
 
         submitData = async event => {
             event.preventDefault();
+            setProgress(true)
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
                 databaseRef = firebase.firestore().collection('sports');
 
@@ -49,16 +50,16 @@ export default function Form(props) {
                 storageRef.put(file)
                     .on('state_changed',
                         snapshot => {
-                            setProgress(100.0 * snapshot.bytesTransferred / snapshot.totalBytes)
+                            // setProgress(100.0 * snapshot.bytesTransferred / snapshot.totalBytes)
                         },
                         error => {
                             console.log(error)
                         },
                         async () => {
-                            setProgress(null)
                             try {
                                 const downloadURL = await storageRef.getDownloadURL()
                                 await databaseRef.add(turf.feature(geometry, { ...properties, image: downloadURL }))
+                                setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
                                 props.toggleComponent('form')
                                 clearForm()
@@ -75,6 +76,7 @@ export default function Form(props) {
             else {
                 try {
                     await databaseRef.add(turf.feature(geometry, properties))
+                    setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
                     props.toggleComponent('form')
                     clearForm()
@@ -103,7 +105,7 @@ export default function Form(props) {
             setFile(null)
             setOrganizer(false)
             setTerms(false)
-            setProgress(null)
+            setProgress(false)
 
         }
 
@@ -116,10 +118,9 @@ export default function Form(props) {
                     <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.value)}></textarea>
                 </div>
             </div> : null,
-        submitButtonClass = (progress === null) ? "button" : "button is-loading";
+        submitButtonClass = progress ? "button is-loading" : "button";
 
     if (props.visible) {
-
         const sports = props.data.map(sport => {
             return (
                 <option key={sport} value={sport}>{sport}</option>
@@ -173,7 +174,7 @@ export default function Form(props) {
                                     </div>
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" defaultChecked={type === 'punctual'} required name="type" value="punctual" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required name="type" value="punctual" onChange={e => setType(e.target.value)} />
                                             {` `}Puntual
                                 </label>
                                     </div>
@@ -242,7 +243,7 @@ export default function Form(props) {
                             <div className="control">
                                 <label className="checkbox">
                                     <input type="checkbox" defaultChecked={organizer} onChange={e => setOrganizer(e.target.checked)} />
-                                    {` `}Soy el responsable de la organización de la actividad
+                                    {` `}Soy responsable de la organización de la actividad
                                 </label>
                             </div>
                         </div>
