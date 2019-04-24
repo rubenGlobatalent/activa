@@ -102,9 +102,9 @@ export default function Dashboard(props) {
               <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
             </header>
             <section className="modal-card-body">
-            <div className="is-uppercase" style={style.text}>
+            <p className="is-uppercase" style={style.text}>
               Introduce tu correo y tu contraseña para acceder. Si no tienes una cuenta, se creara automáticamente.
-              </div>
+              </p>
               <div className="field is-horizontal">
                 <div className="field-body">
                   <div className="field">

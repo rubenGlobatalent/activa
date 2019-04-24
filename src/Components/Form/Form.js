@@ -76,7 +76,7 @@ export default function Form(props) {
                 <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
                 <form className="modal-card" onSubmit={submitData}>
                     <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una iniciativa</h2>
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una actividad</h2>
                         <button className="delete" onClick={() => props.toggleComponent('form')}></button>
                     </header>
 
