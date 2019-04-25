@@ -17,7 +17,7 @@ export default function Form(props) {
         [organization, setOrganization] = useState(''),
         [schedule, setSchedule] = useState(''),
         [description, setDescription] = useState(''),
-        [type, setType] = useState('punctual'),
+        [type, setType] = useState(''),
         [twitter, setTwitter] = useState(''),
         [facebook, setFacebook] = useState(''),
         [youtube, setYoutube] = useState(''),
@@ -98,7 +98,7 @@ export default function Form(props) {
             setOrganization('')
             setSchedule('')
             setDescription('')
-            setType('punctual')
+            setType('puntual')
             setTwitter('')
             setFacebook('')
             setYoutube('')
@@ -112,7 +112,7 @@ export default function Form(props) {
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
         imagePreview = file ? <figure className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
-        scheduleField = type === 'periodic' ?
+        scheduleField = type === 'periódica' ?
             <div className="field column animated zoomIn faster">
                 <div className="control">
                     <textarea className="textarea" placeholder="Horario de la actividad" value={schedule} rows="2" onChange={e => setSchedule(e.target.value)}></textarea>
@@ -168,13 +168,13 @@ export default function Form(props) {
                                 <div className="control">
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" required name="type" value="periodic" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required name="type" value="periódica" onChange={e => setType(e.target.value)} />
                                             {` `}Periódica
                                 </label>
                                     </div>
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" required name="type" value="punctual" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required name="type" value="puntual" onChange={e => setType(e.target.value)} />
                                             {` `}Puntual
                                 </label>
                                     </div>

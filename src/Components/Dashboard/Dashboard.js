@@ -6,11 +6,6 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import * as firebase from 'firebase'
 
 const style = {
-  input: {
-    border: 'none',
-    boxShadow: 'none',
-    borderBottom: '1px #00aec7 solid'
-  },
   text: {
     backgroundColor: 'rgb(244,244,244)'
   }
