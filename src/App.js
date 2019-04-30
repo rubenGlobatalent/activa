@@ -79,7 +79,8 @@ class App extends Component {
     super(props);
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
-    this.clearFilters = this.clearFilters.bind(this)
+    this.clearActivityFilter = this.clearActivityFilter.bind(this)
+    this.clearDistrictFilter = this.clearDistrictFilter.bind(this)
     this.state = {
       header: {
         visible: false
@@ -128,8 +129,12 @@ class App extends Component {
     this.setState({ [component]: { ...this.state[component], selected: selected, visible: !this.state[component].visible } })
   };
 
-  clearFilters = () => {
-    this.setState({ activityFilter: { ...this.state.activityFilter, selected: [], visible: false }, districtFilter: { ...this.state.districtFilter, selected: [], visible: false } })
+  clearActivityFilter = () => {
+    this.setState({ activityFilter: { ...this.state.activityFilter, selected: [], visible: false } })
+  };
+
+  clearDistrictFilter = () => {
+    this.setState({ districtFilter: { ...this.state.districtFilter, selected: [], visible: false } })
   };
 
   componentDidMount() {
@@ -366,13 +371,13 @@ class App extends Component {
           {...this.state.districtFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
+          clearDistrictFilter={this.clearDistrictFilter}
         />
         <ActivityFilter
           {...this.state.activityFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
+          clearActivityFilter={this.clearActivityFilter}
         />
         <Sidebar
           {...this.state.sidebar}
