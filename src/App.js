@@ -63,14 +63,25 @@ const style = {
 const initialStep = 0,
   steps = [
     {
-      element: '.navbar-color-on-scroll',
-      intro: 'Bienvenido a PIC Málaga. En esta barra encontrarás los filtros necesarios para buscar las iniciativas creadas en la ciudad.',
+      element: '.navbar.is-fixed-top',
+      intro: 'Bienvenido a Málaga Activa. En esta barra podrás seleccionar los filtros de actividad deportiva y distrito, así como iniciar sesión o registrarte.',
     },
     {
       element: '.mapbox-gl-draw_point',
-      intro: 'Utiliza el lápiz para añadir la iniciativa al mapa. Antes deberás estar registrado en la plataforma.',
+      intro: 'Con este botón podrás registrar los puntos de interés donde realizas la actividad deportiva.',
     },
-
+    {
+      element: '.mapbox-gl-draw_line',
+      intro: 'Si tu actividad deportiva implica un recorrido podrás crearlo mediante una sucesión de puntos.',
+    },
+    {
+      element: '.mapbox-gl-draw_trash',
+      intro: 'Utiliza este botón para eliminar un punto o recorrido que estés creando.',
+    },
+    {
+      element: '.icon.legend',
+      intro: 'Pulsando este botón podrás visualizar una leyenda que relaciona los iconos representados en el mapa con cada actividad deportiva.',
+    }
   ];
 
 class App extends Component {
@@ -81,6 +92,7 @@ class App extends Component {
     this.updateFilters = this.updateFilters.bind(this)
     this.clearActivityFilter = this.clearActivityFilter.bind(this)
     this.clearDistrictFilter = this.clearDistrictFilter.bind(this)
+    this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.state = {
       header: {
         visible: false
@@ -96,7 +108,7 @@ class App extends Component {
         selected: []
       },
       help: {
-        visible: false
+        visible: true
       },
       dashboard: {
         visible: false
@@ -136,6 +148,14 @@ class App extends Component {
   clearDistrictFilter = () => {
     this.setState({ districtFilter: { ...this.state.districtFilter, selected: [], visible: false } })
   };
+
+  displayStepsAfterHelp = () => {
+    this.setState({ help: { visible: false }, steps: { visible: true } })
+  }
+
+  stepsOnExit = () => {
+    this.setState({ steps: { visible: false } })
+  }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
@@ -366,6 +386,7 @@ class App extends Component {
         <Help
           {...this.state.help}
           toggleComponent={this.toggleComponent}
+          displayStepsAfterHelp={this.displayStepsAfterHelp}
         />
         <DistrictFilter
           {...this.state.districtFilter}
@@ -392,13 +413,14 @@ class App extends Component {
           enabled={this.state.steps.visible}
           steps={steps}
           initialStep={initialStep}
-          onExit={() => this.toggleComponent('steps')}
+          // onExit={() => this.toggleComponent('steps')}
+          onExit={this.stepsOnExit}
         />
         {/* TEMPORAL, CONVERT TO COMPONENT ALONG WITH MAP */}
         <div className="mapboxgl-control-container" >
           <div className="mapboxgl-ctrl-bottom-right" style={{marginBottom: '13.75rem'}}>
             <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
-              <button className="icon is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
+              <button className="icon legend is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
             </div>
           </div>
         </div>

@@ -16,6 +16,9 @@ $input-shadow: transparent;
 $input-focus-border-color: #00aec7;
 $input-hover-border-color: #00aec7;
 
+$tabs-link-active-border-bottom-color: #00aec7;
+$tabs-link-active-color: #00aec7;
+
 @import 'bulma/bulma.sass';
 
 .navbar-item img {
@@ -71,4 +74,18 @@ $input-hover-border-color: #00aec7;
   position: relative;
   opacity: 0.9;
   margin-top: 15px;
+}
+
+.button.helpButton:active {
+  opacity: .8;
+}
+
+.button.helpButton:focus {
+  color: white;
+  box-shadow: none;
+  border-color: #00aec7;
+}
+
+.introjs-helperNumberLayer {
+  background: #00aec7 !important;
 }
