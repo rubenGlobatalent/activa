@@ -94,7 +94,7 @@ export default function Dashboard(props) {
           <form className="modal-card" onSubmit={handleLogin}>
             <header className="modal-card-head">
               <h2 className="modal-card-title is-size-5 has-text-weight-light">Accede o crea tu cuenta</h2>
-              <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
+              <button className="delete" type="button" onClick={() => props.toggleComponent('dashboard')}></button>
             </header>
             <section className="modal-card-body">
             <p className="is-uppercase" style={style.text}>

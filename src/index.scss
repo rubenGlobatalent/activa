@@ -18,6 +18,10 @@ $input-hover-border-color: #00aec7;
 
 @import 'bulma/bulma.sass';
 
+.navbar-item img {
+  max-height: 40px;
+}
+
 .message {
     background-color: transparent;
     border-radius: 4px;
