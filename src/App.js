@@ -33,9 +33,9 @@ firebase.initializeApp({
 const data = {
   "type": "FeatureCollection",
   "features": [
-    { "type": "Feature", "properties": { "sport": "Cycling", "type": "puntual", "id": "abc" }, "geometry": { "type": "LineString", "coordinates": [[-4.445852597663771, 36.711033630771375], [-4.445135690452562, 36.70989852768696], [-4.44442834200417, 36.708866181302831], [-4.444179814170952, 36.708482337233505], [-4.443037542014427, 36.706907531059549], [-4.441785344085517, 36.704990999114919], [-4.441159245121063, 36.704025564070498], [-4.440767335845603, 36.703523729022649], [-4.440442337909856, 36.703275201189435], [-4.439405212144308, 36.70218072284699], [-4.438635731737612, 36.701425580584512], [-4.436222144126545, 36.70028808780939], [-4.436226923507953, 36.700283308428006], [-4.436226923507953, 36.700283308428006]] } },
-    { "type": "Feature", "properties": { "sport": "Cycling", "type": "puntual", "id": "aasda" }, "geometry": { "type": "LineString", "coordinates": [[-4.436375084331603, 36.700359778530533], [-4.436293834847666, 36.700531836261227], [-4.436150453405424, 36.700543784714746], [-4.436045307014447, 36.700574850693897], [-4.43598795443755, 36.700615475435868], [-4.435861300830237, 36.700586799147416], [-4.435777661655596, 36.700586799147416], [-4.435737036913627, 36.700589188838123], [-4.435679684336731, 36.700617865126567], [-4.435455053410553, 36.700472093993625], [-4.434974725579043, 36.700916576464572], [-4.434975293102768, 36.700916304027999]] } },
-    { "type": "Feature", "properties": { "sport": "Cycling", "type": "puntual", "id": "dasx" }, "geometry": { "type": "LineString", "coordinates": [[-4.419635257898319, 36.717488975711646], [-4.418508275974476, 36.717327978293959], [-4.413819226184201, 36.718615957635492], [-4.4131148624818, 36.717871344578668], [-4.413094737804588, 36.717569474420493], [-4.415227953589005, 36.71396715719964], [-4.415187704234582, 36.714027531231274]] } },
+    { "type": "Feature", "properties": { "sport": "Ciclismo", "type": "puntual", "id": "abc" }, "geometry": { "type": "LineString", "coordinates": [[-4.445852597663771, 36.711033630771375], [-4.445135690452562, 36.70989852768696], [-4.44442834200417, 36.708866181302831], [-4.444179814170952, 36.708482337233505], [-4.443037542014427, 36.706907531059549], [-4.441785344085517, 36.704990999114919], [-4.441159245121063, 36.704025564070498], [-4.440767335845603, 36.703523729022649], [-4.440442337909856, 36.703275201189435], [-4.439405212144308, 36.70218072284699], [-4.438635731737612, 36.701425580584512], [-4.436222144126545, 36.70028808780939], [-4.436226923507953, 36.700283308428006], [-4.436226923507953, 36.700283308428006]] } },
+    { "type": "Feature", "properties": { "sport": "Ciclismo", "type": "puntual", "id": "aasda" }, "geometry": { "type": "LineString", "coordinates": [[-4.436375084331603, 36.700359778530533], [-4.436293834847666, 36.700531836261227], [-4.436150453405424, 36.700543784714746], [-4.436045307014447, 36.700574850693897], [-4.43598795443755, 36.700615475435868], [-4.435861300830237, 36.700586799147416], [-4.435777661655596, 36.700586799147416], [-4.435737036913627, 36.700589188838123], [-4.435679684336731, 36.700617865126567], [-4.435455053410553, 36.700472093993625], [-4.434974725579043, 36.700916576464572], [-4.434975293102768, 36.700916304027999]] } },
+    { "type": "Feature", "properties": { "sport": "Ciclismo", "type": "puntual", "id": "dasx" }, "geometry": { "type": "LineString", "coordinates": [[-4.419635257898319, 36.717488975711646], [-4.418508275974476, 36.717327978293959], [-4.413819226184201, 36.718615957635492], [-4.4131148624818, 36.717871344578668], [-4.413094737804588, 36.717569474420493], [-4.415227953589005, 36.71396715719964], [-4.415187704234582, 36.714027531231274]] } },
     { "type": "Feature", "properties": { "sport": "Parkour", "type": "puntual", "id": "oajdoa" }, "geometry": { "type": "Point", "coordinates": [-4.444313611851205, 36.692268466360197] } },
     { "type": "Feature", "properties": { "sport": "Parkour", "type": "puntual", "id": "oisdoa" }, "geometry": { "type": "Point", "coordinates": [-4.42565667861847, 36.716594997677795] } },
     { "type": "Feature", "properties": { "sport": "Parkour", "type": "puntual", "id": "kasjda" }, "geometry": { "type": "Point", "coordinates": [-4.426302749097907, 36.716551047305046] } },
@@ -63,14 +63,25 @@ const style = {
 const initialStep = 0,
   steps = [
     {
-      element: '.navbar-color-on-scroll',
-      intro: 'Bienvenido a PIC Málaga. En esta barra encontrarás los filtros necesarios para buscar las iniciativas creadas en la ciudad.',
+      element: '.navbar.is-fixed-top',
+      intro: 'Bienvenido a Málaga Activa. En esta barra podrás seleccionar los filtros de actividad deportiva y distrito, así como iniciar sesión o registrarte.',
     },
     {
       element: '.mapbox-gl-draw_point',
-      intro: 'Utiliza el lápiz para añadir la iniciativa al mapa. Antes deberás estar registrado en la plataforma.',
+      intro: 'Con este botón podrás registrar los puntos de interés donde realizas la actividad deportiva.',
     },
-
+    {
+      element: '.mapbox-gl-draw_line',
+      intro: 'Si tu actividad deportiva implica un recorrido podrás crearlo mediante una sucesión de puntos.',
+    },
+    {
+      element: '.mapbox-gl-draw_trash',
+      intro: 'Utiliza este botón para eliminar un punto o recorrido que estés creando.',
+    },
+    {
+      element: '.icon.legend',
+      intro: 'Pulsando este botón podrás visualizar una leyenda que relaciona los iconos representados en el mapa con cada actividad deportiva.',
+    }
   ];
 
 class App extends Component {
@@ -79,7 +90,9 @@ class App extends Component {
     super(props);
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
-    this.clearFilters = this.clearFilters.bind(this)
+    this.clearActivityFilter = this.clearActivityFilter.bind(this)
+    this.clearDistrictFilter = this.clearDistrictFilter.bind(this)
+    this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.state = {
       header: {
         visible: false
@@ -95,7 +108,7 @@ class App extends Component {
         selected: []
       },
       help: {
-        visible: false
+        visible: true
       },
       dashboard: {
         visible: false
@@ -132,6 +145,14 @@ class App extends Component {
   clearFilters = (component) => {
     this.setState({ [component]: { ...this.state[component], selected: [], visible: false } })
   };
+
+  displayStepsAfterHelp = () => {
+    this.setState({ help: { visible: false }, steps: { visible: true } })
+  }
+
+  stepsOnExit = () => {
+    this.setState({ steps: { visible: false } })
+  }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
@@ -262,9 +283,9 @@ class App extends Component {
           'circle-color': [
             'match',
             ['get', 'sport'],
-            'Cycling', '#fbb03b',
+            'Ciclismo', '#fbb03b',
             'Parkour', '#223b53',
-            'Running', '#e55e5e',
+            'Correr', '#e55e5e',
             'Yoga', '#3bb2d0',
             '#Ff8326'
           ]
@@ -367,18 +388,19 @@ class App extends Component {
         <Help
           {...this.state.help}
           toggleComponent={this.toggleComponent}
+          displayStepsAfterHelp={this.displayStepsAfterHelp}
         />
         <DistrictFilter
           {...this.state.districtFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
+          clearDistrictFilter={this.clearDistrictFilter}
         />
         <ActivityFilter
           {...this.state.activityFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
+          clearActivityFilter={this.clearActivityFilter}
         />
         <Sidebar
           {...this.state.sidebar}
@@ -393,13 +415,14 @@ class App extends Component {
           enabled={this.state.steps.visible}
           steps={steps}
           initialStep={initialStep}
-          onExit={() => this.toggleComponent('steps')}
+          // onExit={() => this.toggleComponent('steps')}
+          onExit={this.stepsOnExit}
         />
         {/* TEMPORAL, CONVERT TO COMPONENT ALONG WITH MAP */}
         <div className="mapboxgl-control-container" >
           <div className="mapboxgl-ctrl-bottom-right" style={{ marginBottom: '13.75rem' }}>
             <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
-              <button className="icon is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
+              <button className="icon legend is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
             </div>
           </div>
         </div>

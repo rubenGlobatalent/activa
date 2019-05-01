@@ -1,15 +1,16 @@
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import logo from '../../assets/img/logo.png'
 
 const style = {
   icon: {
-    padding: '0 1.5rem 0 0'
+    fontSize: '1.25rem'
+  },
+  userIcon: {
+    fontSize: '1.25rem',
+    marginRight: '5px'
   },
   button: {
-    height: '70%',
-    padding: '0 2rem'
+    height: '70%'
   },
   districtButton: {
     height: '70%',
@@ -66,12 +67,12 @@ export default function Header(props) {
             <hr className="navbar-divider" />
             <div className="navbar-item" >
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
-                <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faQuestionCircle} /></span>
+                <i className='material-icons' style={style.icon}>help</i>
               </button>
             </div>
             <div className="navbar-item">
               <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('dashboard')}>
-                <span className="icon is-size-5" style={style.icon}><FontAwesomeIcon icon={faUser} /></span>
+                <i className='material-icons' style={style.userIcon}>person</i>
                 {user}
               </button>
             </div>
