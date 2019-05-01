@@ -396,13 +396,13 @@ class App extends Component {
           {...this.state.districtFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearDistrictFilter={this.clearDistrictFilter}
+          clearFilters={this.clearFilters}
         />
         <ActivityFilter
           {...this.state.activityFilter}
           toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
-          clearActivityFilter={this.clearActivityFilter}
+          clearFilters={this.clearFilters}
         />
         <Sidebar
           {...this.state.sidebar}
