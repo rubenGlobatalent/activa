@@ -16,6 +16,7 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import DistrictFilter from './Components/DistrictFilter/DistrictFilter'
 import ActivityFilter from './Components/ActivityFilter/ActivityFilter'
 import Form from './Components/Form/Form'
+import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
 import districts from './assets/data/districts.json'
 
@@ -121,6 +122,9 @@ class App extends Component {
         feature: turf.feature({ type: 'Point', coordinates: [0, 0] })
       },
       steps: {
+        visible: false
+      },
+      legend: {
         visible: false
       },
       data: {
@@ -416,11 +420,17 @@ class App extends Component {
           // onExit={() => this.toggleComponent('steps')}
           onExit={this.stepsOnExit}
         />
+        <Legend
+          {...this.state.legend}
+          toggleComponent={this.toggleComponent}
+        />
         {/* TEMPORAL, CONVERT TO COMPONENT ALONG WITH MAP */}
         <div className="mapboxgl-control-container" >
           <div className="mapboxgl-ctrl-bottom-right" style={{ marginBottom: '13.75rem' }}>
             <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
-              <button className="icon legend is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
+              <button className="icon legend is-size-5" onClick={() => this.toggleComponent('legend')}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </button>
             </div>
           </div>
         </div>
