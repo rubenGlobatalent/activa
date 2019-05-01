@@ -44,7 +44,7 @@ const data = {
     { "type": "Feature", "properties": { "sport": "Running", "type": "puntual", "id": "pakdpaos" }, "geometry": { "type": "LineString", "coordinates": [[-4.4264273364572, 36.710646585459735], [-4.426296526055325, 36.715979624920777], [-4.426205965007876, 36.717851219901434], [-4.426165715653453, 36.718153090059609], [-4.425873907833886, 36.718917827793646], [-4.425733035093406, 36.719581942141623], [-4.425622349368743, 36.720286305844027], [-4.425672661061771, 36.720950420192004], [-4.425823596140858, 36.721845968327912], [-4.426477648150231, 36.725971527156283]] } },
     { "type": "Feature", "properties": { "sport": "Running", "type": "puntual", "id": "opaidpas" }, "geometry": { "type": "LineString", "coordinates": [[-4.42565253638456, 36.711713193351962], [-4.425783346786434, 36.714591022193197], [-4.425753159770617, 36.715738128794257], [-4.425682723400377, 36.716683988623195], [-4.425607255860834, 36.717740534176791], [-4.425521725982685, 36.718465022556408], [-4.425320479210571, 36.719204604443931], [-4.425129294777061, 36.720095121410537], [-4.425229918163119, 36.721121479948323], [-4.425642474045953, 36.726041963526527]] } },
     { "type": "Feature", "properties": { "sport": "Running", "type": "puntual", "id": "oadpapdas" }, "geometry": { "type": "LineString", "coordinates": [[-4.419601725065577, 36.717632737370501], [-4.418882293083513, 36.717288661205167], [-4.413658591300696, 36.718649326040811], [-4.413017358447117, 36.717804775453168], [-4.41300171862142, 36.717742216150384], [-4.415206934044705, 36.714223255368545], [-4.414534421539732, 36.713691501294846], [-4.413032998272812, 36.710188180338697], [-4.413001718621418, 36.709586047049356], [-4.413181576616934, 36.708905714631534], [-4.413650771387846, 36.708100263608138]] } },
-    { "type": "Feature", "properties": { "sport": "Yoga", "type": "puntual", "id": "ioadkjaos" }, "geometry": { "type": "Point", "coordinates": [-4.413995311857809, 36.712571574445178] } },
+    { "type": "Feature", "properties": { "sport": "Yoga", "description": "Esto es una prueba de un deporte, para ver cómo se vería su carta" , "image": "https://pixelz.cc/wp-content/uploads/2017/09/earth-3d-uhd-8k-wallpaper.jpg", "type": "puntual", "id": "ioadkjaos" }, "geometry": { "type": "Point", "coordinates": [-4.413995311857809, 36.712571574445178] } },
     { "type": "Feature", "properties": { "sport": "Yoga", "type": "puntual", "id": "odioapda" }, "geometry": { "type": "Point", "coordinates": [-4.432187840371991, 36.706106176787976] } },
     { "type": "Feature", "properties": { "sport": "Yoga", "type": "puntual", "id": "jdaodsjao" }, "geometry": { "type": "Point", "coordinates": [-4.435970785809722, 36.699692364750348] } }
   ]
@@ -101,7 +101,8 @@ class App extends Component {
         visible: false
       },
       sidebar: {
-        visible: true
+        visible: false,
+        data: {}
       },
       form: {
         visible: false,
@@ -128,8 +129,8 @@ class App extends Component {
     this.setState({ [component]: { ...this.state[component], selected: selected, visible: !this.state[component].visible } })
   };
 
-  clearFilters = () => {
-    this.setState({ activityFilter: { ...this.state.activityFilter, selected: [], visible: false }, districtFilter: { ...this.state.districtFilter, selected: [], visible: false } })
+  clearFilters = (component) => {
+    this.setState({ [component]: { ...this.state[component], selected: [], visible: false } })
   };
 
   componentDidMount() {
@@ -281,7 +282,12 @@ class App extends Component {
 
         this.map.on('click', activityType, e => {
           let featureProperties = e.features[0].properties;
-          console.log(featureProperties)
+          this.setState({ sidebar: { data: featureProperties, visible: true } })
+        });
+
+        this.map.on('touchend', activityType, e => {
+          let featureProperties = e.features[0].properties;
+          this.setState({ sidebar: { data: featureProperties, visible: true } })
         });
       })
 
@@ -391,7 +397,7 @@ class App extends Component {
         />
         {/* TEMPORAL, CONVERT TO COMPONENT ALONG WITH MAP */}
         <div className="mapboxgl-control-container" >
-          <div className="mapboxgl-ctrl-bottom-right" style={{marginBottom: '13.75rem'}}>
+          <div className="mapboxgl-ctrl-bottom-right" style={{ marginBottom: '13.75rem' }}>
             <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
               <button className="icon is-size-5"><FontAwesomeIcon icon={faInfoCircle} /></button>
             </div>

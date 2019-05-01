@@ -53,7 +53,7 @@ export default function DistrictFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => props.clearFilters()}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={() => props.clearFilters('districtFilter')}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

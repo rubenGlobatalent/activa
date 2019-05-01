@@ -54,7 +54,7 @@ export default function ActivityFilter(props) {
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
                         <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => props.clearFilters()}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={() => props.clearFilters('activityFilter')}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

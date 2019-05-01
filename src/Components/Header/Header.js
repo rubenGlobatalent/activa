@@ -41,7 +41,7 @@ export default function Header(props) {
       <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
           <a className="navbar-item" href="/">
-            <img src={logo} alt="" />
+            <img src={logo} alt="Málaga Áctiva"/>
           </a>
 
           <button className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
