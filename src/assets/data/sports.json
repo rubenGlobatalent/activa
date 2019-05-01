@@ -1,78 +1,103 @@
 {
     "list": [
         {
+            "key": "baloncesto",
             "name": "Baloncesto"
         },
         {
+            "key": "balonmano",
             "name": "Balonmano"
         },
         {
+            "key": "beisbol",
             "name": "Béisbol"
         },
         {
+            "key": "bmx",
             "name": "BMX"
         },
         {
+            "key": "calistenia",
             "name": "Calistenia"
         },
         {
+            "key": "ciclismo",
             "name": "Ciclismo"
         },
         {
+            "key": "estiramientos",
             "name": "Estiramientos"
         },
         {
+            "key": "futbol",
             "name": "Fútbol"
         },
         {
+            "key": "kayak",
             "name": "Kayak"
         },
         {
-            "name": "Marcha atlética"
+            "key": "marcha-deportiva",
+            "name": "Marcha deportiva"
         },
         {
-            "name": "Natación"
+            "key": "nado-libre",
+            "name": "Nado libre"
         },
         {
+            "key": "marcha-nordica",
             "name": "Marcha nórdica"
         },
         {
-            "name": "Paddlesurf"
+            "key": "paddle-surf",
+            "name": "Paddle surf"
         },
         {
-            "name": "Parque de ejercicios"
+            "key": "parque-musculacion",
+            "name": "Parque de musculación"
         },
         {
+            "key": "patinaje",
             "name": "Patinaje"
         },
         {
+            "key": "petanca",
             "name": "Petanca"
         },
         {
+            "key": "remo",
             "name": "Remo"
         },
         {
-            "name": "Correr"
+            "key": "running",
+            "name": "Running"
         },
         {
+            "key": "skate",
             "name": "Skate"
         },
         {
+            "key": "surf",
             "name": "Surf"
         },
         {
-            "name": "Navegación"
+            "key": "vela",
+            "name": "Vela"
         },
         {
-            "name": "Voleibol"
+            "key": "voley",
+            "name": "Voley"
         },
         {
+            "key": "windsurf",
             "name": "Windsurf"
         },
         {
+            "key": "parkour",
             "name": "Parkour"
         },
         {
+            "key": "yoga",
             "name": "Yoga"
         }
     ]
