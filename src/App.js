@@ -90,8 +90,6 @@ class App extends Component {
     super(props);
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
-    this.clearActivityFilter = this.clearActivityFilter.bind(this)
-    this.clearDistrictFilter = this.clearDistrictFilter.bind(this)
     this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.state = {
       header: {
