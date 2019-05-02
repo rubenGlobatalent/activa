@@ -34,17 +34,18 @@ export default function Form(props) {
 
             let geometry = turf.getGeom(props.feature),
                 properties = {
-                    name: name.length > 0 ? name : null,
+                    name: name.length > 0 ? name : false,
                     sport: sport,
-                    organization: organization.length > 0 ? organization : null,
-                    schedule: schedule.length > 0 ? schedule : null,
-                    description: description.length > 0 ? description : null,
+                    organization: organization.length > 0 ? organization : false,
+                    schedule: schedule.length > 0 ? schedule : false,
+                    description: description.length > 0 ? description : false,
                     type: type,
-                    twitter: twitter.length > 0 ? twitter : null,
-                    facebook: facebook.length > 0 ? facebook : null,
-                    youtube: youtube.length > 0 ? youtube : null,
+                    twitter: twitter.length > 0 ? twitter : false,
+                    facebook: facebook.length > 0 ? facebook : false,
+                    youtube: youtube.length > 0 ? youtube : false,
                     organizer: organizer,
-                    image: file
+                    image: file ? file : false,
+                    creatorUID: firebase.auth().currentUser.uid
                 };
             if (file) {
                 storageRef.put(file)

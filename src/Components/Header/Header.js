@@ -45,11 +45,11 @@ export default function Header(props) {
             <img src={logo} alt="Málaga Áctiva"/>
           </a>
 
-          <button className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
+          <a className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
             <span></span>
             <span></span>
             <span></span>
-          </button>
+          </a>
         </div>
 
         <div className={navbarMenuClass}>
