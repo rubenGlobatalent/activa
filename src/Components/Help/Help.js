@@ -5,6 +5,7 @@ import logoPolo from '../../assets/img/polo.png'
 import logoAndtech from '../../assets/img/andtech.png'
 import logoRce from '../../assets/img/rce.png'
 import logoPromalaga from '../../assets/img/promalaga.png'
+import imgPortada from '../../assets/img/portada.jpg'
 
 const style = {
     modalCardHead: {
@@ -23,6 +24,9 @@ const style = {
     p: {
         fontSize: '1rem',
         textAlign: 'justify'
+    },
+    imgPortadaContainer: {
+        margin: '25px auto'
     },
     logosRow: {
         width: '70%',
@@ -89,6 +93,9 @@ export default function Help(props) {
                                         <strong>¡Registra una actividad!</strong> No dudes en registrar los puntos de actividad deportiva que conozcas para compartir y ayudar a otr@s ciudadan@s a conocer nuevos lugares <strong>¡Vamos a potenciar la actividad deportiva en la ciudad!</strong>
                                     </p>
                                 </article>
+                                <div style={style.imgPortadaContainer}>
+                                    <img src={imgPortada} alt='portada' />
+                                </div>
                                 <div>
                                     <div style={style.logosRow}>
                                         <div style={style.logoContainer}>
