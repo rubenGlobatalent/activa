@@ -5,6 +5,7 @@ import { NotificationContainer } from 'react-notifications'
 import { Steps } from 'intro.js-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { NotificationManager } from 'react-notifications'
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
@@ -80,6 +81,7 @@ class App extends Component {
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
     this.fetchData = this.fetchData.bind(this)
+    this.deleteDrawnPoint = this.deleteDrawnPoint.bind(this)
     this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.state = {
       header: {
@@ -145,26 +147,47 @@ class App extends Component {
     this.setState({ steps: { visible: false } })
   }
 
+  deleteDrawnPoint = (id) => {
+    this.draw.delete(id)
+  }
+
+  //   firebase.firestore().collection("sports").onSnapshot(querySnapshot => {
+  //     var currentSports = [];
+  //     querySnapshot.forEach(doc => {
+  //         currentSports.push(doc.data().properties.sport);
+  //     });
+  //     console.log("Current sports: ", currentSports.join(", "));
+  // });
   fetchData = async () => {
     try {
       const documents = await firebase.firestore().collection('sports').get(),
-      features = documents.docs.map(doc => {
-        let data = doc.data()
-        data.properties.id = doc.id
+        test = await firebase.firestore().collection('sports').onSnapshot(async querySnapshot => {
+          const snapshot = await querySnapshot
+          snapshot.docs.map(doc => {
+            let data = doc.data()
+            data.properties.id = doc.id
 
-        return data
-      });
+            return data
+          })
+        }),
+        features = documents.docs.map(doc => {
+          let data = doc.data()
+          data.properties.id = doc.id
 
+          return data
+        });
       this.setState({
         data: {
-        ...this.state.data,
-        activities: turf.featureCollection(features)
-      }
-    })
+          ...this.state.data,
+          activities: turf.featureCollection(features)
+        }
+      })
 
     }
     catch (error) {
       console.log(error)
+      NotificationManager.error('Ha ocurrido conectando con la base de datos')
+
     }
   }
 
@@ -300,7 +323,7 @@ class App extends Component {
       //     "icon-image": ['get', 'sport'],
       //     "icon-size": 0.5
       //     }
-          
+
       // });
 
       this.map.addLayer({
@@ -309,7 +332,7 @@ class App extends Component {
         type: 'circle',
         paint: {
           'circle-radius': {
-            'base': 1.75,
+            'base': 2,
             'stops': [[12, 2], [22, 180]]
           },
 
@@ -442,6 +465,7 @@ class App extends Component {
         <Form
           {...this.state.form}
           toggleComponent={this.toggleComponent}
+          deleteDrawnPoint={this.deleteDrawnPoint}
         />
         <NotificationContainer />
         <Steps

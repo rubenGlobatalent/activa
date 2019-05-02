@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
-import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faUpload, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { NotificationManager } from 'react-notifications'
 import uuidv4 from 'uuid/v4'
 // OPTIMIZE IMPORTS
@@ -10,7 +10,6 @@ import * as firebase from 'firebase'
 
 
 export default function Form(props) {
-
     // Hooks
     const [name, setName] = useState(''),
         [sport, setSport] = useState(''),
@@ -25,7 +24,13 @@ export default function Form(props) {
         [organizer, setOrganizer] = useState(false),
         [terms, setTerms] = useState(false),
         [progress, setProgress] = useState(false),
+        [email, setEmail] = useState(''),
+        [phone, setPhone] = useState('');
 
+    const closeAndRemove = () => {
+        props.deleteDrawnPoint(props.feature.id)
+        props.toggleComponent('form')
+    },
         submitData = async event => {
             event.preventDefault();
             setProgress(true)
@@ -45,6 +50,8 @@ export default function Form(props) {
                     youtube: youtube.length > 0 ? youtube : false,
                     organizer: organizer,
                     image: file ? file : false,
+                    email: email.length > 0 ? email : false,
+                    phone: phone.length > 0 ? phone : false,
                     creatorUID: firebase.auth().currentUser.uid
                 };
             if (file) {
@@ -62,13 +69,13 @@ export default function Form(props) {
                                 await databaseRef.add(turf.feature(geometry, { ...properties, image: downloadURL }))
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
-                                props.toggleComponent('form')
                                 clearForm()
+                                closeAndRemove()
                             }
                             catch (error) {
                                 console.log(error)
-                                props.toggleComponent('form')
                                 NotificationManager.error('Ha ocurrido un error al crear la actividad.')
+                                closeAndRemove()
                             }
                         }
                     )
@@ -107,12 +114,14 @@ export default function Form(props) {
             setOrganizer(false)
             setTerms(false)
             setProgress(false)
+            setEmail('')
+            setPhone('')
 
         }
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
-        imagePreview = file ? <figure className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(file)} alt={file.name} /></figure> : null,
+        imagePreview = file ? <picture className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(file)} alt={file.name} /></picture> : null,
         scheduleField = type === 'periódica' ?
             <div className="field column animated zoomIn faster">
                 <div className="control">
@@ -121,7 +130,7 @@ export default function Form(props) {
             </div> : null,
         submitButtonClass = progress ? "button is-loading" : "button";
 
-    if (props.visible) {
+    if (props.visible && firebase.auth().currentUser) {
         const sports = props.data.map(sport => {
             return (
                 <option key={sport} value={sport}>{sport}</option>
@@ -129,11 +138,14 @@ export default function Form(props) {
         })
         return (
             <div className="modal is-active animated fadeIn faster">
-                <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
+                <div className="modal-background"></div>
                 <form className="modal-card" onSubmit={submitData}>
                     <header className="modal-card-head">
                         <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una actividad</h2>
-                        <button className="delete" onClick={() => props.toggleComponent('form')}></button>
+                        <button className="delete" onClick={() => {
+                            closeAndRemove()
+                            NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
+                        }}></button>
                     </header>
 
                     <section className="modal-card-body">
@@ -196,7 +208,7 @@ export default function Form(props) {
                             <div className="column">
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="text" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faTwitter} />
                                         </span>
@@ -204,7 +216,7 @@ export default function Form(props) {
                                 </div>
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="text" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faFacebook} />
                                         </span>
@@ -212,7 +224,7 @@ export default function Form(props) {
                                 </div>
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="text" placeholder="Youtube" value={youtube} onChange={e => setYoutube(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Youtube" value={youtube} onChange={e => setYoutube(e.target.value)} />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faYoutube} />
                                         </span>
@@ -249,6 +261,24 @@ export default function Form(props) {
                             </div>
                         </div>
 
+                        <div className={ organizer ? `animated fadeIn` : `is-sr-only`}>
+                            <div className="field">
+                                <div className="control is-expanded has-icons-left">
+                                    <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                                    <span className="icon is-small is-left">
+                                        <FontAwesomeIcon icon={faEnvelope} />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="control is-expanded has-icons-left">
+                                    <input className="input" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+                                    <span className="icon is-small is-left">
+                                        <FontAwesomeIcon icon={faPhone} />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="field">
                             <div className="control">
@@ -267,7 +297,7 @@ export default function Form(props) {
                                 <button type='submit' className={submitButtonClass}>Enviar</button>
                             </div>
                             <div className="control">
-                                <button className="button is-text" onClick={clearForm}>Borrar</button>
+                                <button type="reset" className="button is-text" onClick={clearForm}>Borrar</button>
                             </div>
                         </div>
                     </footer>
@@ -275,6 +305,36 @@ export default function Form(props) {
             </div>
         )
     }
+
+    else if (props.visible) {
+        return (
+            <div className="modal is-active animated fadeIn faster">
+                <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Regístrate</h2>
+                        <button className="delete" onClick={() => props.toggleComponent('form')}></button>
+                    </header>
+
+                    <section className="modal-card-body">
+                        <p className="is-size-6 has-text-centered has-text-weight-bold">Debes de estar registrado para añadir una actividad</p>
+                    </section>
+
+                    <footer className="modal-card-foot buttons is-centered">
+                        <div className="field is-grouped">
+                            <div className="control">
+                                <button className={submitButtonClass} onClick={() => {
+                                    closeAndRemove()
+                                    NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
+                                }}>Cerrar</button>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        )
+    }
+
     else {
         return (
             null

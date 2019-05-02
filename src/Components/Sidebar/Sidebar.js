@@ -35,8 +35,8 @@ const Remove = (props) => {
 
 const Image = (props) => {
     return (
-        <picture className="card-image image is-4by3" style={{padding: "0 0.5rem 0 0.5rem"}}>
-            <img src={props.data} />
+        <picture className="card-image image is-1by1">
+            <img src={props.data.image}/>
         </picture>
     )
 }
@@ -55,12 +55,11 @@ const Basics = (props) => {
         <>
         <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
         <br/>
-        <div><span className="has-text-weight-bold">¿Cuándo se práctica?: </span>{ props.data.type === 'puntual' ? 
+        <div><span className="has-text-weight-bold">¿Cuándo se practica?: </span>{ props.data.type === 'puntual' ? 
         <p>Puntualmente</p> : 
         <p>{props.data.schedule}</p>
         }
-                <br/>
-
+        <br/>
         </div>
         </>
     )
@@ -74,6 +73,7 @@ const Details = (props) => {
         {props.data.facebook ? <div><a href={props.data.facebook}><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
         {props.data.twitter ? <div><a href={props.data.twitter}><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
         {props.data.youtube ? <div><a href={props.data.youtube}><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
+        <br/>
         </div>
 
         </div>
@@ -86,14 +86,14 @@ export default function Sidebar(props) {
 
     if (props.visible) {
 
-        const image = props.data.image ? <Image data={props.data.image} /> : null,
+        const image = props.data.image ? <Image data={{...props.data}} /> : null,
             description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
             details = (props.data.facebook || props.data.twitter || props.data.youtube) ? <Details data={{...props.data}}/> : null,
             footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID ? <Remove toggleComponent={props.toggleComponent} id={props.data.id} /> : null) : null;
 
 
         return (
-            <article className="card animated fadeIn faster container is-fluid" style={{ zIndex: 1, position: "absolute", top: "4.5rem"}}>
+            <article className="card animated fadeIn faster" style={{ zIndex: 1, position: "absolute", top: "4.5rem", left: "0.7rem"}}>
                 <header className="card-header">
                     <h2 className="is-size-6 card-header-title">
                         {props.data.name ? props.data.name : props.data.sport}
@@ -110,7 +110,7 @@ export default function Sidebar(props) {
                     </div>
                 </header>
 
-                <div style={{ display: expanded ? "block" : "none" }}>
+                <div style={{ display: expanded ? "block" : "none", padding:"0 1rem 1rem 1rem"}}>
                     {image}
 
                     <div className="card-content">
