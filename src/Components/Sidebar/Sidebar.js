@@ -35,7 +35,7 @@ const Remove = (props) => {
 
 const Image = (props) => {
     return (
-        <picture className="card-image image is-4by3">
+        <picture className="card-image image is-4by3" style={{padding: "0 0.5rem 0 0.5rem"}}>
             <img src={props.data} />
         </picture>
     )
@@ -54,10 +54,13 @@ const Basics = (props) => {
     return (
         <>
         <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
+        <br/>
         <div><span className="has-text-weight-bold">¿Cuándo se práctica?: </span>{ props.data.type === 'puntual' ? 
         <p>Puntualmente</p> : 
         <p>{props.data.schedule}</p>
         }
+                <br/>
+
         </div>
         </>
     )
