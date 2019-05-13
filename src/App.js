@@ -5,7 +5,6 @@ import { NotificationContainer } from 'react-notifications'
 import { Steps } from 'intro.js-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import { NotificationManager } from 'react-notifications'
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
@@ -21,13 +20,11 @@ import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
 import districts from './assets/data/districts.json'
 
-// import test from './assets/img/andtech.png'
-
-// const reqSvgs = require.context('./assets/icons', true, /\.png$/)
-// const sportsIcons = sports.list.map(sport => ({
-// 	...sport,
-// 	icon: reqSvgs(`./${sport.key}.png`)
-// }))
+const reqSvgs = require.context('./assets/icons', true, /\.png$/)
+const sportsIcons = sports.list.map(sport => ({
+  ...sport,
+  icon: reqSvgs(`./${sport.key}.png`)
+}))
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'
 
@@ -62,7 +59,7 @@ const initialStep = 0,
     },
     {
       element: '.mapbox-gl-draw_line',
-      intro: 'Si tu actividad deportiva implica un recorrido podrás crearlo mediante una sucesión de puntos.',
+      intro: 'Si tu actividad deportiva implica un recorrido podrás crearlo mediante una sucesión de puntos. Haz doble click, o pulsa dos veces, para terminar de dibujar el recorrido.',
     },
     {
       element: '.mapbox-gl-draw_trash',
@@ -80,7 +77,6 @@ class App extends Component {
     super(props);
     this.toggleComponent = this.toggleComponent.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
-    this.fetchData = this.fetchData.bind(this)
     this.deleteDrawnPoint = this.deleteDrawnPoint.bind(this)
     this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.state = {
@@ -151,46 +147,6 @@ class App extends Component {
     this.draw.delete(id)
   }
 
-  //   firebase.firestore().collection("sports").onSnapshot(querySnapshot => {
-  //     var currentSports = [];
-  //     querySnapshot.forEach(doc => {
-  //         currentSports.push(doc.data().properties.sport);
-  //     });
-  //     console.log("Current sports: ", currentSports.join(", "));
-  // });
-  fetchData = async () => {
-    try {
-      const documents = await firebase.firestore().collection('sports').get(),
-        test = await firebase.firestore().collection('sports').onSnapshot(async querySnapshot => {
-          const snapshot = await querySnapshot
-          snapshot.docs.map(doc => {
-            let data = doc.data()
-            data.properties.id = doc.id
-
-            return data
-          })
-        }),
-        features = documents.docs.map(doc => {
-          let data = doc.data()
-          data.properties.id = doc.id
-
-          return data
-        });
-      this.setState({
-        data: {
-          ...this.state.data,
-          activities: turf.featureCollection(features)
-        }
-      })
-
-    }
-    catch (error) {
-      console.log(error)
-      NotificationManager.error('Ha ocurrido conectando con la base de datos')
-
-    }
-  }
-
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -200,7 +156,25 @@ class App extends Component {
       }
     });
 
-    this.fetchData();
+    firebase.firestore().collection('sports').onSnapshot(async querySnapshot => {
+      const snapshot = await querySnapshot,
+
+        features = snapshot.docs.map(doc => {
+          let data = doc.data()
+          data.properties.id = doc.id
+          if (turf.getType(data) === 'LineString') {
+            data.geometry.coordinates = Object.values(data.geometry.coordinates)
+          }
+          return data
+        })
+
+      this.setState({
+        data: {
+          ...this.state.data,
+          activities: turf.featureCollection(features)
+        }
+      })
+    })
 
     this.setState({
       activityFilter: {
@@ -224,8 +198,11 @@ class App extends Component {
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v9',
       center: [-4.4214, 36.7213],
-      zoom: 12
+      zoom: 12,
+      attributionControl: false
     });
+
+    this.map.addControl(new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com.com"><strong>Cartometrics</strong></a>'] }), 'bottom-right');
 
     this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
@@ -308,43 +285,19 @@ class App extends Component {
         }
       });
 
-      ////////TEEEEEEEEESSSSS//////////////
-      // sportsIcons.forEach(icon => {
-      //   this.map.loadImage(icon.icon, (error, image) => {
-      //     if (error) throw error;
-      //     this.map.addImage(icon.name, image);
-      //   })
-      // })
-      // this.map.addLayer({
-      //   id: 'pointActivities',
-      //   source: 'activities',
-      //   type: 'symbol',
-      //   "layout": {
-      //     "icon-image": ['get', 'sport'],
-      //     "icon-size": 0.5
-      //     }
-
-      // });
-
+      sportsIcons.forEach(icon => {
+        this.map.loadImage(icon.icon, (error, image) => {
+          if (error) throw error;
+          this.map.addImage(icon.name, image);
+        })
+      })
       this.map.addLayer({
         id: 'pointActivities',
         source: 'activities',
-        type: 'circle',
-        paint: {
-          'circle-radius': {
-            'base': 2,
-            'stops': [[12, 2], [22, 180]]
-          },
-
-          'circle-color': [
-            'match',
-            ['get', 'sport'],
-            'Ciclismo', '#fbb03b',
-            'Parkour', '#223b53',
-            'Correr', '#e55e5e',
-            'Yoga', '#3bb2d0',
-            '#Ff8326'
-          ]
+        type: 'symbol',
+        "layout": {
+          "icon-image": ['get', 'sport'],
+          "icon-size": 0.75
         }
       });
 
@@ -376,6 +329,8 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+
+    console.log(this.state.data.activities)
     if (this.map.getSource('activities') !== undefined) {
       let activityFilter = null,
         districtFilter = ['match', ['get', 'name'], 'none', true, false],
@@ -458,10 +413,9 @@ class App extends Component {
           updateFilters={this.updateFilters}
           clearFilters={this.clearFilters}
         />
-        <Sidebar
-          {...this.state.sidebar}
-          toggleComponent={this.toggleComponent}
-        />
+
+        {this.state.sidebar.visible ? <Sidebar {...this.state.sidebar} toggleComponent={this.toggleComponent} /> : null}
+
         <Form
           {...this.state.form}
           toggleComponent={this.toggleComponent}
@@ -472,8 +426,13 @@ class App extends Component {
           enabled={this.state.steps.visible}
           steps={steps}
           initialStep={initialStep}
-          // onExit={() => this.toggleComponent('steps')}
           onExit={this.stepsOnExit}
+          options={{
+            nextLabel: 'Siguiente',
+            prevLabel: 'Anterior',
+            skipLabel: 'Saltar',
+            doneLabel: 'Hecho'
+          }}
         />
         <Legend
           {...this.state.legend}

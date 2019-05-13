@@ -35,7 +35,7 @@ export default function Form(props) {
             event.preventDefault();
             setProgress(true)
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
-                databaseRef = firebase.firestore().collection('sports');
+                databaseRef = firebase.firestore().collection(`sports`);
 
             let geometry = turf.getGeom(props.feature),
                 properties = {
@@ -43,7 +43,7 @@ export default function Form(props) {
                     sport: sport,
                     organization: organization.length > 0 ? organization : false,
                     schedule: schedule.length > 0 ? schedule : false,
-                    description: description.length > 0 ? description : false,
+                    description: description.length > 0 ? description.replace(/\r?\n/g, '<br/>') : false,
                     type: type,
                     twitter: twitter.length > 0 ? twitter : false,
                     facebook: facebook.length > 0 ? facebook : false,
@@ -54,6 +54,7 @@ export default function Form(props) {
                     phone: phone.length > 0 ? phone : false,
                     creatorUID: firebase.auth().currentUser.uid
                 };
+            
             if (file) {
                 storageRef.put(file)
                     .on('state_changed',
@@ -65,8 +66,14 @@ export default function Form(props) {
                         },
                         async () => {
                             try {
-                                const downloadURL = await storageRef.getDownloadURL()
-                                await databaseRef.add(turf.feature(geometry, { ...properties, image: downloadURL }))
+                                const downloadURL = await storageRef.getDownloadURL(),
+                                feature = turf.feature(geometry, { ...properties, image: downloadURL });
+
+                                if (turf.getType(feature) === 'LineString') {
+                                    feature.geometry.coordinates = {...feature.geometry.coordinates}
+                                }
+
+                                await databaseRef.add(feature)
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
                                 clearForm()
@@ -83,15 +90,20 @@ export default function Form(props) {
 
             else {
                 try {
-                    await databaseRef.add(turf.feature(geometry, properties))
+                    const feature = turf.feature(geometry, properties)
+                    if (turf.getType(feature) === 'LineString') {
+                        feature.geometry.coordinates = {...feature.geometry.coordinates}
+                    }
+
+                    await databaseRef.add(feature)
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
-                    props.toggleComponent('form')
+                    closeAndRemove()
                     clearForm()
                 }
                 catch (error) {
                     console.log(error)
-                    props.toggleComponent('form')
+                    closeAndRemove()
                     NotificationManager.error('Ha ocurrido un error al crear la actividad.')
                 }
 

@@ -89,3 +89,7 @@ $tabs-link-active-color: #00aec7;
 .introjs-helperNumberLayer {
   background: #00aec7 !important;
 }
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib p {
+  display: inline;
+}

@@ -15,41 +15,52 @@ export default function Dashboard(props) {
   const [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
-    handleLogin = event => {
+    [waiting, setWaiting] = useState(false)
+
+    const handleLogin = event => {
       event.preventDefault();
-      if (forgot) {
-        firebase.auth().sendPasswordResetEmail(email)
-          .then(() => {
-            props.toggleComponent('dashboard');
-            NotificationManager.info('Te hemos enviado instrucciones de cómo restablecer tu contraseña a la cuenta de correo indicada.')
-          })
-          .catch(() => {
-            props.toggleComponent('dashboard');
-            NotificationManager.error('No existe la cuenta indicada.')
-          })
-      }
-      else {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(() => {
-            props.toggleComponent('dashboard');
-            NotificationManager.success('¡Cuenta creada!')
-          })
-          .catch((error) => {
-            if (error.code === 'auth/email-already-in-use') {
-              firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(() => {
-                  props.toggleComponent('dashboard');
-                  NotificationManager.success('¡Autenticación correcta!')
-                })
-                .catch(() => {
-                  NotificationManager.error('La contraseña no es correcta')
-                })
-            }
-            else {
-              console.error(error)
-              NotificationManager.error('No se ha podido crear la cuenta');
-            }
-          })
+      if (!waiting) {
+        setWaiting(true);
+        if (forgot) {
+          firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+              props.toggleComponent('dashboard');
+              NotificationManager.info('Te hemos enviado instrucciones de cómo restablecer tu contraseña a la cuenta de correo indicada.')
+              setWaiting(false)
+            })
+            .catch(() => {
+              props.toggleComponent('dashboard');
+              NotificationManager.error('No existe la cuenta indicada.')
+              setWaiting(false)
+            })
+        }
+        else {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+              props.toggleComponent('dashboard');
+              NotificationManager.success('¡Cuenta creada!')
+              setWaiting(false)
+            })
+            .catch((error) => {
+              if (error.code === 'auth/email-already-in-use') {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                  .then(() => {
+                    props.toggleComponent('dashboard');
+                    NotificationManager.success('¡Autenticación correcta!')
+                    setWaiting(false)
+                  })
+                  .catch(() => {
+                    NotificationManager.error('La contraseña no es correcta')
+                    setWaiting(false)
+                  })
+              }
+              else {
+                console.error(error)
+                NotificationManager.error('No se ha podido crear la cuenta')
+                setWaiting(false)
+              }
+            })
+        }
       }
     },
     handleLogout = event => {
@@ -133,7 +144,7 @@ export default function Dashboard(props) {
               </div>
             </section>
             <footer className="modal-card-foot buttons is-centered">
-              <button type='submit' className="button">Acceder</button>
+              <button type='submit' className={`button ${waiting ? `is-loading` : ``}`}>Acceder</button>
             </footer>
           </form>
         </div>

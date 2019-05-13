@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
@@ -20,23 +20,59 @@ const Remove = (props) => {
         }
     }
 
-    return (
-        <footer className="card-footer">
+    console.log(props.confirmation)
 
-            <div className="card-footer-item">
-                <button className="button is-danger" onClick={removePoint}>
-                    Eliminar iniciativa
-        </button>
-            </div>
-        </footer>
+    if (props.confirmation) {
+        return (
+            <footer className="card-footer">
+    
+                <div className="card-footer-item">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button className="button is-danger" onClick={removePoint}>
+                                Confirmar
+                    </button>
+                        </div>
+                        <div class="control">
+                            <button className="button is-light" onClick={props.toggleConfirmation}>
+                                Cancelar
+                    </button>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </footer>
+    
+        )
+    }
 
-    )
+    else {
+        return (
+            <footer className="card-footer">
+    
+                <div className="card-footer-item">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button className="button is-danger" onClick={props.toggleConfirmation}>
+                                Eliminar deporte
+                    </button>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </footer>
+    
+        )
+    }
+
 }
 
 const Image = (props) => {
     return (
-        <picture className="card-image image is-1by1">
-            <img src={props.data.image}/>
+        <picture className="card-image image is-square">
+            <img src={props.data.image} style={{ objectFit: 'contain' }} />
         </picture>
     )
 }
@@ -44,8 +80,8 @@ const Image = (props) => {
 const Description = (props) => {
     return (
         <>
-        <p className="has-text-weight-bold">Descripción de la actividad:</p>
-        <p className="content">{props.data}</p >
+            <p className="has-text-weight-bold">Descripción de la actividad:</p>
+            <p className="content" dangerouslySetInnerHTML={{ __html: props.data }} style={{ overflowWrap: 'break-word' }}></p >
         </>
     )
 }
@@ -53,14 +89,14 @@ const Description = (props) => {
 const Basics = (props) => {
     return (
         <>
-        <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
-        <br/>
-        <div><span className="has-text-weight-bold">¿Cuándo se practica?: </span>{ props.data.type === 'puntual' ? 
-        <p>Puntualmente</p> : 
-        <p>{props.data.schedule}</p>
-        }
-        <br/>
-        </div>
+            <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
+            <br />
+            <div><span className="has-text-weight-bold">¿Cuándo se practica?: </span>{props.data.type === 'puntual' ?
+                <p>Puntualmente</p> :
+                <p>{props.data.schedule}</p>
+            }
+                <br />
+            </div>
         </>
     )
 }
@@ -68,13 +104,13 @@ const Basics = (props) => {
 const Details = (props) => {
     return (
         <div className="box has-background-white-bis is-paddingless">
-        <h2 className="title is-size-6 has-background-grey-lighter" style={{paddingLeft:"0.25rem"}}>Contacto</h2>
-        <div className="subtitle is-size-7">
-        {props.data.facebook ? <div><a href={props.data.facebook}><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
-        {props.data.twitter ? <div><a href={props.data.twitter}><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
-        {props.data.youtube ? <div><a href={props.data.youtube}><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
-        <br/>
-        </div>
+            <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Contacto</h2>
+            <div className="subtitle is-size-7">
+                {props.data.facebook ? <div><a href={props.data.facebook}><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
+                {props.data.twitter ? <div><a href={props.data.twitter}><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
+                {props.data.youtube ? <div><a href={props.data.youtube}><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
+                <br />
+            </div>
 
         </div>
     )
@@ -82,18 +118,21 @@ const Details = (props) => {
 
 export default function Sidebar(props) {
 
-    const [expanded, setExpanded] = useState(true)
+    const [expanded, setExpanded] = useState(true),
+    [confirmation, setConfirmation] = useState(false)
 
-    if (props.visible) {
+    const toggleConfirmation = () => {
+        setConfirmation(!confirmation)
+    }
 
-        const image = props.data.image ? <Image data={{...props.data}} /> : null,
+        const image = props.data.image ? <Image data={{ ...props.data }} /> : null,
             description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
-            details = (props.data.facebook || props.data.twitter || props.data.youtube) ? <Details data={{...props.data}}/> : null,
-            footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID ? <Remove toggleComponent={props.toggleComponent} id={props.data.id} /> : null) : null;
+            details = (props.data.facebook || props.data.twitter || props.data.youtube) ? <Details data={{ ...props.data }} /> : null,
+            footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID ? <Remove toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} id={props.data.id} /> : null) : null;
 
 
         return (
-            <article className="card animated fadeIn faster" style={{ zIndex: 1, position: "absolute", top: "4.5rem", left: "0.7rem"}}>
+            <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
                 <header className="card-header">
                     <h2 className="is-size-6 card-header-title">
                         {props.data.name ? props.data.name : props.data.sport}
@@ -110,11 +149,11 @@ export default function Sidebar(props) {
                     </div>
                 </header>
 
-                <div style={{ display: expanded ? "block" : "none", padding:"0 1rem 1rem 1rem"}}>
+                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem 1rem 1rem" }}>
                     {image}
 
                     <div className="card-content">
-                    <Basics data={props.data} />
+                        <Basics data={props.data} />
                         {description}
                         {details}
                     </div>
@@ -122,11 +161,5 @@ export default function Sidebar(props) {
                 {footer}
             </article>
         )
-    }
-    else {
-        return (
-            null
-        )
-    }
 
 }

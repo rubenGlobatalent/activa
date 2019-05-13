@@ -5,7 +5,13 @@ import logoPolo from '../../assets/img/polo.png'
 import logoAndtech from '../../assets/img/andtech.png'
 import logoRce from '../../assets/img/rce.png'
 import logoPromalaga from '../../assets/img/promalaga.png'
-import imgPortada from '../../assets/img/portada.jpg'
+import imgPortada from '../../assets/img/main.gif'
+import cartometrics from '../../assets/img/cartometrics.png'
+import logoInteractividad from '../../assets/img/interactividad.png'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faTwitter, faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons"
 
 const style = {
     modalCardHead: {
@@ -96,30 +102,55 @@ export default function Help(props) {
                                 <div style={style.imgPortadaContainer}>
                                     <img src={imgPortada} alt='portada' />
                                 </div>
+                                <div className="has-text-centered is-size-7">
+                                    <h6>Contáctanos</h6>
+                                <div className="has-text-centered is-size-6">
+                                <a href="info@teciudadania.uma.es"><span className="icon">
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                </span></a>
+                                <a href="https://twitter.com/teciudadania?lang=es"><span className="icon">
+                                    <FontAwesomeIcon icon={faTwitter} />
+                                </span></a>
+                                <a href="https://www.facebook.com/teciudadania.ciudadania.1"><span className="icon">
+                                    <FontAwesomeIcon icon={faFacebook} />
+                                </span></a>
+                                <a href="https://www.instagram.com/teciudadania/?hl=es"><span className="icon">
+                                    <FontAwesomeIcon icon={faInstagram} />
+                                </span></a>
+                                </div>
+                                </div>
                                 <div>
                                     <div style={style.logosRow}>
-                                        <div style={style.logoContainer}>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoTec} alt="" />
-                                        </div>
-                                        <div style={style.logoContainer}>
+                                        </picture>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoAyunt} alt="" />
-                                        </div>
+                                        </picture>
                                     </div>
                                     <div style={style.logosRow}>
-                                        <div style={style.logoContainer}>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoPolo} alt="" />
-                                        </div>
-                                        <div style={style.logoContainer}>
+                                        </picture>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoAndtech} alt="" />
-                                        </div>
+                                        </picture>
                                     </div>
                                     <div style={style.logosRow}>
-                                        <div style={style.logoContainer}>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoRce} alt="" />
-                                        </div>
-                                        <div style={style.logoContainer}>
+                                        </picture>
+                                        <picture style={style.logoContainer}>
                                             <img src={logoPromalaga} alt="" />
-                                        </div>
+                                        </picture>
+                                    </div>
+                                    <div style={style.logosRow}>
+                                        <picture style={style.logoContainer}>
+                                            <img src={cartometrics} alt="" />
+                                        </picture>
+                                        <picture style={style.logoContainer}>
+                                            <img src={logoInteractividad} alt="" />
+                                        </picture>
                                     </div>
                                 </div>
                             </React.Fragment>
