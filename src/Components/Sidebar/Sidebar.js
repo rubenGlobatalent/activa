@@ -27,13 +27,13 @@ const Remove = (props) => {
             <footer className="card-footer">
     
                 <div className="card-footer-item">
-                    <div class="field is-grouped">
-                        <div class="control">
+                    <div className="field is-grouped">
+                        <div className="control">
                             <button className="button is-danger" onClick={removePoint}>
                                 Confirmar
                     </button>
                         </div>
-                        <div class="control">
+                        <div className="control">
                             <button className="button is-light" onClick={props.toggleConfirmation}>
                                 Cancelar
                     </button>
@@ -52,8 +52,8 @@ const Remove = (props) => {
             <footer className="card-footer">
     
                 <div className="card-footer-item">
-                    <div class="field is-grouped">
-                        <div class="control">
+                    <div className="field is-grouped">
+                        <div className="control">
                             <button className="button is-danger" onClick={props.toggleConfirmation}>
                                 Eliminar deporte
                     </button>
@@ -128,7 +128,7 @@ export default function Sidebar(props) {
         const image = props.data.image ? <Image data={{ ...props.data }} /> : null,
             description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
             details = (props.data.facebook || props.data.twitter || props.data.youtube) ? <Details data={{ ...props.data }} /> : null,
-            footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID ? <Remove toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} id={props.data.id} /> : null) : null;
+            footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Remove toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} id={props.data.id} /> : null) : null;
 
 
         return (

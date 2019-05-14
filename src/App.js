@@ -165,13 +165,20 @@ class App extends Component {
           if (turf.getType(data) === 'LineString') {
             data.geometry.coordinates = Object.values(data.geometry.coordinates)
           }
+
           return data
-        })
+        }),
+
+      exploded = features
+      .filter(feature => turf.getType(feature ) === 'LineString')
+      .map(feature => turf.explode(feature).features)
+      .flat()
+
 
       this.setState({
         data: {
           ...this.state.data,
-          activities: turf.featureCollection(features)
+          activities: turf.featureCollection([...features, ...exploded])
         }
       })
     })
@@ -202,7 +209,7 @@ class App extends Component {
       attributionControl: false
     });
 
-    this.map.addControl(new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com.com"><strong>Cartometrics</strong></a>'] }), 'bottom-right');
+    this.map.addControl(new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com" target="_blank"><strong>Cartometrics</strong></a>'] }), 'bottom-right');
 
     this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
@@ -330,7 +337,6 @@ class App extends Component {
 
   componentDidUpdate() {
 
-    console.log(this.state.data.activities)
     if (this.map.getSource('activities') !== undefined) {
       let activityFilter = null,
         districtFilter = ['match', ['get', 'name'], 'none', true, false],
