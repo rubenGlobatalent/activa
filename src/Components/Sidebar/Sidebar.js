@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
@@ -19,8 +19,6 @@ const Remove = (props) => {
             NotificationManager.error('Ha ocurrido un error al eliminar la actividad.')
         }
     }
-
-    console.log(props.confirmation)
 
     if (props.confirmation) {
         return (
@@ -106,9 +104,9 @@ const Details = (props) => {
         <div className="box has-background-white-bis is-paddingless">
             <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Contacto</h2>
             <div className="subtitle is-size-7">
-                {props.data.facebook ? <div><a href={props.data.facebook}><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
-                {props.data.twitter ? <div><a href={props.data.twitter}><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
-                {props.data.youtube ? <div><a href={props.data.youtube}><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
+                {props.data.facebook ? <div><a href={props.data.facebook} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
+                {props.data.twitter ? <div><a href={props.data.twitter} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
+                {props.data.youtube ? <div><a href={props.data.youtube} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
                 <br />
             </div>
 
