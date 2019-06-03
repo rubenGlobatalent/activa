@@ -1,31 +1,175 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="20 30 80 20" style="enable-background:new 0 0 100 125;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#D57642;}
-	.st1{fill:none;}
-	.st2{fill:#D57642;stroke:#D57642;stroke-width:2;stroke-miterlimit:10;}
-</style>
-<g>
-	<polygon class="st0" points="36.3,36.9 34.4,36.9 35.4,37.6 	"/>
-	<polygon class="st0" points="43.5,36.9 41.5,36.9 42.5,37.6 	"/>
-	<polygon class="st0" points="27.4,38 25.9,36.9 25.4,36.9 25.7,39.1 	"/>
-	<polygon class="st0" points="28.9,36.9 27.4,36.9 28.1,37.5 	"/>
-	<path class="st0" d="M72,51.2l0.1,0.2c0,0-0.2,0,0,0.2c0.5,0.7,4.3,4.5,5.7,5.2c2,1.2,10.2,2.5,14.9,3.2c0.3,0.2,0.7,0.2,0.8,0.2
-		c1.5-0.2,2.8-1.3,3-2.8c0.3-1.8-1-3.5-2.7-3.8c-5.4-0.8-11.7-2-13-2.5c-0.7-0.5-4.8-4.7-4.8-4.7"/>
-	<path class="st0" d="M74.4,44.8l-3.2-11.5c3.5,0.7,4.7,2.8,6.2,6.9c0.5,1.2,1.5,1.8,2.7,1.7c0.2,0,0.5,0,0.7-0.2
-		c1.3-0.5,2-1.8,1.5-3.2C77.7,24.7,63.2,28.1,63,28.1c-5.2,0.8-9.7,0-10.2-0.7c-0.3-0.5-0.8-4-2.7-8c0-0.2-6.2-10-5.3,1.2
-		c0.8,6.2,3.5,9.5,4.3,10.5c1.5,1.7,5.4,2.3,9.4,2.5L63,48.3c0,0,0,8.4,0.5,10.5c0.2,0.8,0.7,3.2,10.9,11.4c0.7,0.5,1.7,0.8,2.5,0.7
-		c0.8,0,1.7-0.5,2.2-1.2c1.2-1.5,1-3.5-0.5-4.7c-3.5-2.8-8.7-8-8.7-8s0-3.7,0-6.5"/>
-	<path class="st0" d="M22.2,38.4h1.8 M48,39.3v-3.7H22.2v0.8h-2.2v2h2.2v0.8 M46.1,38.4H48 M46.1,38.4 M42.8,58.2 M27.6,58.3h0.8"/>
-	<path class="st0" d="M36.3,30.8c2.7,0,5-2.3,5-5.2c0-2.7-2.3-5-5-5c-2.8,0-5.2,2.3-5.2,5C31.1,28.4,33.4,30.8,36.3,30.8z"/>
-	<path class="st0" d="M66,25.6c3.5-1.2,5.3-4.8,4.3-8.4c-1.2-3.5-4.8-5.4-8.2-4.3c-3.5,1.2-5.5,4.8-4.3,8.4
-		C58.9,24.6,62.5,26.6,66,25.6z"/>
-</g>
-<line class="st1" x1="27.5" y1="59.4" x2="27.5" y2="59.4"/>
-<line class="st1" x1="37" y1="50.9" x2="32.3" y2="71.6"/>
-<line class="st1" x1="35.2" y1="58.5" x2="37.4" y2="54.8"/>
-<line class="st2" x1="46.8" y1="38.3" x2="39.5" y2="58.1"/>
-<line class="st2" x1="23.6" y1="38.6" x2="29.9" y2="57.9"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="80.675758mm"
+   height="80.675758mm"
+   viewBox="0 0 80.675758 80.675758"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="baloncesto.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-188.97045"
+     inkscape:cy="127.07679"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-29.965693,-117.56688)">
+    <rect
+       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5477-8-9"
+       width="80.675758"
+       height="80.675758"
+       x="29.693287"
+       y="117.83928"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\baloncesto.png"
+       inkscape:export-xdpi="11.019427"
+       inkscape:export-ydpi="11.019427" />
+    <g
+       id="g4959"
+       transform="matrix(0.99786075,0,0,0.99786075,12.106393,115.0623)"
+       style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055"
+       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\baloncesto.png"
+       inkscape:export-xdpi="11.019427"
+       inkscape:export-ydpi="11.019427">
+      <g
+         id="g4924"
+         style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055">
+        <polygon
+           id="polygon4906"
+           points="34.4,36.9 35.4,37.6 36.3,36.9 "
+           class="st0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <polygon
+           id="polygon4908"
+           points="41.5,36.9 42.5,37.6 43.5,36.9 "
+           class="st0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <polygon
+           id="polygon4910"
+           points="25.4,36.9 25.7,39.1 27.4,38 25.9,36.9 "
+           class="st0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <polygon
+           id="polygon4912"
+           points="27.4,36.9 28.1,37.5 28.9,36.9 "
+           class="st0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <path
+           id="path4914"
+           d="m 72,51.2 0.1,0.2 c 0,0 -0.2,0 0,0.2 0.5,0.7 4.3,4.5 5.7,5.2 2,1.2 10.2,2.5 14.9,3.2 0.3,0.2 0.7,0.2 0.8,0.2 1.5,-0.2 2.8,-1.3 3,-2.8 0.3,-1.8 -1,-3.5 -2.7,-3.8 -5.4,-0.8 -11.7,-2 -13,-2.5 C 80.1,50.6 76,46.4 76,46.4"
+           class="st0"
+           inkscape:connector-curvature="0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <path
+           id="path4916"
+           d="M 74.4,44.8 71.2,33.3 c 3.5,0.7 4.7,2.8 6.2,6.9 0.5,1.2 1.5,1.8 2.7,1.7 0.2,0 0.5,0 0.7,-0.2 1.3,-0.5 2,-1.8 1.5,-3.2 C 77.7,24.7 63.2,28.1 63,28.1 c -5.2,0.8 -9.7,0 -10.2,-0.7 -0.3,-0.5 -0.8,-4 -2.7,-8 0,-0.2 -6.2,-10 -5.3,1.2 0.8,6.2 3.5,9.5 4.3,10.5 1.5,1.7 5.4,2.3 9.4,2.5 L 63,48.3 c 0,0 0,8.4 0.5,10.5 0.2,0.8 0.7,3.2 10.9,11.4 0.7,0.5 1.7,0.8 2.5,0.7 0.8,0 1.7,-0.5 2.2,-1.2 1.2,-1.5 1,-3.5 -0.5,-4.7 -3.5,-2.8 -8.7,-8 -8.7,-8 0,0 0,-3.7 0,-6.5"
+           class="st0"
+           inkscape:connector-curvature="0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <path
+           id="path4918"
+           d="M 22.2,38.4 H 24 m 24,0.9 V 35.6 H 22.2 v 0.8 H 20 v 2 h 2.2 v 0.8 M 46.1,38.4 H 48 m -1.9,0 m -3.3,19.8 m -15.2,0.1 h 0.8"
+           class="st0"
+           inkscape:connector-curvature="0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <path
+           id="path4920"
+           d="m 36.3,30.8 c 2.7,0 5,-2.3 5,-5.2 0,-2.7 -2.3,-5 -5,-5 -2.8,0 -5.2,2.3 -5.2,5 0,2.8 2.3,5.2 5.2,5.2 z"
+           class="st0"
+           inkscape:connector-curvature="0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+        <path
+           id="path4922"
+           d="m 66,25.6 c 3.5,-1.2 5.3,-4.8 4.3,-8.4 -1.2,-3.5 -4.8,-5.4 -8.2,-4.3 -3.5,1.2 -5.5,4.8 -4.3,8.4 1.1,3.3 4.7,5.3 8.2,4.3 z"
+           class="st0"
+           inkscape:connector-curvature="0"
+           style="fill:#d57642;fill-opacity:1;stroke-width:0.26515055" />
+      </g>
+      <line
+         id="line4926"
+         y2="59.400002"
+         x2="27.5"
+         y1="59.400002"
+         x1="27.5"
+         class="st1"
+         style="clip-rule:evenodd;fill:#d57642;fill-opacity:1;fill-rule:evenodd;stroke-width:0.26515055" />
+      <line
+         id="line4928"
+         y2="71.599998"
+         x2="32.299999"
+         y1="50.900002"
+         x1="37"
+         class="st1"
+         style="clip-rule:evenodd;fill:#d57642;fill-opacity:1;fill-rule:evenodd;stroke-width:0.26515055" />
+      <line
+         id="line4930"
+         y2="54.799999"
+         x2="37.400002"
+         y1="58.5"
+         x1="35.200001"
+         class="st1"
+         style="clip-rule:evenodd;fill:#d57642;fill-opacity:1;fill-rule:evenodd;stroke-width:0.26515055" />
+      <line
+         id="line4932"
+         y2="58.099998"
+         x2="39.5"
+         y1="38.299999"
+         x1="46.799999"
+         class="st2"
+         style="fill:#d57642;fill-opacity:1;stroke:#d57642;stroke-width:0.53030109;stroke-miterlimit:10" />
+      <line
+         id="line4934"
+         y2="57.900002"
+         x2="29.9"
+         y1="38.599998"
+         x1="23.6"
+         class="st2"
+         style="fill:#d57642;fill-opacity:1;stroke:#d57642;stroke-width:0.53030109;stroke-miterlimit:10" />
+    </g>
+  </g>
 </svg>

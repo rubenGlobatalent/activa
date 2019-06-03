@@ -9,6 +9,7 @@ import logoVice from '../../assets/img/vice.png'
 import imgPortada from '../../assets/img/main.gif'
 import cartometrics from '../../assets/img/cartometrics.png'
 import logoInteractividad from '../../assets/img/interactividad.png'
+import logoGeotecnologia from '../../assets/img/geotecnologia.png'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
@@ -37,14 +38,27 @@ const style = {
         display: 'block',
         margin: '0 auto'
     },
-    logosRow: {
-        width: '70%',
+    logosRow2: {
+        width: '50%',
         margin: '20px auto 0',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    logoContainer: {
+    logosRow3: {
+        width: '80%',
+        margin: '20px auto 0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    logoContainer2: {
+        width: '45%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    logoContainer3: {
         width: '30%',
         display: 'flex',
         justifyContent: 'center',
@@ -100,36 +114,42 @@ export default function Help(props) {
                                     </span></a>
                             </section>
                         <div>
-                            <div style={style.logosRow}>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoTec} alt="" />
-                                </picture>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoAyunt} alt="" />
-                                </picture>
-                            </div>
-                            <div style={style.logosRow}>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoPolo} alt="" />
-                                </picture>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoAndtech} alt="" />
-                                </picture>
-                            </div>
-                            <div style={style.logosRow}>
-                                <picture style={style.logoContainer}>
+                            <div style={style.logosRow2}>
+                                <picture style={style.logoContainer2}>
                                     <img src={logoRce} alt="" />
                                 </picture>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoPromalaga} alt="" />
+                                <picture style={style.logoContainer2}>
+                                    <img src={logoVice} alt="" />
                                 </picture>
                             </div>
-                            <div style={style.logosRow}>
-                                <picture style={style.logoContainer}>
+                            <div style={style.logosRow3}>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoTec} alt="" />
+                                </picture>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoGeotecnologia} alt="" />
+                                </picture>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoInteractividad} alt="" />
+                                </picture>
+                            </div>
+                            <div style={style.logosRow2}>
+                                <picture style={style.logoContainer2}>
+                                    <img src={logoAndtech} alt="" />
+                                </picture>
+                                <picture style={style.logoContainer2}>
                                     <img src={cartometrics} alt="" />
                                 </picture>
-                                <picture style={style.logoContainer}>
-                                    <img src={logoInteractividad} alt="" />
+                            </div>
+                            <div style={style.logosRow3}>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoPolo} alt="" />
+                                </picture>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoAyunt} alt="" />
+                                </picture>
+                                <picture style={style.logoContainer3}>
+                                    <img src={logoPromalaga} alt="" />
                                 </picture>
                             </div>
                         </div>
