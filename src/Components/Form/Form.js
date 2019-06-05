@@ -220,7 +220,7 @@ export default function Form(props) {
                             <div className="column">
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="url" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?twitter\.com\/.+" title="Introduce una cuenta de Twitter válida."/>
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faTwitter} />
                                         </span>
@@ -228,7 +228,7 @@ export default function Form(props) {
                                 </div>
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="url" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?facebook\.com\/.+" title="Introduce una cuenta de Facebook válida."/>
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faFacebook} />
                                         </span>
@@ -236,7 +236,7 @@ export default function Form(props) {
                                 </div>
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="url" placeholder="Youtube" value={youtube} onChange={e => setYoutube(e.target.value)} />
+                                        <input className="input" type="url" placeholder="Youtube" value={youtube} onChange={e => setYoutube(e.target.value)} pattern="^(http(s)?:\/\/(?:www\.)?youtu(be|.be)?(\.com)?\/.+" title="Introduce una cuenta de Youtube válida." />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faYoutube} />
                                         </span>
