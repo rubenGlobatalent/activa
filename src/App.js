@@ -162,6 +162,7 @@ class App extends Component {
         features = snapshot.docs.map(doc => {
           let data = doc.data()
           data.properties.id = doc.id
+          data.properties.pointInLine = false
           if (turf.getType(data) === 'LineString') {
             data.geometry.coordinates = Object.values(data.geometry.coordinates)
           }
@@ -173,7 +174,20 @@ class App extends Component {
       .filter(feature => turf.getType(feature ) === 'LineString')
       .map(feature => turf.explode(feature).features)
       .flat()
+      
+      // Deep clone properties to be able to set pointInLine property immutably
+      exploded.forEach(feature => {
+        const propertiesDeepClone = { ...feature.properties }
+        feature.properties = propertiesDeepClone
+        return feature
+      })
 
+      /* Add property pointInLine to be able to separate the pointActivities layer
+      from the pointInLineActivities layer */
+      exploded.map(feature => {
+        feature.properties.pointInLine = true
+        return feature
+      })
 
       this.setState({
         data: {
@@ -277,7 +291,7 @@ class App extends Component {
         },
         filter: ['match', ['get', 'name'], ['none'], true, false]
       });
-
+      
       this.map.addLayer({
         id: 'lineActivities',
         source: 'activities',
@@ -305,11 +319,24 @@ class App extends Component {
         "layout": {
           "icon-image": ['get', 'sport'],
           "icon-size": 0.75,
-          // "icon-allow-overlap": true
-        }
+          "icon-allow-overlap": true
+        },
+        "filter": ["==", ['get', 'pointInLine'], false]
       });
 
-      ['pointActivities', 'lineActivities'].forEach(activityType => {
+      this.map.addLayer({
+        id: 'pointInLineActivities',
+        source: 'activities',
+        type: 'symbol',
+        "layout": {
+          "icon-image": ['get', 'sport'],
+          "icon-size": 0.75,
+          "icon-allow-overlap": false
+        },
+        "filter": ["==", ['get', 'pointInLine'], true]
+      });
+
+      ['pointActivities', 'pointInLineActivities', 'lineActivities'].forEach(activityType => {
         this.map.on('mouseenter', activityType, () => {
           this.map.getCanvas().style.cursor = 'pointer';
         });
@@ -379,7 +406,7 @@ class App extends Component {
 
       this.map.setFilter('districts', districtFilter);
 
-      ['pointActivities', 'lineActivities'].forEach(layer => {
+      ['pointActivities', 'pointInLineActivities', 'lineActivities'].forEach(layer => {
         this.map.setFilter(layer, activityFilter)
       })
 
