@@ -1,6 +1,6 @@
 import React, { useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faMinus, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { NotificationManager } from 'react-notifications'
 import * as firebase from 'firebase'
@@ -100,6 +100,7 @@ const Basics = (props) => {
 }
 
 const Details = (props) => {
+    console.log(props.data)
     return (
         <div className="box has-background-white-bis is-paddingless">
             <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Contacto</h2>
@@ -107,7 +108,9 @@ const Details = (props) => {
                 {props.data.facebook ? <div><a href={props.data.facebook} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faFacebook} /></span>Facebook</a></div> : null}
                 {props.data.twitter ? <div><a href={props.data.twitter} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faTwitter} /></span>Twitter</a></div> : null}
                 {props.data.youtube ? <div><a href={props.data.youtube} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faYoutube} /></span>Youtube</a></div> : null}
-                <br />
+                {props.data.email ? <div><a href={`mailto:${props.data.email}`} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faEnvelope} /></span>Correo</a></div> : null}
+                {props.data.phone ? <div><a href={`tel:${props.data.email}`} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faPhone} /></span>Teléfono</a></div> : null}
+                <br/>
             </div>
 
         </div>
@@ -125,7 +128,7 @@ export default function Sidebar(props) {
 
         const image = props.data.image ? <Image data={{ ...props.data }} /> : null,
             description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
-            details = (props.data.facebook || props.data.twitter || props.data.youtube) ? <Details data={{ ...props.data }} /> : null,
+            details = (props.data.facebook || props.data.twitter || props.data.youtube || props.data.email || props.data.phone) ? <Details data={{ ...props.data }} /> : null,
             footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Remove toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} id={props.data.id} /> : null) : null;
 
 
