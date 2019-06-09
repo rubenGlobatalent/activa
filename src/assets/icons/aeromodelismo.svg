@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="parkour.svg">
+   sodipodi:docname="aeromodelismo.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="-211.82758"
-     inkscape:cy="158.17242"
+     inkscape:cx="-188.97045"
+     inkscape:cy="186.74383"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -56,41 +56,26 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-36.013309,-110.00736)">
+     transform="translate(-29.965693,-117.56688)">
     <rect
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect5477-8-3-6"
+       id="rect5477-7"
        width="80.675758"
        height="80.675758"
-       x="36.013309"
-       y="110.00736"
+       x="30.449242"
+       y="117.08333"
        rx="0"
        ry="0"
-       inkscape:export-xdpi="11.01941"
-       inkscape:export-ydpi="11.01941"
-       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\parkour.png" />
-    <g
-       style="fill:#3c7899;stroke-width:3.4343257"
-       id="g4757"
-       transform="matrix(0.07704085,0,0,0.07704085,39.348954,112.53873)"
-       inkscape:export-xdpi="11.01941"
-       inkscape:export-ydpi="11.01941"
-       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\parkour.png">
-      <g
-         id="g4746"
-         style="stroke-width:3.4343257">
-        <circle
-           id="circle4742"
-           r="99.199997"
-           cy="446.60001"
-           cx="248.5"
-           style="stroke-width:3.4343257" />
-        <path
-           id="path4744"
-           d="m 838.8,323.8 -162.8,42.7 -9.8,-65 c -1.7,-11 -6.4,-21.3 -13.8,-29.7 l -40,-45.6 43,-124.4 c 10.5,-30.4 -5.6,-63.5 -36,-74 C 606.3,23.3 592.7,24 580.6,28.4 576.9,23 572.1,18.3 565.9,15 545.7,4.2 520.4,11.8 509.6,32.1 L 352.7,325.7 c -3.3,6.2 -4.7,12.9 -4.7,19.5 l -0.3,0.1 0.3,2.2 c 0.1,2.4 0.5,4.7 1,7 l 25.1,172 V 773.7 H 121.4 c -18.4,0 -33.3,14.9 -33.3,33.3 v 149.7 c 0,18.4 14.9,33.3 33.3,33.3 h 291.1 c 18.4,0 33.3,-14.9 33.3,-33.3 V 807.1 c 0,-1.4 -0.3,-2.8 -0.4,-4.2 7.4,-7.5 11.9,-17.8 11.9,-29.1 V 509.1 L 577,466.7 c 4.5,8.4 10.9,15.9 19,21.3 9.6,6.3 20.7,9.6 32,9.6 4.9,0 9.9,-0.6 14.8,-1.9 l 225.5,-59.2 c 31.1,-8.2 49.7,-40 41.5,-71.1 -8.1,-31.2 -39.9,-49.7 -71,-41.6 z m -350,-76.3 c 1.6,10.9 6.2,21.4 13.7,30 l 9,10.2 -54.4,19.1 z"
-           inkscape:connector-curvature="0"
-           style="stroke-width:3.4343257" />
-      </g>
-    </g>
+       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\aeromodelismo.png"
+       inkscape:export-xdpi="11.019427"
+       inkscape:export-ydpi="11.019427" />
+    <path
+       style="fill:#008000;fill-opacity:1;stroke-width:0.35277778"
+       inkscape:connector-curvature="0"
+       d="M 77.900316,168.86215 H 108.0376 v -7.53431 l -30.137284,-7.53433 v -26.37012 c 0,-4.16265 -3.371717,-7.53435 -7.534301,-7.53435 -4.16261,0 -7.534407,3.3717 -7.534407,7.53435 v 26.37012 l -30.137391,7.53433 v 7.53431 h 30.137391 v 7.53433 l -11.301492,11.3015 v 7.53432 l 18.835899,-7.53432 18.835793,7.53432 v -7.53432 l -11.301492,-11.3015 z m 0,0"
+       id="path4730-5"
+       inkscape:export-filename="C:\Users\Pablo\Desktop\CARTOMETRICS\9 PROYECTOS\ANTIGUOS\10 Webgis MalagaActiva\logosUlt\aeromodelismo.png"
+       inkscape:export-xdpi="11.019427"
+       inkscape:export-ydpi="11.019427" />
   </g>
 </svg>

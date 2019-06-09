@@ -304,7 +304,8 @@ class App extends Component {
         type: 'symbol',
         "layout": {
           "icon-image": ['get', 'sport'],
-          "icon-size": 0.75
+          "icon-size": 0.75,
+          // "icon-allow-overlap": true
         }
       });
 

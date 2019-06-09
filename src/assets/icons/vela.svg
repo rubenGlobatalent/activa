@@ -1,25 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 50 50" style="enable-background:new 0 0 50 62.5;" xml:space="preserve">
-<style type="text/css">
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 50 62.5"
+   style="enable-background:new 0 0 50 62.5;"
+   xml:space="preserve"
+   sodipodi:docname="vela1.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><metadata
+   id="metadata961"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs959" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1017"
+   id="namedview957"
+   showgrid="false"
+   inkscape:zoom="3.776"
+   inkscape:cx="25"
+   inkscape:cy="31.25"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Capa_1" />
+<style
+   type="text/css"
+   id="style938">
 	.st0{fill:#874C64;}
 </style>
-<g>
-	<g>
-		<path class="st0" d="M48.7,42.5c-0.6-0.4-1.8-0.5-2.7-0.3l-3.2,1c-4.7,1.4-7.1-1.8-14.1-0.1c-1.2,0.3-3.5,1-6.2,0.2
-			c-3.3-0.9-6.5-0.7-9.8,0.1c-1.6,0.4-3.6,0.4-5.1-0.1L4,42.2c-0.9-0.3-2.1-0.2-2.7,0.3c-0.6,0.4-0.3,1,0.6,1.2l3.5,1.1
-			c2.7,0.8,6.2,0.9,9.1,0.2c1-0.3,3.3-0.9,5.9-0.2c2.6,0.8,6,0.8,8.8,0.1c1.7-0.4,3.4-1,6.5-0.2c5.3,1.4,9.3-0.1,12.4-1.1
-			C49,43.4,49.3,42.9,48.7,42.5z"/>
-		<path class="st0" d="M25.9,32.7H10.8c0.2,8.6,5.9,9.2,9.5,8.7c2.4-0.4,4.9-0.3,7.3,0.1c14.4,1.9,18.7-8.7,18.7-8.7H27l-0.7-1.5
-			l19.9-4.5C39,5.7,25.9,1,25.9,1l0,1.2l-6.2,16.4L25.9,32.7z M26,5L26,30.5l-5.2-11.9L26,5z"/>
-		<path class="st0" d="M11.1,20.4c-3.1-0.4-3.1-0.4-4-0.1C5.2,21,4.2,23.1,4.9,25L7,30.9c0.3,0.9,1,1.7,1.8,2.1v-0.1l0-1h12.1
-			l-2-2.3c-0.4-0.4-0.9-0.7-1.5-0.7h-3.4c0-0.1-0.1-0.3-0.1-0.4l-1.7-4.9"/>
-		<path class="st0" d="M13.6,23.6l2.2,0.2c0.1,0,0.1,0,0.2,0c0.3,0,0.6-0.1,0.9-0.3l3.5-2.4l-1.1-2.5l0.2-0.5l-3.8,2.6
-			c-1.2-0.1-2.2-0.3-2.9-0.3"/>
-		<circle class="st0" cx="7.2" cy="16.1" r="3.2"/>
+<g
+   id="g952"
+   style="fill:#008983;fill-opacity:1">
+	<g
+   id="g950"
+   style="fill:#008983;fill-opacity:1">
+		<path
+   class="st0"
+   d="M48.7,42.5c-0.6-0.4-1.8-0.5-2.7-0.3l-3.2,1c-4.7,1.4-7.1-1.8-14.1-0.1c-1.2,0.3-3.5,1-6.2,0.2    c-3.3-0.9-6.5-0.7-9.8,0.1c-1.6,0.4-3.6,0.4-5.1-0.1L4,42.2c-0.9-0.3-2.1-0.2-2.7,0.3c-0.6,0.4-0.3,1,0.6,1.2l3.5,1.1    c2.7,0.8,6.2,0.9,9.1,0.2c1-0.3,3.3-0.9,5.9-0.2c2.6,0.8,6,0.8,8.8,0.1c1.7-0.4,3.4-1,6.5-0.2c5.3,1.4,9.3-0.1,12.4-1.1    C49,43.4,49.3,42.9,48.7,42.5z"
+   id="path940"
+   style="fill:#008983;fill-opacity:1" />
+		<path
+   class="st0"
+   d="M25.9,32.7H10.8c0.2,8.6,5.9,9.2,9.5,8.7c2.4-0.4,4.9-0.3,7.3,0.1c14.4,1.9,18.7-8.7,18.7-8.7H27l-0.7-1.5    l19.9-4.5C39,5.7,25.9,1,25.9,1l0,1.2l-6.2,16.4L25.9,32.7z M26,5L26,30.5l-5.2-11.9L26,5z"
+   id="path942"
+   style="fill:#008983;fill-opacity:1" />
+		<path
+   class="st0"
+   d="M11.1,20.4c-3.1-0.4-3.1-0.4-4-0.1C5.2,21,4.2,23.1,4.9,25L7,30.9c0.3,0.9,1,1.7,1.8,2.1v-0.1l0-1h12.1    l-2-2.3c-0.4-0.4-0.9-0.7-1.5-0.7h-3.4c0-0.1-0.1-0.3-0.1-0.4l-1.7-4.9"
+   id="path944"
+   style="fill:#008983;fill-opacity:1" />
+		<path
+   class="st0"
+   d="M13.6,23.6l2.2,0.2c0.1,0,0.1,0,0.2,0c0.3,0,0.6-0.1,0.9-0.3l3.5-2.4l-1.1-2.5l0.2-0.5l-3.8,2.6    c-1.2-0.1-2.2-0.3-2.9-0.3"
+   id="path946"
+   style="fill:#008983;fill-opacity:1" />
+		<circle
+   class="st0"
+   cx="7.2"
+   cy="16.1"
+   r="3.2"
+   id="circle948"
+   style="fill:#008983;fill-opacity:1" />
 	</g>
 </g>
-<image style="overflow:visible;" width="920" height="519" xlink:href="../55399424.jpg"  transform="matrix(1 0 0 1 -458.9999 144.3091)">
+<image
+   sodipodi:absref="C:\Users\marta\Desktop\../55399424.jpg"
+   xlink:href="../55399424.jpg"
+   id="image954"
+   transform="matrix(1 0 0 1 -458.9999 144.3091)"
+   height="519"
+   width="920"
+   style="overflow:visible;">
 </image>
 </svg>

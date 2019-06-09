@@ -1,6 +1,10 @@
 {
     "list": [
         {
+            "key": "aeromodelismo",
+            "name": "Aeromodelismo"
+        },
+        {
             "key": "baloncesto",
             "name": "Baloncesto"
         },
@@ -25,6 +29,10 @@
             "name": "Ciclismo"
         },
         {
+            "key": "dron",
+            "name": "Dron"
+        },
+        {
             "key": "estiramientos",
             "name": "Estiramientos"
         },
@@ -41,16 +49,20 @@
             "name": "Marcha deportiva"
         },
         {
-            "key": "nado-libre",
-            "name": "Nado libre"
-        },
-        {
             "key": "marcha-nordica",
             "name": "Marcha nórdica"
         },
         {
+            "key": "nado-libre",
+            "name": "Nado libre"
+        },
+        {
             "key": "paddle-surf",
             "name": "Paddle surf"
+        },
+        {
+            "key": "parkour",
+            "name": "Parkour"
         },
         {
             "key": "parque-musculacion",
@@ -91,10 +103,6 @@
         {
             "key": "windsurf",
             "name": "Windsurf"
-        },
-        {
-            "key": "parkour",
-            "name": "Parkour"
         },
         {
             "key": "yoga",
