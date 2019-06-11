@@ -364,7 +364,6 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-
     if (this.map.getSource('activities') !== undefined) {
       let activityFilter = null,
         districtFilter = ['match', ['get', 'name'], 'none', true, false],
@@ -406,9 +405,17 @@ class App extends Component {
 
       this.map.setFilter('districts', districtFilter);
 
-      ['pointActivities', 'pointInLineActivities', 'lineActivities'].forEach(layer => {
-        this.map.setFilter(layer, activityFilter)
-      })
+      const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false];
+      const pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true];
+
+      if(activityFilter === null) {
+        this.map.setFilter('pointActivities', pointActivitiesFilter);
+        this.map.setFilter('pointInLineActivities', pointInLineActivitiesFilter);
+      } else {
+        this.map.setFilter('lineActivities', activityFilter);
+        this.map.setFilter('pointActivities', ['all', activityFilter, pointActivitiesFilter]);
+        this.map.setFilter('pointInLineActivities', ['all', activityFilter, pointInLineActivitiesFilter]);
+      }
 
     }
   }
