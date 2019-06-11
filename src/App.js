@@ -409,6 +409,7 @@ class App extends Component {
       const pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true];
 
       if(activityFilter === null) {
+        this.map.setFilter('lineActivities', activityFilter);
         this.map.setFilter('pointActivities', pointActivitiesFilter);
         this.map.setFilter('pointInLineActivities', pointInLineActivitiesFilter);
       } else {
