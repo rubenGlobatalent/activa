@@ -4,13 +4,18 @@ export default function ActivityFilter(props) {
 
     const [filter, setFilter] = useState({}),
 
-        submitFilter = () => {
-            props.updateFilters('activityFilter',
-                Object.entries(filter)
-                    .filter(filter => filter[1])
-                    .map(filter => filter[0])
-            )
-        }
+    submitFilter = () => {
+        props.updateFilters('activityFilter',
+            Object.entries(filter)
+                .filter(filter => filter[1])
+                .map(filter => filter[0])
+        )
+    },
+
+    clearFilter = () => {
+        setFilter({})
+        props.clearFilters('activityFilter')
+    }
 
     if (props.visible) {
 
@@ -53,8 +58,8 @@ export default function ActivityFilter(props) {
                         </ul>
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
-                        <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => props.clearFilters('activityFilter')}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={submitFilter}>Filtrar</button>
+                        <button className="button" onClick={clearFilter}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>

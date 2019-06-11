@@ -4,13 +4,18 @@ export default function DistrictFilter(props) {
 
     const [filter, setFilter] = useState({}),
 
-        submitFilter = () => {
-            props.updateFilters('districtFilter',
-                Object.entries(filter)
-                    .filter(filter => filter[1])
-                    .map(filter => filter[0])
-            )
-        }
+    submitFilter = () => {
+        props.updateFilters('districtFilter',
+            Object.entries(filter)
+                .filter(filter => filter[1])
+                .map(filter => filter[0])
+        )
+    },
+
+    clearFilter = () => {
+        setFilter({})
+        props.clearFilters('districtFilter')
+    }
 
     if (props.visible) {
         const selected = Object.fromEntries(
@@ -52,8 +57,8 @@ export default function DistrictFilter(props) {
                         </ul>
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
-                        <button className="button" onClick={() => submitFilter()}>Filtrar</button>
-                        <button className="button" onClick={() => props.clearFilters('districtFilter')}>Eliminar todos los filtros</button>
+                        <button className="button" onClick={submitFilter}>Filtrar</button>
+                        <button className="button" onClick={clearFilter}>Eliminar todos los filtros</button>
                     </footer>
                 </div>
             </div>
