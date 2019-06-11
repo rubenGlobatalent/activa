@@ -117,7 +117,7 @@ class App extends Component {
       data: {
         activities: turf.featureCollection([]),
         districts: districts,
-        sports: sports.list.map(sport => sport.name).sort((a, b) => a.localeCompare(b))
+        sports: sports.list.map(sport => sport.name)
       },
       user: null,
     }

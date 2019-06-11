@@ -5,7 +5,7 @@ const reqSvgs = require.context('../../assets/icons', true, /\.svg$/)
 const sports = sportsData.list.map(sport => ({
 	...sport,
 	icon: reqSvgs(`./${sport.key}.svg`)
-})).sort((a, b) => a.name.localeCompare(b.name))
+}))
 
 const style = {
   card: {
