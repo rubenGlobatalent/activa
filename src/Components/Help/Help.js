@@ -79,7 +79,7 @@ export default function Help(props) {
                 <article className="modal-card" style={style.modalCard}>
                     <header className="modal-card-head">
                         <h2 className="modal-card-title is-size-5 has-text-weight-light">Málaga Activa</h2>
-                        <button className="delete" onClick={() => props.toggleComponent('help')}></button>
+                        <button className="delete" onClick={buttonClickHandler}></button>
                     </header>
                     <section className="modal-card-body">
                         <article>
@@ -155,7 +155,7 @@ export default function Help(props) {
                         </div>
                     </section>
                     <footer className="modal-card-foot buttons is-centered">
-                        <button className="button helpButton" onClick={() => buttonClickHandler(false)}>Siguiente</button>
+                        <button className="button helpButton" onClick={buttonClickHandler}>Siguiente</button>
                     </footer>
                 </article>
             </div>
