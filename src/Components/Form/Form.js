@@ -210,9 +210,9 @@ export default function Form(props) {
                         </div>
 
                         <div className="field">
-                            <label className="label">Describe brevemente la actividad que realizas</label>
+                            <label className="label">Describe brevemente por qué realizas la actividad en este lugar y posibles mejoras</label>
                             <div className="control">
-                                <textarea className="textarea" placeholder="Descripción" value={description} onChange={e => setDescription(e.target.value)}></textarea>
+                                <textarea className="textarea" placeholder="Entorno natural, condiciones técnicas adecuadas (pavimento), tranquilidad, sensación de seguridad, punto de encuentro con otros deportistas, no hay ruidos molestos, buen estado de instalaciones, mobiliario urbano idóneo (fuentes, bancos, alumbrado público, zonas de sombra)..." value={description} onChange={e => setDescription(e.target.value)}></textarea>
                             </div>
                         </div>
 
