@@ -162,14 +162,14 @@ export default function Form(props) {
 
                     <section className="modal-card-body">
                         <div className="field">
-                            <label className="label">Nombre</label>
+                            <label className="label">Nombre de la actividad</label>
                             <div className="control is-expanded">
-                                <input className="input" type="text" placeholder="Nombre de la actividad" value={name} onChange={e => setName(e.target.value)} />
+                                <input className="input" type="text" placeholder="Personaliza el nombre de tu actividad (ej. paseos nocturnos de patinaje)" value={name} onChange={e => setName(e.target.value)} />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label className="label">Deporte</label>
+                            <label className="label">Deporte *</label>
                             <div className="control is-expanded">
                                 <div className="select is-fullwidth">
                                     <select required value={sport} onChange={e => setSport(e.target.value)}>
@@ -189,7 +189,7 @@ export default function Form(props) {
 
                         <div className="columns is-vcentered">
                             <div className="field column">
-                                <label className="label">Tipo de actividad</label>
+                                <label className="label">Tipo de actividad *</label>
                                 <div className="control">
                                     <div className="is-fullwidth">
                                         <label className="radio">
@@ -210,9 +210,9 @@ export default function Form(props) {
                         </div>
 
                         <div className="field">
-                            <label className="label">Describe brevemente por qué realizas la actividad en este lugar y posibles mejoras</label>
+                            <label className="label">Describe brevemente por qué realizas la actividad en este lugar y posibles mejoras *</label>
                             <div className="control">
-                                <textarea className="textarea" placeholder="Entorno natural, condiciones técnicas adecuadas (pavimento), tranquilidad, sensación de seguridad, punto de encuentro con otros deportistas, no hay ruidos molestos, buen estado de instalaciones, mobiliario urbano idóneo (fuentes, bancos, alumbrado público, zonas de sombra)..." value={description} onChange={e => setDescription(e.target.value)}></textarea>
+                                <textarea required className="textarea" placeholder="Entorno natural, condiciones técnicas adecuadas (pavimento), tranquilidad, sensación de seguridad, punto de encuentro con otros deportistas, no hay ruidos molestos, buen estado de instalaciones, mobiliario urbano idóneo (fuentes, bancos, alumbrado público, zonas de sombra)..." value={description} onChange={e => setDescription(e.target.value)}></textarea>
                             </div>
                         </div>
 
@@ -296,7 +296,7 @@ export default function Form(props) {
                             <div className="control">
                                 <label className="checkbox">
                                     <input type="checkbox" required defaultChecked={terms} onChange={e => setTerms(e.target.checked)} />
-                                    {` `}Acepto los <a href="/">términos y condiciones</a> y permito que mis datos aparezcan en la web.
+                                    {` `}Acepto los <a href="/">términos y condiciones</a> y permito que mis datos aparezcan en la web *
                                 </label>
                             </div>
                         </div>
