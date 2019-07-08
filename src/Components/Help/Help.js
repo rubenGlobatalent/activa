@@ -78,14 +78,14 @@ export default function Help(props) {
                 <div className="modal-background"></div>
                 <article className="modal-card" style={style.modalCard}>
                     <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Málaga Activa</h2>
+                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Activa Málaga</h2>
                         <button className="delete" onClick={buttonClickHandler}></button>
                     </header>
                     <section className="modal-card-body">
                         <article>
                             <h3 className="title is-size-6" style={style.h3}>¿QUIERES HACER DEPORTE AL AIRE LIBRE EN TU CIUDAD?</h3>
                             <p style={style.p}>
-                                <strong>Málaga Activa</strong> es una plataforma digital de consulta para todos los ciudadan@s malagueñ@s donde puedes encontrar las zonas urbanas idóneas y de acceso libre para practicar tu deporte favorito sin que dependas de polideportivos, gimnasios ni centros de acceso restringido.
+                                <strong>Activa Málaga</strong> es una plataforma digital de consulta para todos los ciudadan@s malagueñ@s donde puedes encontrar las zonas urbanas idóneas y de acceso libre para practicar tu deporte favorito sin que dependas de polideportivos, gimnasios ni centros de acceso restringido.
                             </p>
                         </article>
                         <br/>

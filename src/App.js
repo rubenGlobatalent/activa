@@ -51,7 +51,7 @@ const initialStep = 0,
   steps = [
     {
       element: '.navbar.is-fixed-top',
-      intro: 'Bienvenido a Málaga Activa. En esta barra podrás seleccionar los filtros de actividad deportiva y distrito, así como iniciar sesión o registrarte.',
+      intro: 'Bienvenido a Activa Málaga. En esta barra podrás seleccionar los filtros de actividad deportiva y distrito, así como iniciar sesión o registrarte.',
     },
     {
       element: '.mapbox-gl-draw_point',
