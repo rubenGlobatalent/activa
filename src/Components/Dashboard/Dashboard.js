@@ -15,7 +15,8 @@ export default function Dashboard(props) {
   const [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
-    [waiting, setWaiting] = useState(false)
+    [waiting, setWaiting] = useState(false),
+    [terms, setTerms] = useState(false)
 
     const handleLogin = event => {
       event.preventDefault();
@@ -139,6 +140,14 @@ export default function Dashboard(props) {
                   <label className="checkbox">
                     <input type="checkbox" onChange={e => setForgot(e.target.checked)}/>
                     <span> Si has olvidado tu contraseña, introduce tu e-mail, marca esta casilla y pulsa "Acceder" para recuperarla</span>
+                  </label>
+                </div>
+              </div>
+              <div className="field">
+                <div className="control">
+                  <label className="checkbox">
+                    <input type="checkbox" required onChange={e => setTerms(e.target.checked)}/>
+                    <span> Acepto los <a href="">terminos y condiciones</a></span>
                   </label>
                 </div>
               </div>
