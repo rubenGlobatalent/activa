@@ -114,7 +114,7 @@ export default function Help(props) {
                                     </span></a>
                             </section>
                         <div className="columns is-centered">
-                        <a href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124" className="is-3 column">Términos y condiciones</a>
+                        <a target="_blank" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124" className="is-3 column">Términos y condiciones</a>
                         </div>
                         <div>
                             <div style={style.logosRow2}>
