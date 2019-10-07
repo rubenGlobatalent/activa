@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactGA from 'react-ga'
 import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import { NotificationContainer } from 'react-notifications'
@@ -19,6 +20,9 @@ import Form from './Components/Form/Form'
 import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
 import districts from './assets/data/districts.json'
+
+ReactGA.initialize('UA-149502396-1')
+ReactGA.pageview(window.location.pathname + window.location.search)
 
 const reqSvgs = require.context('./assets/icons', true, /\.png$/)
 const sportsIcons = sports.list.map(sport => ({
