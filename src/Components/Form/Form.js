@@ -4,12 +4,15 @@ import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-i
 import { faUpload, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { NotificationManager } from 'react-notifications'
 import uuidv4 from 'uuid/v4'
+import { useTranslation } from 'react-i18next'
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
 
 export default function Form(props) {
+    const { t } = useTranslation('general', { useSuspense: false });
+
     // Hooks
     const [name, setName] = useState(''),
         [sport, setSport] = useState(''),
@@ -25,6 +28,36 @@ export default function Form(props) {
         [terms, setTerms] = useState(false),
         [progress, setProgress] = useState(false),
         [email, setEmail] = useState(''),
+        [feature, setFeature] = useState({
+            safe: false,
+            large: false,
+            natural: false,
+            lineal: false,
+            near: false,
+            gathering: false,
+            suitable: false,
+            quiet: false,
+            rest: false
+        }),
+        [improvements, setImprovements] = useState({
+            pavement: false,
+            furniture: false,
+            accesibility: false,
+            sportsFacilities: false,
+            lighting: false,
+            restZones: false,
+            safety: false
+        }),
+        [urbanFurniture, setUrbanFurniture] = useState({
+            fountains: false,
+            bench: false,
+            shadow: false,
+            greenZones: false,
+            bikeParking: false,
+            stretching: false,
+            lightningImprovements: false,
+            restrooms: false
+        }),
         [phone, setPhone] = useState('');
 
     const closeAndRemove = () => {
@@ -52,9 +85,12 @@ export default function Form(props) {
                     image: file ? file : false,
                     email: email.length > 0 ? email : false,
                     phone: phone.length > 0 ? phone : false,
-                    creatorUID: firebase.auth().currentUser.uid
+                    creatorUID: firebase.auth().currentUser.uid,
+                    improvements: improvements,
+                    urbanFurniture: urbanFurniture,
+                    feature: feature
                 };
-            
+
             if (file) {
                 storageRef.put(file)
                     .on('state_changed',
@@ -67,10 +103,10 @@ export default function Form(props) {
                         async () => {
                             try {
                                 const downloadURL = await storageRef.getDownloadURL(),
-                                feature = turf.feature(geometry, { ...properties, image: downloadURL });
+                                    feature = turf.feature(geometry, { ...properties, image: downloadURL });
 
                                 if (turf.getType(feature) === 'LineString') {
-                                    feature.geometry.coordinates = {...feature.geometry.coordinates}
+                                    feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
                                 await databaseRef.add(feature)
@@ -92,7 +128,7 @@ export default function Form(props) {
                 try {
                     const feature = turf.feature(geometry, properties)
                     if (turf.getType(feature) === 'LineString') {
-                        feature.geometry.coordinates = {...feature.geometry.coordinates}
+                        feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
 
                     await databaseRef.add(feature)
@@ -109,7 +145,6 @@ export default function Form(props) {
 
             }
         },
-
         clearForm = () => {
             // Until we do have a more elegant way to select all hooks, we will have
             // to set them one by one by hand
@@ -128,7 +163,17 @@ export default function Form(props) {
             setProgress(false)
             setEmail('')
             setPhone('')
-
+        },
+        renderTags = (collection, setCollection, collectionName) => {
+            const collectionComponent = Object.entries(collection)
+                .map(entry => {
+                    const name = entry[0],
+                        status = entry[1]
+                    return (
+                        <span className={`tag ${status ? `is-info` : ``}`} onClick={() => setCollection({ ...collection, [name]: !status })} >{t(`${collectionName}.${name}`)}</span>
+                    )
+                })
+            return collectionComponent
         }
 
     // Conditional rendering
@@ -173,7 +218,7 @@ export default function Form(props) {
                             <div className="control is-expanded">
                                 <div className="select is-fullwidth">
                                     <select required value={sport} onChange={e => setSport(e.target.value)}>
-                                        <option disabled value=''>Selecciona el deporte que se practica</option>
+                                        <option disabled value=''>Selecciona el deporte que se practica </option>
                                         {sports}
                                     </select>
                                 </div>
@@ -206,11 +251,36 @@ export default function Form(props) {
                                 </div>
                             </div>
                             {scheduleField}
+                        </div>
+
+                        <div className="columns is-multiline">
+                            <div className="column">
+                                <h5 className="subtitle is-size-7 has-text-weight-bold">¿Cuál es la cualidad que más te gusta de este espacio?</h5>
+                                <div class="tags">
+                                    {renderTags(feature, setFeature, 'features')}
+                                </div>
+                            </div>
+
+                            <div className="column">
+                                <h5 className="subtitle is-size-7 has-text-weight-bold">¿Qué mejoras introducirías en este espacio?</h5>
+                                <div className="tags">
+                                    {renderTags(improvements, setImprovements, 'improvements')}
+                                </div>
+                            </div>
+
+                            <div className="column">
+                                <h5 className="subtitle is-size-7 has-text-weight-bold">¿Qué mejoras introducirías en el mobiliario urbano?</h5>
+                                <div className="tags">
+                                    {renderTags(urbanFurniture, setUrbanFurniture, 'urbanFurniture')}
+                                </div>
+                            </div>
+
 
                         </div>
 
+
                         <div className="field">
-                            <label className="label">Describe brevemente por qué realizas la actividad en este lugar y posibles mejoras *</label>
+                            <label className="label">Comentarios sobre tu actividad deportiva</label>
                             <div className="control">
                                 <textarea required className="textarea" placeholder="Entorno natural, condiciones técnicas adecuadas (pavimento), tranquilidad, sensación de seguridad, punto de encuentro con otros deportistas, no hay ruidos molestos, buen estado de instalaciones, mobiliario urbano idóneo (fuentes, bancos, alumbrado público, zonas de sombra)..." value={description} onChange={e => setDescription(e.target.value)}></textarea>
                             </div>
@@ -220,7 +290,7 @@ export default function Form(props) {
                             <div className="column">
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="url" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?twitter\.com\/.+" title="Introduce una cuenta de Twitter válida."/>
+                                        <input className="input" type="url" placeholder="Twitter" value={twitter} onChange={e => setTwitter(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?twitter\.com\/.+" title="Introduce una cuenta de Twitter válida." />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faTwitter} />
                                         </span>
@@ -228,7 +298,7 @@ export default function Form(props) {
                                 </div>
                                 <div className="field">
                                     <div className="control is-expanded has-icons-left">
-                                        <input className="input" type="url" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?facebook\.com\/.+" title="Introduce una cuenta de Facebook válida."/>
+                                        <input className="input" type="url" placeholder="Facebook" value={facebook} onChange={e => setFacebook(e.target.value)} pattern="http(s)?:\/\/(?:www\.)?facebook\.com\/.+" title="Introduce una cuenta de Facebook válida." />
                                         <span className="icon is-small is-left">
                                             <FontAwesomeIcon icon={faFacebook} />
                                         </span>
@@ -273,7 +343,7 @@ export default function Form(props) {
                             </div>
                         </div>
 
-                        <div className={ organizer ? `animated fadeIn` : `is-sr-only`}>
+                        <div className={organizer ? `animated fadeIn` : `is-sr-only`}>
                             <div className="field">
                                 <div className="control is-expanded has-icons-left">
                                     <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} />

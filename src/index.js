@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import 'react-notifications/lib/notifications.css';
 import 'intro.js/introjs.css';
 import 'animate.css';
+import './i18n'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
