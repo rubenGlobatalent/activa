@@ -1,0 +1,32 @@
+{
+    "features": {
+        "safe": "Espacio seguro",
+        "large": "Espacio amplio",
+        "natural": "Espacio situado en un entorno natural",
+        "lineal": "Espacio lineal",
+        "near": "Cercano a mi lugar de residencia o trabajo",
+        "gathering": "Espacio donde me reúno con más deportistas",
+        "suitable": "Reúne las condiciones técnicas adecuadas para mi actividad deportiva",
+        "quiet": "Espacio sin ruidos molestos y sin tráfico de vehículos",
+        "rest": "Espacio con zonas para descansar"
+    },
+    "improvements": {
+        "pavement": "Pavimento",
+        "furniture": "Mobiliario",
+        "accesibility": "Accesibilidad",
+        "sportsFacilities": "Instalaciones deportivas",
+        "lighting": "Alumbrado",
+        "restZones": "Zonas de descanso",
+        "safety": "Sensación de seguridad"
+    },
+    "urbanFurniture": {
+        "fountains": "Mayor número de fuentes de agua",
+        "bench": "Mayor número de bancos",
+        "shadow": "Mayor número de espacios en sombra",
+        "greenZones": "Mayor número de zonas verdes",
+        "bikeParking": "Mayor número de aparcamiento de bicis",
+        "stretching": "Zonas de estiramiento",
+        "lightiningImprovements": "Mejora del alumbrado",
+        "restrooms": "Existencia de instalaciones para cambio de ropa o aseos"
+    }
+}
