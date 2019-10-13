@@ -30,15 +30,15 @@ const sportsIcons = sports.list.map(sport => ({
   icon: reqSvgs(`./${sport.key}.png`)
 }))
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 firebase.initializeApp({
-  apiKey: "AIzaSyATMuKsWD1n7aeeyOYO1aVZvkFIc9bHNQA",
-  authDomain: "recomendador-534fb.firebaseapp.com",
-  databaseURL: "https://recomendador-534fb.firebaseio.com",
-  projectId: "recomendador-534fb",
-  storageBucket: "recomendador-534fb.appspot.com",
-  messagingSenderId: "428207234830"
+  apiKey: process.env.REACT_APP_MAPBOX_TOKEN,
+  authDomain: process.env.REACT_APP_MAPBOX_TOKEN,
+  databaseURL: process.env.REACT_APP_MAPBOX_TOKEN,
+  projectId: process.env.REACT_APP_MAPBOX_TOKEN,
+  storageBucket: process.env.REACT_APP_MAPBOX_TOKEN,
+  messagingSenderId: process.env.REACT_APP_MAPBOX_TOKEN
 })
 
 
