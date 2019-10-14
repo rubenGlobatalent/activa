@@ -21,7 +21,7 @@ import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
 import districts from './assets/data/districts.json'
 
-ReactGA.initialize('UA-149502396-1')
+ReactGA.initialize(process.env.REACT_APP_GA_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
 
 const reqSvgs = require.context('./assets/icons', true, /\.png$/)
