@@ -87,7 +87,7 @@ const Image = (props) => {
         const { t } = useTranslation('general', { useSuspense: false });
 
         const selectedTags = (collection, collectionName) => {
-                const safeCollection = collection ? collection : {},
+                const safeCollection = collection ? JSON.parse(collection) : {},
                 selected = Object.entries(safeCollection).filter(entry => entry[1]).map(entry => {
                     return (
                         <span className={`tag`}>{t(`${collectionName}.${entry[0]}`)}</span>

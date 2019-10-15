@@ -257,7 +257,7 @@ export default function Form(props) {
                             <div className="column">
                                 <h5 className="subtitle is-size-7 has-text-weight-bold">¿Cuál es la cualidad que más te gusta de este espacio?</h5>
                                 <div class="tags">
-                                    {renderTags(feature, setFeature, 'features')}
+                                    {renderTags(feature, setFeature, 'feature')}
                                 </div>
                             </div>
 

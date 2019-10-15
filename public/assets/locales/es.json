@@ -1,5 +1,5 @@
 {
-    "features": {
+    "feature": {
         "safe": "Espacio seguro",
         "large": "Espacio amplio",
         "natural": "Espacio situado en un entorno natural",
@@ -26,7 +26,7 @@
         "greenZones": "Mayor número de zonas verdes",
         "bikeParking": "Mayor número de aparcamiento de bicis",
         "stretching": "Zonas de estiramiento",
-        "lightiningImprovements": "Mejora del alumbrado",
+        "lightningImprovements": "Mejora del alumbrado",
         "restrooms": "Existencia de instalaciones para cambio de ropa o aseos"
     }
 }
