@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faUpload, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
@@ -11,7 +11,38 @@ import * as firebase from 'firebase'
 
 
 export default function Form(props) {
-    const { t } = useTranslation('general', { useSuspense: false });
+    const { t } = useTranslation('general', { useSuspense: false })
+
+    const defaultFeature = {
+        safe: false,
+        large: false,
+        natural: false,
+        lineal: false,
+        near: false,
+        gathering: false,
+        suitable: false,
+        quiet: false,
+        rest: false
+    },
+        defaultImprovements = {
+            pavement: false,
+            furniture: false,
+            accesibility: false,
+            sportsFacilities: false,
+            lighting: false,
+            restZones: false,
+            safety: false
+        },
+        defaultFurniture = {
+            fountains: false,
+            bench: false,
+            shadow: false,
+            greenZones: false,
+            bikeParking: false,
+            stretching: false,
+            lightningImprovements: false,
+            restrooms: false
+        }
 
     // Hooks
     const [name, setName] = useState(''),
@@ -28,42 +59,23 @@ export default function Form(props) {
         [terms, setTerms] = useState(false),
         [progress, setProgress] = useState(false),
         [email, setEmail] = useState(''),
-        [feature, setFeature] = useState({
-            safe: false,
-            large: false,
-            natural: false,
-            lineal: false,
-            near: false,
-            gathering: false,
-            suitable: false,
-            quiet: false,
-            rest: false
-        }),
-        [improvements, setImprovements] = useState({
-            pavement: false,
-            furniture: false,
-            accesibility: false,
-            sportsFacilities: false,
-            lighting: false,
-            restZones: false,
-            safety: false
-        }),
-        [urbanFurniture, setUrbanFurniture] = useState({
-            fountains: false,
-            bench: false,
-            shadow: false,
-            greenZones: false,
-            bikeParking: false,
-            stretching: false,
-            lightningImprovements: false,
-            restrooms: false
-        }),
+        [feature, setFeature] = useState(defaultFeature),
+        [improvements, setImprovements] = useState(defaultImprovements),
+        [urbanFurniture, setUrbanFurniture] = useState(defaultFurniture),
         [phone, setPhone] = useState('');
 
     const closeAndRemove = () => {
         props.deleteDrawnPoint(props.feature.id)
         props.toggleComponent('form')
     },
+        saveData = (uid, ref, data) => {
+            if (uid) {
+                return ref.doc(uid).update(data)
+            }
+            else {
+                return ref.add(data)
+            }
+        },
         submitData = async event => {
             event.preventDefault();
             setProgress(true)
@@ -109,7 +121,8 @@ export default function Form(props) {
                                     feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
-                                await databaseRef.add(feature)
+                                await saveData(props.uid, databaseRef, feature)
+
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
                                 clearForm()
@@ -130,8 +143,8 @@ export default function Form(props) {
                     if (turf.getType(feature) === 'LineString') {
                         feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
+                    await saveData(props.uid, databaseRef, feature)
 
-                    await databaseRef.add(feature)
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
                     closeAndRemove()
@@ -163,6 +176,9 @@ export default function Form(props) {
             setProgress(false)
             setEmail('')
             setPhone('')
+            setFeature(defaultFeature)
+            setImprovements(defaultImprovements)
+            setUrbanFurniture(defaultFurniture)
         },
         renderTags = (collection, setCollection, collectionName) => {
             const collectionComponent = Object.entries(collection)
@@ -174,7 +190,36 @@ export default function Form(props) {
                     )
                 })
             return collectionComponent
+        },
+        getData = async (uid) => {
+            const raw = await firebase.firestore().collection('sports').doc(uid).get(),
+                data = raw.data().properties
+
+            setName(data.name ? data.name : '')
+            setSport(data.sport ? data.sport : '')
+            setOrganization(data.organization ? data.organization : '')
+            setSchedule(data.schedule ? data.schedule : '')
+            setDescription(data.description ? data.description : '')
+            setType(data.type ? data.type : '')
+            setTwitter(data.twitter ? data.twitter : '')
+            setFacebook(data.facebook ? data.facebook : '')
+            setYoutube(data.youtube ? data.youtube : '')
+            setFile(data.file ? data.file : null)
+            setOrganizer(data.organizer ? data.organizer : false)
+            setEmail(data.email ? data.email : '')
+            setPhone(data.phone ? data.phone : '')
+            setFeature(data.feature ? data.feature : defaultFeature)
+            setImprovements(data.improvements ? data.improvements : defaultImprovements)
+            setUrbanFurniture(data.furniture ? data.furniture : defaultFurniture)
         }
+
+    useEffect(() => {
+        if (props.visible && firebase.auth().currentUser) {
+            if (props.uid) {
+                getData(props.uid)
+            }
+        }
+    }, [props.visible])
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
