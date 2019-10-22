@@ -147,7 +147,7 @@ export default function Dashboard(props) {
                 <div className="control">
                   <label className="checkbox">
                     <input type="checkbox" required onChange={e => setTerms(e.target.checked)}/>
-                    <span> Acepto los <a target="_blank" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">terminos y condiciones</a></span>
+                    <span> Acepto los <a target="_blank" rel="noopener noreferrer" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">terminos y condiciones</a></span>
                   </label>
                 </div>
               </div>
