@@ -6,20 +6,21 @@ import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
 import * as firebase from 'firebase'
 
-const Remove = (props) => {
-
+const Edit = (props) => {
     const removePoint = async () => {
         try {
-            firebase.firestore().collection('sports').doc(props.id).delete()
+            firebase.firestore().collection('sports').doc(props.data.id).delete()
             NotificationManager.success('Actividad eliminada con éxito.')
             props.toggleComponent('sidebar')
         }
         catch (error) {
-            console.log(error)
+            console.error(error)
             props.toggleComponent('sidebar')
             NotificationManager.error('Ha ocurrido un error al eliminar la actividad.')
         }
     }
+
+    const data = {...props.data, urbanFurniture: JSON.parse(props.data.urbanFurniture), improvements: JSON.parse(props.data.improvements), feature: JSON.parse(props.data.feature)}
 
     if (props.confirmation) {
         return (
@@ -56,6 +57,9 @@ const Remove = (props) => {
                             <button className="button is-danger" onClick={props.toggleConfirmation}>
                                 Eliminar deporte
                     </button>
+                    <button className="button is-info" onClick={() => props.editFeature({type: "Feature", properties: data, geometry: props.geom})}>
+                                Editar deporte
+                    </button>
                         </div>
                     </div>
 
@@ -66,15 +70,14 @@ const Remove = (props) => {
         )
     }
 
-}
-
-const Image = (props) => {
-    return (
-        <picture className="card-image image is-square">
-            <img src={props.data.image} style={{ objectFit: 'contain' }} />
-        </picture>
-    )
 },
+    Image = (props) => {
+        return (
+            <picture className="card-image image is-square">
+                <img src={props.data.image} style={{ objectFit: 'contain' }} />
+            </picture>
+        )
+    },
     Description = (props) => {
         return (
             <>
@@ -87,26 +90,26 @@ const Image = (props) => {
         const { t } = useTranslation('general', { useSuspense: false });
 
         const selectedTags = (collection, collectionName) => {
-                const safeCollection = collection ? JSON.parse(collection) : {},
+            const safeCollection = collection ? JSON.parse(collection) : {},
                 selected = Object.entries(safeCollection).filter(entry => entry[1]).map(entry => {
                     return (
                         <span className={`tag`}>{t(`${collectionName}.${entry[0]}`)}</span>
                     )
                 })
-                return selected
+            return selected
         },
-        showCollection = collection => {
-            if (!collection) {
-                return false
-            }
-            else if (Object.values(collection).filter(value => value).length === 0) {
-                return false
-            }
-            else {
-                return true
-            }
+            showCollection = collection => {
+                if (!collection) {
+                    return false
+                }
+                else if (Object.values(collection).filter(value => value).length === 0) {
+                    return false
+                }
+                else {
+                    return true
+                }
 
-        }
+            }
         return (
             <>
                 <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
@@ -117,23 +120,22 @@ const Image = (props) => {
                 }
                     <br />
                 </div>
-                <div className={showCollection(props.data.feature) ? ``: `is-sr-only`}>
-                <p><span className="has-text-weight-bold">Cualidades del espacio:</span></p>
-                <div className="tags">{selectedTags(props.data.feature, 'feature')}</div>
+                <div className={showCollection(props.data.feature) ? `` : `is-sr-only`}>
+                    <p><span className="has-text-weight-bold">Cualidades del espacio:</span></p>
+                    <div className="tags">{selectedTags(props.data.feature, 'feature')}</div>
                 </div>
-                <div className={showCollection(props.data.improvements) ? ``: `is-sr-only`}>
-                <p><span className="has-text-weight-bold">Mejoras para el espacio:</span></p>
-                <div className="tags">{selectedTags(props.data.improvements, 'improvements')}</div>
+                <div className={showCollection(props.data.improvements) ? `` : `is-sr-only`}>
+                    <p><span className="has-text-weight-bold">Mejoras para el espacio:</span></p>
+                    <div className="tags">{selectedTags(props.data.improvements, 'improvements')}</div>
                 </div>
-                <div className={showCollection(props.data.urbanFurniture) ? ``: `is-sr-only`}>
-                <p><span className="has-text-weight-bold">Mejoras para el mobiliario urbano:</span></p>
-                <div className="tags">{selectedTags(props.data.urbanFurniture, 'urbanFurniture')}</div>
+                <div className={showCollection(props.data.urbanFurniture) ? `` : `is-sr-only`}>
+                    <p><span className="has-text-weight-bold">Mejoras para el mobiliario urbano:</span></p>
+                    <div className="tags">{selectedTags(props.data.urbanFurniture, 'urbanFurniture')}</div>
                 </div>
             </>
         )
     },
     Details = (props) => {
-        console.log(props.data)
         return (
             <div className="box has-background-white-bis is-paddingless">
                 <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Contacto</h2>
@@ -151,7 +153,6 @@ const Image = (props) => {
     }
 
 export default function Sidebar(props) {
-
     const [expanded, setExpanded] = useState(true),
         [confirmation, setConfirmation] = useState(false)
 
@@ -162,7 +163,7 @@ export default function Sidebar(props) {
     const image = props.data.image ? <Image data={{ ...props.data }} /> : null,
         description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
         details = (props.data.facebook || props.data.twitter || props.data.youtube || props.data.email || props.data.phone) ? <Details data={{ ...props.data }} /> : null,
-        footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Remove toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} id={props.data.id} /> : null) : null;
+        footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} editFeature={props.editFeature} data={props.data} geom={props.geom} /> : null) : null;
 
 
     return (

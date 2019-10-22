@@ -110,7 +110,7 @@ export default function Form(props) {
                             // setProgress(100.0 * snapshot.bytesTransferred / snapshot.totalBytes)
                         },
                         error => {
-                            console.log(error)
+                            console.error(error)
                         },
                         async () => {
                             try {
@@ -121,7 +121,7 @@ export default function Form(props) {
                                     feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
-                                await saveData(props.uid, databaseRef, feature)
+                                await saveData(props.feature.properties.id, databaseRef, feature)
 
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
@@ -129,7 +129,7 @@ export default function Form(props) {
                                 closeAndRemove()
                             }
                             catch (error) {
-                                console.log(error)
+                                console.error(error)
                                 NotificationManager.error('Ha ocurrido un error al crear la actividad.')
                                 closeAndRemove()
                             }
@@ -143,7 +143,7 @@ export default function Form(props) {
                     if (turf.getType(feature) === 'LineString') {
                         feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
-                    await saveData(props.uid, databaseRef, feature)
+                    await saveData(props.feature.properties.id, databaseRef, feature)
 
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
@@ -151,7 +151,7 @@ export default function Form(props) {
                     clearForm()
                 }
                 catch (error) {
-                    console.log(error)
+                    console.error(error)
                     closeAndRemove()
                     NotificationManager.error('Ha ocurrido un error al crear la actividad.')
                 }
@@ -191,10 +191,7 @@ export default function Form(props) {
                 })
             return collectionComponent
         },
-        getData = async (uid) => {
-            const raw = await firebase.firestore().collection('sports').doc(uid).get(),
-                data = raw.data().properties
-
+        setData = data => {
             setName(data.name ? data.name : '')
             setSport(data.sport ? data.sport : '')
             setOrganization(data.organization ? data.organization : '')
@@ -215,8 +212,8 @@ export default function Form(props) {
 
     useEffect(() => {
         if (props.visible && firebase.auth().currentUser) {
-            if (props.uid) {
-                getData(props.uid)
+            if (props.feature.properties.id) {
+                setData(props.feature.properties)
             }
         }
     }, [props.visible])

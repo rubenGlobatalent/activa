@@ -83,6 +83,7 @@ class App extends Component {
     this.updateFilters = this.updateFilters.bind(this)
     this.deleteDrawnPoint = this.deleteDrawnPoint.bind(this)
     this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
+    this.editFeature = this.editFeature.bind(this)
     this.state = {
       header: {
         visible: false
@@ -105,7 +106,8 @@ class App extends Component {
       },
       sidebar: {
         visible: false,
-        data: {}
+        data: {},
+        geom: {}
       },
       form: {
         visible: false,
@@ -135,7 +137,7 @@ class App extends Component {
     this.setState({ [component]: { ...this.state[component], selected: selected, visible: !this.state[component].visible } })
   };
 
-  clearFilters = (component) => {
+  clearFilters = component => {
     this.setState({ [component]: { ...this.state[component], selected: [], visible: false } })
   };
 
@@ -147,8 +149,12 @@ class App extends Component {
     this.setState({ steps: { visible: false } })
   }
 
-  deleteDrawnPoint = (id) => {
+  deleteDrawnPoint = id => {
     this.draw.delete(id)
+  }
+
+  editFeature = feature => {
+    this.setState({ form: { ...this.state.form, feature: feature,visible: !this.state.form.visible }, sidebar: { ...this.state.sidebar, visible: !this.state.sidebar.visible } })
   }
 
   componentDidMount() {
@@ -350,8 +356,9 @@ class App extends Component {
         });
 
         this.map.on('click', activityType, e => {
-          let featureProperties = e.features[0].properties;
-          this.setState({ sidebar: { data: featureProperties, visible: true } })
+          let featureProperties = e.features[0].properties,
+          featureGeometry = e.features[0].geometry;
+          this.setState({ sidebar: { data: featureProperties, geom: featureGeometry, visible: true } })
         });
 
         this.map.on('touchend', activityType, e => {
@@ -460,7 +467,7 @@ class App extends Component {
           clearFilters={this.clearFilters}
         />
 
-        {this.state.sidebar.visible ? <Sidebar {...this.state.sidebar} toggleComponent={this.toggleComponent} /> : null}
+        {this.state.sidebar.visible ? <Sidebar {...this.state.sidebar} toggleComponent={this.toggleComponent} editFeature={this.editFeature} /> : null}
 
         <Form
           {...this.state.form}
