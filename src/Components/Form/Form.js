@@ -280,13 +280,13 @@ export default function Form(props) {
                                 <div className="control">
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" required name="type" value="periódica" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required checked={type === 'periódica'} name="type" value="periódica" onChange={e => setType(e.target.value)} />
                                             {` `}Periódica
                                 </label>
                                     </div>
                                     <div className="is-fullwidth">
                                         <label className="radio">
-                                            <input type="radio" required name="type" value="puntual" onChange={e => setType(e.target.value)} />
+                                            <input type="radio" required name="type" checked={type === 'puntual'} value="puntual" onChange={e => setType(e.target.value)} />
                                             {` `}Puntual
                                 </label>
                                     </div>

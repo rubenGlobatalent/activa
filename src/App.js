@@ -184,17 +184,15 @@ class App extends Component {
       .filter(feature => turf.getType(feature ) === 'LineString')
       .map(feature => turf.explode(feature).features)
       .flat()
-      
       // Deep clone properties to be able to set pointInLine property immutably
-      exploded.forEach(feature => {
+      .map(feature => {
         const propertiesDeepClone = { ...feature.properties }
         feature.properties = propertiesDeepClone
         return feature
       })
-
       /* Add property pointInLine to be able to separate the pointActivities layer
       from the pointInLineActivities layer */
-      exploded.map(feature => {
+      .map(feature => {
         feature.properties.pointInLine = true
         return feature
       })
@@ -357,7 +355,13 @@ class App extends Component {
 
         this.map.on('click', activityType, e => {
           let featureProperties = e.features[0].properties,
-          featureGeometry = e.features[0].geometry;
+          featureGeometry;
+          if (featureProperties.pointInLine) {
+            featureGeometry = this.state.data.activities.features.find(feature => feature.properties.id === featureProperties.id).geometry
+          }
+          else {
+            featureGeometry = e.features[0].geometry
+          }
           this.setState({ sidebar: { data: featureProperties, geom: featureGeometry, visible: true } })
         });
 
