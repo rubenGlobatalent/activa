@@ -28,11 +28,13 @@ export default function Dashboard(props) {
               props.toggleComponent('dashboard');
               NotificationManager.info('Te hemos enviado instrucciones de cómo restablecer tu contraseña a la cuenta de correo indicada.')
               setWaiting(false)
+              setForgot(false)
             })
             .catch(() => {
               props.toggleComponent('dashboard');
               NotificationManager.error('No existe la cuenta indicada.')
               setWaiting(false)
+              setForgot(false)
             })
         }
         else {
@@ -49,10 +51,12 @@ export default function Dashboard(props) {
                     props.toggleComponent('dashboard');
                     NotificationManager.success('¡Autenticación correcta!')
                     setWaiting(false)
+                    setForgot(false)
                   })
                   .catch(() => {
                     NotificationManager.error('La contraseña no es correcta')
                     setWaiting(false)
+                    setForgot(false)
                   })
               }
               else {
@@ -123,7 +127,7 @@ export default function Dashboard(props) {
                       </span>
                     </p>
                   </div>
-                  <div className="field">
+                  <div className={forgot ? 'is-sr-only' : 'field'}>
                     <label className="label has-text-weight-normal">Contraseña</label>
                     <p className="control is-expanded has-icons-left has-icons-right">
                       <input className="input" type="password" placeholder="Contraseña" value={password} minLength="6" onChange={e => setPassword(e.target.value)} required={!forgot} />
@@ -143,10 +147,10 @@ export default function Dashboard(props) {
                   </label>
                 </div>
               </div>
-              <div className="field">
+              <div className={forgot ? 'is-sr-only' : 'field'}>
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" required onChange={e => setTerms(e.target.checked)}/>
+                    <input type="checkbox" required={!forgot} onChange={e => setTerms(e.target.checked)}/>
                     <span> Acepto los <a target="_blank" rel="noopener noreferrer" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">terminos y condiciones</a></span>
                   </label>
                 </div>
