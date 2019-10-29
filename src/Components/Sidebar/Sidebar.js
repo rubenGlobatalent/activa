@@ -125,17 +125,17 @@ const Edit = (props) => {
                 <div className={showCollection(props.data.feature) ? `` : `is-sr-only`}>
                     <p><span className="has-text-weight-bold">Cualidades del espacio:</span></p>
                     <div className="tags">{selectedTags(props.data.feature, 'feature')}</div>
-                    <br/>
+                    <div></div>
                 </div>
                 <div className={showCollection(props.data.improvements) ? `` : `is-sr-only`}>
                     <p><span className="has-text-weight-bold">Mejoras para el espacio:</span></p>
                     <div className="tags">{selectedTags(props.data.improvements, 'improvements')}</div>
-                    <br/>
+                    <div></div>
                 </div>
                 <div className={showCollection(props.data.urbanFurniture) ? `` : `is-sr-only`}>
                     <p><span className="has-text-weight-bold">Mejoras para el mobiliario urbano:</span></p>
                     <div className="tags">{selectedTags(props.data.urbanFurniture, 'urbanFurniture')}</div>
-                    <br/>
+                    <div></div>
                 </div>
             </>
         )
