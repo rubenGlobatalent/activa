@@ -5,9 +5,10 @@
         "natural": "Espacio situado en un entorno natural",
         "lineal": "Espacio lineal",
         "near": "Cercano a mi lugar de residencia o trabajo",
-        "gathering": "Espacio donde me reúno con más deportistas",
-        "suitable": "Reúne las condiciones técnicas adecuadas para mi actividad deportiva",
-        "quiet": "Espacio sin ruidos molestos y sin tráfico de vehículos",
+        "gathering": "Me reúno con más deportistas",
+        "suitable": "Reúne las condiciones técnicas adecuadas",
+        "quiet": "Espacio sin ruidos molestos",
+        "noVehicles":"Espacio sin tráfico de vehículos",
         "rest": "Espacio con zonas para descansar"
     },
     "improvements": {
@@ -17,7 +18,8 @@
         "sportsFacilities": "Instalaciones deportivas",
         "lighting": "Alumbrado",
         "restZones": "Zonas de descanso",
-        "safety": "Sensación de seguridad"
+        "safety": "Sensación de seguridad",
+        "allOk": "No cambiaría nada"
     },
     "urbanFurniture": {
         "fountains": "Mayor número de fuentes de agua",
@@ -27,6 +29,7 @@
         "bikeParking": "Mayor número de aparcamiento de bicis",
         "stretching": "Zonas de estiramiento",
         "lightningImprovements": "Mejora del alumbrado",
-        "restrooms": "Existencia de instalaciones para cambio de ropa o aseos"
+        "restrooms": "Instalaciones para cambio de ropa o aseos",
+        "allOk": "Ninguna"
     }
 }

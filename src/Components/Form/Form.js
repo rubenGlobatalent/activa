@@ -22,7 +22,8 @@ export default function Form(props) {
         gathering: false,
         suitable: false,
         quiet: false,
-        rest: false
+        rest: false,
+        noVehicles: false
     },
         defaultImprovements = {
             pavement: false,
@@ -31,7 +32,8 @@ export default function Form(props) {
             sportsFacilities: false,
             lighting: false,
             restZones: false,
-            safety: false
+            safety: false,
+            allOk: false
         },
         defaultFurniture = {
             fountains: false,
@@ -41,7 +43,8 @@ export default function Form(props) {
             bikeParking: false,
             stretching: false,
             lightningImprovements: false,
-            restrooms: false
+            restrooms: false,
+            allOk: false
         }
 
     // Hooks
