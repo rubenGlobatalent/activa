@@ -1,8 +1,29 @@
-const functions = require('firebase-functions');
+const { ApolloServer } = require('apollo-server-cloud-functions'),
+    { https } = require('firebase-functions'),
+    schema = require('./graphql/schema'),
+    functions = require('./graphql/functions')
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+// Provide resolver functions for your schema fields
+const resolvers = {
+    Query: {
+        comments: functions.getComments
+    },
+    Mutation: {
+        comment: functions.postComment
+    }
+};
+
+const server = new ApolloServer({
+    typeDefs: schema,
+    resolvers,
+    playground: true,
+    introspection: true,
+}),
+    conf = {
+        cors: {
+            origin: `*`,
+            credentials: true
+        }
+    }
+
+exports.graphql = https.onRequest(server.createHandler(conf));
