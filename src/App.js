@@ -21,7 +21,6 @@ import ActivityFilter from './Components/ActivityFilter/ActivityFilter'
 import Form from './Components/Form/Form'
 import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
-import { assignmentPattern } from '@babel/types'
 
 ReactGA.initialize(process.env.REACT_APP_GA_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
