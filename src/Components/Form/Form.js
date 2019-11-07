@@ -5,12 +5,19 @@ import { faUpload, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons
 import { NotificationManager } from 'react-notifications'
 import uuidv4 from 'uuid/v4'
 import { useTranslation } from 'react-i18next'
+import { connect } from 'react-redux'
+
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
+const mapStateToProps = state => ({
+    districts: state.districts,
+    selectedActivity: state.selectedActivity
+})
 
-export default function Form(props) {
+
+const Form = (props) => {
     const { t } = useTranslation('general', { useSuspense: false })
 
     const defaultFeature = {
@@ -85,7 +92,7 @@ export default function Form(props) {
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
                 databaseRef = firebase.firestore().collection(`sports`);
 
-            let geometry = turf.getGeom(props.feature),
+            let geometry = turf.getGeom(props.selectedActivity),
                 properties = {
                     name: name.length > 0 ? name : false,
                     sport: sport,
@@ -124,7 +131,7 @@ export default function Form(props) {
                                     feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
-                                await saveData(props.feature.properties.id, databaseRef, feature)
+                                await saveData(props.selectedActivity.properties.id, databaseRef, feature)
 
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
@@ -146,7 +153,7 @@ export default function Form(props) {
                     if (turf.getType(feature) === 'LineString') {
                         feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
-                    await saveData(props.feature.properties.id, databaseRef, feature)
+                    await saveData(props.selectedActivity.properties.id, databaseRef, feature)
 
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
@@ -208,15 +215,15 @@ export default function Form(props) {
             setOrganizer(data.organizer ? data.organizer : false)
             setEmail(data.email ? data.email : '')
             setPhone(data.phone ? data.phone : '')
-            setFeature(data.feature ? data.feature : defaultFeature)
-            setImprovements(data.improvements ? data.improvements : defaultImprovements)
-            setUrbanFurniture(data.furniture ? data.furniture : defaultFurniture)
+            setFeature(data.feature ? JSON.parse(data.feature) : defaultFeature)
+            setImprovements(data.improvements ? JSON.parse(data.improvements) : defaultImprovements)
+            setUrbanFurniture(data.furniture ? JSON.parse(data.furniture) : defaultFurniture)
         }
 
     useEffect(() => {
         if (props.visible && firebase.auth().currentUser) {
-            if (props.feature.properties.id) {
-                setData(props.feature.properties)
+            if (props.selectedActivity.properties.id) {
+                setData(props.selectedActivity.properties)
             }
         }
     }, [props.visible])
@@ -469,3 +476,8 @@ export default function Form(props) {
     }
 
 }
+
+export default connect(
+    mapStateToProps,
+    null
+)(Form)

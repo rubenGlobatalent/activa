@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import logo from '../../assets/img/logo.png'
 
 const style = {
@@ -19,7 +20,7 @@ const style = {
   }
 }
 
-export default function Header(props) {
+const Header = props => {
   let navbarBurguerClass = 'navbar-burger',
     navbarMenuClass = 'navbar-menu',
     buttonClass = 'button is-large is-size-7 is-uppercase',
@@ -82,3 +83,8 @@ export default function Header(props) {
     </header>
   )
 }
+
+export default connect(
+  null,
+  null
+)(Header)

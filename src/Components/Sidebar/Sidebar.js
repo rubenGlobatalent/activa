@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus, faEnvelope, faPhone, faBold, faItalic, faUnderline, faList, faHeading } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
@@ -6,7 +6,13 @@ import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { connect } from 'react-redux'
 import * as firebase from 'firebase'
+
+const mapStateToProps = state => ({
+    districts: state.districts,
+    selectedActivity: state.selectedActivity
+  })
 
 const Edit = (props) => {
     const removePoint = async () => {
@@ -253,7 +259,7 @@ const Edit = (props) => {
         )
     }
 
-export default function Sidebar(props) {
+const Sidebar = (props) => {
     const [expanded, setExpanded] = useState(true),
         [confirmation, setConfirmation] = useState(false)
 
@@ -261,17 +267,17 @@ export default function Sidebar(props) {
         setConfirmation(!confirmation)
     }
 
-    const image = props.data.image ? <Image data={{ ...props.data }} /> : null,
-        description = props.data.description ? <Description className="content" data={props.data.description} /> : null,
-        details = (props.data.facebook || props.data.twitter || props.data.youtube || props.data.email || props.data.phone) ? <Details data={{ ...props.data }} /> : null,
-        footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.data.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} editFeature={props.editFeature} data={props.data} geom={props.geom} /> : null) : null;
+    const image = props.selectedActivity.properties.image ? <Image data={{ ...props.selectedActivity.properties }} /> : null,
+        description = props.selectedActivity.properties.description ? <Description className="content" data={props.selectedActivity.properties.description} /> : null,
+        details = (props.selectedActivity.properties.facebook || props.selectedActivity.properties.twitter || props.selectedActivity.properties.youtube || props.selectedActivity.properties.email || props.selectedActivity.properties.phone) ? <Details data={{ ...props.selectedActivity.properties }} /> : null,
+        footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.selectedActivity.properties.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} editFeature={props.editFeature} data={props.selectedActivity.properties} geom={props.selectedActivity.geometry} /> : null) : null;
 
 
     return (
         <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
             <header className="card-header">
                 <h2 className="is-size-6 card-header-title">
-                    {props.data.name ? props.data.name : props.data.sport}
+                    {props.selectedActivity.properties.name ? props.selectedActivity.properties.name : props.selectedActivity.properties.sport}
                 </h2>
                 <div className="card-header-icon" onClick={() => setExpanded(!expanded)}>
                     <span className="icon">
@@ -289,7 +295,7 @@ export default function Sidebar(props) {
                 {image}
 
                 <div className="card-content">
-                    <Basics data={props.data} />
+                    <Basics data={props.selectedActivity.properties} />
                     {description}
                     {details}
                     {/* <Comments />
@@ -303,3 +309,8 @@ export default function Sidebar(props) {
     )
 
 }
+
+export default connect(
+    mapStateToProps,
+    null
+  )(Sidebar)

@@ -6,6 +6,8 @@ import { NotificationContainer } from 'react-notifications'
 import { Steps } from 'intro.js-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { connect } from 'react-redux'
+import {store, setActivities, selectActivity} from './redux/store'
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
@@ -19,7 +21,7 @@ import ActivityFilter from './Components/ActivityFilter/ActivityFilter'
 import Form from './Components/Form/Form'
 import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
-import districts from './assets/data/districts.json'
+import { assignmentPattern } from '@babel/types'
 
 ReactGA.initialize(process.env.REACT_APP_GA_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
@@ -41,6 +43,11 @@ firebase.initializeApp({
   messagingSenderId: 428207234830
 })
 
+const mapStateToProps = state => ({
+  activities: state.activities,
+  districts: state.districts,
+  selectedActivity: state.selectedActivity
+})
 
 const style = {
   map: {
@@ -121,8 +128,6 @@ class App extends Component {
         visible: false
       },
       data: {
-        activities: turf.featureCollection([]),
-        districts: districts,
         sports: sports.list.map(sport => sport.name)
       },
       user: null,
@@ -197,12 +202,7 @@ class App extends Component {
         return feature
       })
 
-      this.setState({
-        data: {
-          ...this.state.data,
-          activities: turf.featureCollection([...features, ...exploded])
-        }
-      })
+      store.dispatch(setActivities(turf.featureCollection([...features, ...exploded])))
     })
 
     this.setState({
@@ -212,7 +212,7 @@ class App extends Component {
       },
       districtFilter: {
         ...this.state.districtFilter,
-        data: this.state.data.districts.features.map(district => district.properties.name).sort((a, b) => a.localeCompare(b))
+        data: this.props.districts.features.map(district => district.properties.name).sort((a, b) => a.localeCompare(b))
       },
       form: {
         ...this.state.form,
@@ -281,12 +281,12 @@ class App extends Component {
 
       this.map.addSource('activities', {
         type: 'geojson',
-        data: this.state.data.activities
+        data: this.props.activities
       });
 
       this.map.addSource('districts', {
         type: 'geojson',
-        data: this.state.data.districts
+        data: this.props.districts
       });
 
       this.map.addLayer({
@@ -354,26 +354,38 @@ class App extends Component {
         });
 
         this.map.on('click', activityType, e => {
-          let featureProperties = e.features[0].properties,
-          featureGeometry;
-          if (featureProperties.pointInLine) {
-            featureGeometry = this.state.data.activities.features.find(feature => feature.properties.id === featureProperties.id).geometry
+          let properties = e.features[0].properties,
+          geometry,
+          feature
+          if (properties.pointInLine) {
+            geometry = this.props.activities.features.find(feature => feature.properties.id === properties.id).geometry
+            feature = turf.lineString(geometry.coordinates, properties)
           }
           else {
-            featureGeometry = e.features[0].geometry
+            geometry = e.features[0].geometry
+            if (geometry.type === 'Point') {
+              feature = turf.point(geometry.coordinates, properties)
+            }
+            else if (geometry.type === 'LineString') {
+              feature = turf.lineString(geometry.coordinates, properties)
+            }
           }
-          this.setState({ sidebar: { data: featureProperties, geom: featureGeometry, visible: true } })
+
+          store.dispatch(selectActivity(feature))
+
+          this.setState({ sidebar: { visible: true } })
         });
 
         this.map.on('touchend', activityType, e => {
-          let featureProperties = e.features[0].properties;
-          this.setState({ sidebar: { data: featureProperties, visible: true } })
+          let properties = e.features[0].properties;
+          this.setState({ sidebar: { data: properties, visible: true } })
         });
       })
 
       this.map.on('draw.create', e => {
-        let newFeature = e.features[0];
-        this.setState({ form: { ...this.state.form, feature: newFeature, visible: !this.state.form.visible } })
+        let feature = e.features[0];
+        store.dispatch(selectActivity(feature))
+        this.setState({ form: { ...this.state.form, visible: !this.state.form.visible } })
       });
     });
   }
@@ -382,30 +394,30 @@ class App extends Component {
     if (this.map.getSource('activities') !== undefined) {
       let activityFilter = null,
         districtFilter = ['match', ['get', 'name'], 'none', true, false],
-        sourceData = this.state.data.activities;
+        sourceData = this.props.activities;
 
       if (this.state.districtFilter.selected.length > 0) {
         districtFilter = ['match', ['get', 'name'], [...this.state.districtFilter.selected], true, false];
 
         const districtsCollection = turf.featureCollection(
-          this.state.data.districts.features
+          this.props.districts.features
             .filter(district => this.state.districtFilter.selected.includes(district.properties.name))
         ),
 
           linesID = Array.from(new Set(turf.pointsWithinPolygon(
             turf.explode(
               turf.featureCollection(
-                this.state.data.activities.features
+                this.props.activities.features
                   .filter(feature => feature.geometry.type === 'LineString')
               )
             ),
             districtsCollection
           ).features.map(feature => feature.properties.id))),
 
-          lines = this.state.data.activities.features.filter(feature => linesID.includes(feature.properties.id)),
+          lines = this.props.activities.features.filter(feature => linesID.includes(feature.properties.id)),
 
           points = turf.pointsWithinPolygon(
-            turf.featureCollection(this.state.data.activities.features.filter(feature => feature.geometry.type === 'Point')),
+            turf.featureCollection(this.props.activities.features.filter(feature => feature.geometry.type === 'Point')),
             districtsCollection
           ).features;
 
@@ -439,7 +451,6 @@ class App extends Component {
   componentWillUnmount() {
     this.map.remove();
   }
-
   render() {
     return (
       <div style={style.map} ref={el => this.mapContainer = el} >
@@ -511,4 +522,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  null
+)(App)
