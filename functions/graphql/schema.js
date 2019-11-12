@@ -8,14 +8,21 @@ const schema = gql`
       id: String!
       comment: String!
       date: String!
+      username: String!
+  }
+
+  type User {
+    username: String!
+    id: String!
   }
 
   type Query {
-    comments(activity: ID): [Comment]!
+    comments(activity: ID!): [Comment]!
   }
 
   type Mutation {
-      comment(activity: String!, author: String!, comment: String!, date: String!): Comment!
+      comments(activity: String!, author: String!, comment: String!, date: String!, username: String!): Comment!
+      users(id: ID!, username: String!): User!
   }
 `
 

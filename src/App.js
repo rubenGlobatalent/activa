@@ -7,7 +7,7 @@ import { Steps } from 'intro.js-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
-import {store, setActivities, selectActivity} from './redux/store'
+import {store, setActivities, setUser ,selectActivity} from './redux/store'
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
@@ -45,7 +45,7 @@ firebase.initializeApp({
 const mapStateToProps = state => ({
   activities: state.activities,
   districts: state.districts,
-  selectedActivity: state.selectedActivity
+  selectedActivity: state.selectedActivity,
 })
 
 const style = {
@@ -164,8 +164,10 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        store.dispatch(setUser(user))
         this.setState({ user: user })
       } else {
+        store.dispatch(setUser(null))
         this.setState({ user: null })
       }
     });

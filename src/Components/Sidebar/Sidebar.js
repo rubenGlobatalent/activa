@@ -1,20 +1,22 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes, faMinus, faEnvelope, faPhone, faBold, faItalic, faUnderline, faList, faHeading } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faMinus, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js'
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { connect } from 'react-redux'
 import * as firebase from 'firebase'
 
+import Comments from './Components/Comments'
+
 const mapStateToProps = state => ({
     districts: state.districts,
     selectedActivity: state.selectedActivity
-  })
+})
 
-const Edit = (props) => {
+const Edit = props => {
     const removePoint = async () => {
         try {
             firebase.firestore().collection('sports').doc(props.data.id).delete()
@@ -65,7 +67,7 @@ const Edit = (props) => {
                             <button className="button is-danger" onClick={props.toggleConfirmation}>
                                 Eliminar deporte
                     </button>
-                            <button className="button is-info" onClick={() => props.editFeature({ type: "Feature", properties: data, geometry: props.geom })}>
+                            <button className="button is-primary" onClick={() => props.editFeature({ type: "Feature", properties: data, geometry: props.geom })}>
                                 Editar deporte
                     </button>
                         </div>
@@ -79,14 +81,14 @@ const Edit = (props) => {
     }
 
 },
-    Image = (props) => {
+    Image = props => {
         return (
             <picture className="card-image image is-square">
                 <img src={props.data.image} style={{ objectFit: 'contain' }} />
             </picture>
         )
     },
-    Description = (props) => {
+    Description = props => {
         return (
             <>
                 <p className="has-text-weight-bold">Descripción de la actividad:</p>
@@ -94,7 +96,7 @@ const Edit = (props) => {
             </>
         )
     },
-    Basics = (props) => {
+    Basics = props => {
         const { t } = useTranslation('general', { useSuspense: false });
 
         const selectedTags = (collection, collectionName) => {
@@ -146,7 +148,7 @@ const Edit = (props) => {
             </>
         )
     },
-    Details = (props) => {
+    Details = props => {
         return (
             <div className="box has-background-white-bis is-paddingless">
                 <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Contacto</h2>
@@ -161,107 +163,20 @@ const Edit = (props) => {
 
             </div>
         )
-    },
-    RichEditor = props => {
-        const { t } = useTranslation('general', { useSuspense: false })
-    
-        const [editorState, setEditorState] = useState(EditorState.createEmpty())
-    
-        const inputElement = useRef(null)
-    
-        const textBold = () => {
-            setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
-        },
-            textItalic = () => {
-                setEditorState(RichUtils.toggleInlineStyle(editorState, 'ITALIC'))
-            },
-            textUnderline = () => {
-                setEditorState(RichUtils.toggleInlineStyle(editorState, 'UNDERLINE'))
-            },
-            textUnorderedList = () => {
-                setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'))
-            },
-            textHeader = () => {
-                setEditorState(RichUtils.toggleBlockType(editorState, 'header-six'))
-            },
-            handleKeyCommand = (command, editorState) => {
-                const newState = RichUtils.handleKeyCommand(editorState, command)
-    
-                if (newState) {
-                    setEditorState(newState);
-                    return 'handled'
-                }
-                return 'not-handled'
-            },
-            focusOnEditor = () => {
-                // `current` points to the mounted text input element
-                inputElement.current.focus();
-            }
-    
-        return (
-            <div className="field">
-                <label className="label">{t(props.label)}</label>
-    
-                <div className="buttons">
-                    <button className="button" type="button">
-                        <FontAwesomeIcon className="icon is-size-7" icon={faBold} onClick={textBold} />
-                    </button>
-                    <button className="button" type="button">
-                        <FontAwesomeIcon className="icon is-size-7" icon={faItalic} onClick={textItalic} />
-                    </button>
-                    <button className="button" type="button">
-                        <FontAwesomeIcon className="icon is-size-7" icon={faUnderline} onClick={textUnderline} />
-                    </button>
-                    <button className="button" type="button">
-                        <FontAwesomeIcon className="icon is-size-7" icon={faList} onClick={textUnorderedList} />
-                    </button>
-                    <button className="button" type="button">
-                        <FontAwesomeIcon className="icon is-size-7" icon={faHeading} onClick={textHeader} />
-                    </button>
-                </div>
-    
-                <div className="control" onClick={focusOnEditor}>
-                    <div className="textarea content text-area-overflow">
-                        <Editor
-                            spellCheck={true}
-                            editorState={editorState}
-                            handleKeyCommand={handleKeyCommand}
-                            onChange={setEditorState}
-                            stripPastedStyles={true}
-                            ref={inputElement}
-                        />
-                    </div>
-                </div>
-    
-            </div>
-        )
-    },
-    Comments = (props) => {
-        const toMarkdown = editorState => {
-            return draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
-        },
-            toRaw = stringToParse => {
-                stringToParse = typeof stringToParse === 'object' ? JSON.stringify(stringToParse) : stringToParse
-                return EditorState.createWithContent(convertFromRaw(markdownToDraft(stringToParse)))
-            }
-        return (
-            <article class="media">
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>John Smith</strong> <small>31 minutes ago</small>
-                            <br />
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                        </p>
-                    </div>
-                </div>
-            </article>
-        )
     }
 
-const Sidebar = (props) => {
+
+const Sidebar = props => {
     const [expanded, setExpanded] = useState(true),
         [confirmation, setConfirmation] = useState(false)
+
+    const toMarkdown = editorState => {
+        return draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
+    },
+        toRaw = stringToParse => {
+            stringToParse = typeof stringToParse === 'object' ? JSON.stringify(stringToParse) : stringToParse
+            return EditorState.createWithContent(convertFromRaw(markdownToDraft(stringToParse)))
+        }
 
     const toggleConfirmation = () => {
         setConfirmation(!confirmation)
@@ -298,8 +213,8 @@ const Sidebar = (props) => {
                     <Basics data={props.selectedActivity.properties} />
                     {description}
                     {details}
-                    {/* <Comments />
-                    <RichEditor/> */}
+                    <Comments activity={props.selectedActivity.properties.id} />
+                    {/* <RichEditor/> */}
 
                 </div>
             </div>
@@ -313,4 +228,4 @@ const Sidebar = (props) => {
 export default connect(
     mapStateToProps,
     null
-  )(Sidebar)
+)(Sidebar)

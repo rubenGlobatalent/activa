@@ -1,24 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
-import './index.scss';
+import { Provider as GraphQLProvider, createClient } from 'urql'
+import './index.scss'
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import 'react-notifications/lib/notifications.css';
-import 'intro.js/introjs.css';
-import 'animate.css';
+import 'react-notifications/lib/notifications.css'
+import 'intro.js/introjs.css'
+import 'animate.css'
 import './i18n'
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './App'
+import * as serviceWorker from './serviceWorker'
+
+const client = createClient({
+    url: process.env.REACT_APP_API_PATH
+})
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <GraphQLProvider value={client}>
+            <App />
+        </GraphQLProvider>
     </Provider>
-    , document.getElementById('root'));
+    , document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.register();
+serviceWorker.register()

@@ -13,7 +13,8 @@ import districts from '../assets/data/districts.json'
 const initialState = {
   activities: turf.featureCollection([]),
   districts: districts,
-  selectedActivity: null
+  selectedActivity: null,
+  user: null
 };
 
 const rootReducer = (state = initialState, action)  => {
@@ -22,6 +23,10 @@ const rootReducer = (state = initialState, action)  => {
       return Object.assign({}, state, {
         activities: action.payload
       })
+      case `SET_USER`:
+        return Object.assign({}, state, {
+          user: action.payload
+        })
     case `SELECT_ACTIVITY`:
         return Object.assign({}, state, {
           selectedActivity: action.payload
@@ -38,6 +43,10 @@ export const setActivities = payload => {
 
 export const selectActivity = payload => {
   return { type: `SELECT_ACTIVITY`, payload };
+}
+
+export const setUser = payload => {
+  return { type: `SET_USER`, payload };
 }
 
 // Create a Redux store holding the state of your app.

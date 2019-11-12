@@ -31,5 +31,10 @@
         "lightningImprovements": "Mejora del alumbrado",
         "restrooms": "Instalaciones para cambio de ropa o aseos",
         "allOk": "Ninguna"
+    },
+    "comments": {
+        "smallTextName": "El nombre se asociara a tu cuenta de usuario",
+        "name": "Usuario",
+        "sendComment": "Enviar"
     }
 }

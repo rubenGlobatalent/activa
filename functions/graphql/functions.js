@@ -1,7 +1,5 @@
 const admin = require('firebase-admin')
 
-admin.initializeApp()
-
 /**
  * @typedef {Object} Comment
  * @property {string} activity Activity UID
@@ -35,7 +33,7 @@ exports.getComments = async (parent, args) => {
                 const id = doc.id,
                     data = doc.data()
 
-                return { id: id, ...data }
+                return { id: id, ...data, date: new Date(data.date.toDate()).toISOString() }
             })
 
         return response
@@ -62,9 +60,22 @@ exports.postComment = async (parent, args) => {
             activity: args.activity,
             author: args.author,
             comment: args.comment,
-            date: args.date
+            date: new Date(args.date)
         })
-        return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id }
+        return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id, username: response.username }
+    }
+    catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+exports.postUser = async (parent, args) => {
+    try {
+        await admin.firestore().collection('users').doc(args.id).set({
+            username: args.username
+        })
+        return { username: args.username, id: args.id}
     }
     catch (error) {
         console.log(error)

@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 })
 
 
-const Form = (props) => {
+const Form = props => {
     const { t } = useTranslation('general', { useSuspense: false })
 
     const defaultFeature = {
@@ -196,7 +196,7 @@ const Form = (props) => {
                     const name = entry[0],
                         status = entry[1]
                     return (
-                        <span className={`tag ${status ? `is-info` : ``}`} onClick={() => setCollection({ ...collection, [name]: !status })} >{t(`${collectionName}.${name}`)}</span>
+                        <span className={`tag ${status ? `is-primary` : ``}`} onClick={() => setCollection({ ...collection, [name]: !status })} >{t(`${collectionName}.${name}`)}</span>
                     )
                 })
             return collectionComponent
@@ -308,7 +308,7 @@ const Form = (props) => {
                         <div className="columns is-multiline">
                             <div className="column">
                                 <h5 className="subtitle is-size-7 has-text-weight-bold">¿Cuál es la cualidad que más te gusta de este espacio?</h5>
-                                <div class="tags">
+                                <div className="tags">
                                     {renderTags(feature, setFeature, 'feature')}
                                 </div>
                             </div>

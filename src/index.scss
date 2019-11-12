@@ -18,6 +18,7 @@ $input-hover-border-color: #00aec7;
 
 $tabs-link-active-border-bottom-color: #00aec7;
 $tabs-link-active-color: #00aec7;
+$primary: #00aec7;
 
 @import "bulma/sass/utilities/_all.sass";
 @import "bulma/sass/base/_all.sass";
@@ -88,4 +89,9 @@ $tabs-link-active-color: #00aec7;
 
 .tag {
   cursor: pointer;
+}
+
+.text-area-overflow {
+  overflow: auto;
+  word-break: break-all;
 }

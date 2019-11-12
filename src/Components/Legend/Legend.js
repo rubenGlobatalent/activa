@@ -51,7 +51,7 @@ export default function Legend(props) {
   	return(
 			<div className="card" style={style.card}>
 				<div className="card-header" style={style.cardHeader}>
-					<p class="card-header-title is-centered" style={style.cardHeaderTitle}>LEYENDA</p>
+					<p className="card-header-title is-centered" style={style.cardHeaderTitle}>LEYENDA</p>
 					<button className="delete" style={style.delete} onClick={() => props.toggleComponent('legend')}></button>
 				</div>
 				<div className="card-content" style={style.cardContent}>
