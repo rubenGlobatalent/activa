@@ -16,7 +16,8 @@ const schema = gql`
   }
 
   type Mutation {
-      comments(activity: String!, author: String!, comment: String!, date: String!, username: String!): Comment!
+      PostComment(activity: String!, author: String!, comment: String!, date: String!, username: String!): Comment!
+      DeleteComment(id: ID!): String!
   }
 `
 

@@ -35,7 +35,8 @@
     "comments": {
         "smallTextName": "El nombre se asociara a tu cuenta de usuario",
         "name": "Usuario",
-        "sendComment": "Enviar"
+        "sendComment": "Enviar",
+        "delete": "Eliminar"
     },
     "activity": "Actividad",
     "district": "Zona"

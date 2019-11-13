@@ -153,7 +153,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        store.dispatch(setUser({displayName: user.displayName, email: user.email}))
+        store.dispatch(setUser({displayName: user.displayName, email: user.email, uid: user.uid}))
         this.setState({ user: user })
       } else {
         store.dispatch(setUser(null))

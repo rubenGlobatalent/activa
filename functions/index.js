@@ -12,7 +12,8 @@ const resolvers = {
         comments: resolversFunctions.getComments
     },
     Mutation: {
-        comments: resolversFunctions.postComment
+        PostComment: resolversFunctions.postComment,
+        DeleteComment: resolversFunctions.deleteComment
     }
 };
 

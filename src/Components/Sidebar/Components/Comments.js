@@ -25,13 +25,37 @@ const mapStateToProps = state => ({
     }
 
 const Comment = props => {
+    const { t } = useTranslation('general', { useSuspense: false }),
+    [result, executeMutation] = useMutation(gql`
+    mutation DeleteComment($id: ID!){
+        DeleteComment(id: $id)
+    }
+  `)
+
+  const deleteComment = async () => {
+    const payload = {
+        id: props.id
+    }
+
+    try {
+        console.log(await executeMutation(payload))
+        
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
     return (
-        <article className="media container">
+        <article className="media">
             <div className="media-content">
                 <div className="content">
                     <p><strong className="is-size-5 has-text-primary">{props.username}</strong> <time className="is-size-7 has-text-primary">{formatRelative(new Date(props.date), new Date(), { locale: es, weekStartsOn: 1 })}</time></p>
                     {props.comment}
                 </div>
+            </div>
+            <div class={`media-right ${props.user.uid === props.author ? `` : `is-sr-only`}`}>
+                <button className="button is-small has-text-weight-bold is-danger" onClick={deleteComment}>{t('comments.delete')}</button>
             </div>
         </article>
     )
@@ -41,8 +65,8 @@ const Comment = props => {
 
         const [editorState, setEditorState] = useState(EditorState.createEmpty()),
             [result, executeMutation] = useMutation(gql`
-        mutation comments($author: String!, $activity: String!, $comment: String!, $date: String!, $username: String!){
-            comments(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
+        mutation PostComment($author: String!, $activity: String!, $comment: String!, $date: String!, $username: String!){
+            PostComment(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
                 id
                 comment
                 activity
@@ -178,6 +202,7 @@ const Comment = props => {
                     comment
                     date
                     username
+                    author
                 }
             }
           `
@@ -186,7 +211,7 @@ const Comment = props => {
         if (result.error) return <p></p>
         if (result.fetching) return <p></p>
 
-        const comments = result.data.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} /></li>)
+        const comments = result.data.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (
             <>
                 <hr className="navbar-divider" />

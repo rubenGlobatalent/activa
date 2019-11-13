@@ -93,7 +93,7 @@ const Dashboard = props => {
       user.updateProfile({
         displayName: username
       }).then(function () {
-        store.dispatch(setUser({displayName: user.displayName, email: user.email}))
+        store.dispatch(setUser({displayName: user.displayName, email: user.email, uid: user.uid}))
         NotificationManager.success('Perfil actualizado')
         navigate('/')
         

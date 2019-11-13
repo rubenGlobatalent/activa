@@ -70,3 +70,21 @@ exports.postComment = async (parent, args) => {
         return error
     }
 }
+
+/**
+ * Delete a comment
+ * 
+ * @param {Object} args Object to hold arguments to the function
+ * @property {string} args.id Comment UID
+ * @returns {string} Returns the deleted comment ID
+ */
+exports.deleteComment = async (parent, args) => {
+    try {
+        await admin.firestore().collection('comments').doc(args.id).delete()
+        return args.id
+    }
+    catch (error) {
+        console.log(error)
+        return error
+    }
+}
