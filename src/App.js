@@ -14,7 +14,7 @@ import firebase from 'firebase'
 import * as turf from '@turf/turf'
 
 import Header from './Components/Header/Header'
-import Dashboard from './Components/Dashboard/Dashboard'
+import Dashboard from './Components/User/User'
 import Help from './Components/Help/Help'
 import Sidebar from './Components/Sidebar/Sidebar'
 import Districts from './Components/Filters/Districts'
@@ -456,19 +456,19 @@ class App extends Component {
         />
         <Router>
           <Dashboard path='/user' />
-        <Help path='/help' displayStepsAfterHelp={this.displayStepsAfterHelp} />
-        <Districts
-          {...this.state.districtFilter}
-          updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
-          path='/districts'
-        />
-        <Activities
-          {...this.state.activityFilter}
-          updateFilters={this.updateFilters}
-          clearFilters={this.clearFilters}
-          path='/activities'
-        />
+          <Help path='/help' displayStepsAfterHelp={this.displayStepsAfterHelp} />
+          <Districts
+            {...this.state.districtFilter}
+            updateFilters={this.updateFilters}
+            clearFilters={this.clearFilters}
+            path='/districts'
+          />
+          <Activities
+            {...this.state.activityFilter}
+            updateFilters={this.updateFilters}
+            clearFilters={this.clearFilters}
+            path='/activities'
+          />
         </Router>
 
         {this.state.sidebar.visible ? <Sidebar {...this.state.sidebar} toggleComponent={this.toggleComponent} editFeature={this.editFeature} /> : null}
