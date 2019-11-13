@@ -110,7 +110,7 @@ const Dashboard = props => {
   }, [firebase.auth().currentUser])
 
   if (props.visible) {
-    if (props.user.email) {
+    if (props.user) {
       return (
         <div className="modal is-active animated fadeIn faster">
           <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
@@ -142,7 +142,7 @@ const Dashboard = props => {
                 <div class="field-body">
                   <div class="field">
                     <p class="control">
-                      <input class="input" type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                      <input className={`input ${firebase.auth().currentUser.displayName ? `is-static`:``}`} type="text" value={username} onChange={e => setUsername(e.target.value)} readOnly={firebase.auth().currentUser.displayName ? true : false} />
                     </p>
                   </div>
                 </div>
