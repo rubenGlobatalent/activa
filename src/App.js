@@ -454,6 +454,8 @@ class App extends Component {
           user={{ ...this.state.user }}
           toggleComponent={this.toggleComponent}
         />
+        <NotificationContainer />
+
         <Router>
           <Dashboard path='/user' />
           <Help path='/help' displayStepsAfterHelp={this.displayStepsAfterHelp} />
@@ -478,7 +480,6 @@ class App extends Component {
           toggleComponent={this.toggleComponent}
           deleteDrawnPoint={this.deleteDrawnPoint}
         />
-        <NotificationContainer />
         <Steps
           enabled={this.state.steps.visible}
           steps={steps}

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
-import { draftToMarkdown} from 'markdown-draft-js'
+import { draftToMarkdown } from 'markdown-draft-js'
 import { Link } from '@reach/router'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faBold, faItalic, faUnderline, faList, faHeading } from '@fortawesome/free-solid-svg-icons'
@@ -53,6 +53,7 @@ const Comment = props => {
                     date: new Date().toISOString(),
                     username: props.user.displayName
                 }))
+                setEditorState(EditorState.createEmpty())
 
             }
             catch (error) {
@@ -90,7 +91,6 @@ const Comment = props => {
 
 
         const [result, executeMutation] = useMutation(gql`
-
                 mutation {
                     comments(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
                         id
@@ -185,8 +185,6 @@ const Comment = props => {
 
         if (result.error) return <p></p>
         if (result.fetching) return <p></p>
-
-        console.log(result.data.comments)
 
         const comments = result.data.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} /></li>)
         return (
