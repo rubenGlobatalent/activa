@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } from 'draft-js'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
+import { draftToMarkdown} from 'markdown-draft-js'
 import { Link } from '@reach/router'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faBold, faItalic, faUnderline, faList, faHeading } from '@fortawesome/free-solid-svg-icons'
@@ -46,7 +46,13 @@ const Comment = props => {
         const submitComment = async event => {
             event.preventDefault()
             try {
-                console.log(await executeMutation())
+                console.log(await executeMutation({
+                    author: props.user.uid,
+                    activity: props.activity,
+                    comment: toMarkdown(editorState),
+                    date: new Date().toISOString(),
+                    username: props.user.displayName
+                }))
 
             }
             catch (error) {
@@ -84,8 +90,9 @@ const Comment = props => {
 
 
         const [result, executeMutation] = useMutation(gql`
+
                 mutation {
-                    comments(author: "${props.user.uid}", activity: "${props.activity}", comment: "${toMarkdown(editorState)}", date: "${new Date().toISOString()}", username: "${props.user.displayName}"){
+                    comments(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
                         id
                         comment
                         activity
