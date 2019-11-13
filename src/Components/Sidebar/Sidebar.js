@@ -37,17 +37,13 @@ const Edit = props => {
             <footer className="card-footer">
 
                 <div className="card-footer-item">
-                    <div className="field is-grouped">
-                        <div className="control">
-                            <button className="button is-danger" onClick={removePoint}>
-                                Confirmar
+                    <div className="buttons">
+                        <button className="button is-danger is-small" onClick={removePoint}>
+                            Confirmar
                     </button>
-                        </div>
-                        <div className="control">
-                            <button className="button is-light" onClick={props.toggleConfirmation}>
-                                Cancelar
+                        <button className="button is-light is-small" onClick={props.toggleConfirmation}>
+                            Cancelar
                     </button>
-                        </div>
                     </div>
 
 
