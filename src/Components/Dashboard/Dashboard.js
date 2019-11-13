@@ -117,7 +117,7 @@ const Dashboard = props => {
           <form className="modal-card" onSubmit={updateProfile}>
             <header className="modal-card-head">
               <h2 className="modal-card-title is-size-5 has-text-weight-light">Panel de usuario</h2>
-              <button className="delete" onClick={() => navigate('/')}></button>
+              <button type="button" className="delete" onClick={() => navigate('/')}></button>
             </header>
             <section className="modal-card-body">
               <h3 className="title has-text-centered is-size-6">¡Hola!</h3>

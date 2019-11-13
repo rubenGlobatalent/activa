@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } from 'draft-js'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { Link } from '@reach/router'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faBold, faItalic, faUnderline, faList, faHeading } from '@fortawesome/free-solid-svg-icons'
 import { useQuery, useMutation } from 'urql'
@@ -142,7 +143,7 @@ const Comment = props => {
             <>
                 <p className="has-text-weight-bold has-text-centered">Registrate para poder comentar</p>
                 <div className="buttons is-centered">
-                    <button className="button is-primary is-small has-text-weight-bold">Registrate</button>
+                    <Link to="/user" className="button is-primary is-small has-text-weight-bold">Registrate</Link>
                 </div>
             </>
         )
@@ -155,7 +156,7 @@ const Comment = props => {
                 </p>
 
                 <div className="buttons is-centered">
-                    <button className="button is-primary is-small has-text-weight-bold">Actualiza tu perfil</button>
+                    <Link to="/user" className="button is-primary is-small has-text-weight-bold">Actualiza tu perfil</Link>
                 </div>
             </>
         )
