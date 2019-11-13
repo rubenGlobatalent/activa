@@ -141,7 +141,7 @@ const Dashboard = props => {
                 <div class="field-body">
                   <div class="field">
                     <p class="control">
-                      <input className={`input ${firebase.auth().currentUser.displayName ? `is-static`:``}`} type="text" value={username} onChange={e => setUsername(e.target.value)} readOnly={firebase.auth().currentUser.displayName ? true : false} />
+                      <input className={`input ${props.user.displayName ? `is-static`:``}`} type="text" value={username} onChange={e => setUsername(e.target.value)} readOnly={props.user.displayName ? true : false} />
                     </p>
                   </div>
                 </div>
