@@ -66,7 +66,7 @@ exports.postComment = async (parent, args) => {
         return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id, username: args.username }
     }
     catch (error) {
-        console.log(error)
+        console.error(error)
         return error
     }
 }
@@ -84,7 +84,7 @@ exports.deleteComment = async (parent, args) => {
         return args.id
     }
     catch (error) {
-        console.log(error)
+        console.error(error)
         return error
     }
 }

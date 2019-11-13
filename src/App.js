@@ -367,8 +367,26 @@ class App extends Component {
         });
 
         this.map.on('touchend', activityType, e => {
-          let properties = e.features[0].properties;
-          this.setState({ sidebar: { data: properties, visible: true } })
+          let properties = e.features[0].properties,
+            geometry,
+            feature
+          if (properties.pointInLine) {
+            geometry = this.props.activities.features.find(feature => feature.properties.id === properties.id).geometry
+            feature = turf.lineString(geometry.coordinates, properties)
+          }
+          else {
+            geometry = e.features[0].geometry
+            if (geometry.type === 'Point') {
+              feature = turf.point(geometry.coordinates, properties)
+            }
+            else if (geometry.type === 'LineString') {
+              feature = turf.lineString(geometry.coordinates, properties)
+            }
+          }
+
+          store.dispatch(selectActivity(feature))
+
+          this.setState({ sidebar: { visible: true } })
         });
       })
 

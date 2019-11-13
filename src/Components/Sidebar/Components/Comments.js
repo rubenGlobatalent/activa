@@ -38,11 +38,11 @@ const Comment = props => {
     }
 
     try {
-        console.log(await executeMutation(payload))
+        await executeMutation(payload)
         
     }
     catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -93,7 +93,7 @@ const Comment = props => {
 
             }
             catch (error) {
-                console.log(error)
+                console.error(error)
             }
         },
             // textBold = () => {
