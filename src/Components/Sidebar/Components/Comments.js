@@ -11,6 +11,8 @@ import { connect } from 'react-redux'
 import { formatRelative } from 'date-fns'
 import { es } from 'date-fns/locale'
 
+import {store, setComments, deleteComment, addComment} from '../../../redux/store'
+
 const style = {
     paddedBot: {
         paddingBottom: '1.5rem'
@@ -18,7 +20,8 @@ const style = {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    comments: state.comments
 }),
     toMarkdown = editorState => {
         return draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
@@ -38,7 +41,8 @@ const Comment = props => {
     }
 
     try {
-        await executeMutation(payload)
+        const result = await executeMutation(payload)
+        // store.dispatch(deleteComment({id: result.data.DeleteComment}))
         
     }
     catch (error) {
@@ -54,7 +58,7 @@ const Comment = props => {
                     {props.comment}
                 </div>
             </div>
-            <div class={`media-right ${props.user.uid === props.author ? `` : `is-sr-only`}`}>
+            <div class={`media-right ${props.user ? (props.user.uid === props.author ? `` : `is-sr-only`) : `is-sr-only`}`}>
                 <button className="button is-small has-text-weight-bold is-danger" onClick={deleteComment}>{t('comments.delete')}</button>
             </div>
         </article>
@@ -210,8 +214,9 @@ const Comment = props => {
 
         if (result.error) return <p></p>
         if (result.fetching) return <p></p>
+        store.dispatch(setComments(result.data.comments))
 
-        const comments = result.data.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
+        const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (
             <>
                 <hr className="navbar-divider" />

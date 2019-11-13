@@ -14,7 +14,8 @@ const initialState = {
   activities: turf.featureCollection([]),
   districts: districts,
   selectedActivity: null,
-  user: null
+  user: null,
+  comments: []
 };
 
 const loadState = () => {
@@ -51,6 +52,14 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         selectedActivity: action.payload
       })
+    case `SET_COMMENTS`:
+      return Object.assign({}, state, {
+        comments: action.payload
+      })
+      case `DELETE_COMMENT`:
+        return Object.assign({}, state, {
+          comments: state.comments.filter(element => element.id !== action.payload.id)
+        })
     default:
       return state
   }
@@ -69,6 +78,17 @@ export const setUser = payload => {
   return { type: `SET_USER`, payload };
 }
 
+export const setComments = payload => {
+  return { type: `SET_COMMENTS`, payload };
+}
+
+export const deleteComment = payload => {
+  return { type: `DELETE_COMMENT`, payload };
+}
+
+export const addComment = payload => {
+  return { type: `ADD_COMMENT`, payload };
+}
 // Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
 export const store = createStore(rootReducer, loadState())
