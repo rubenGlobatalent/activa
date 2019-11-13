@@ -11,6 +11,12 @@ import * as firebase from 'firebase'
 
 import Comments from './Components/Comments'
 
+const style = {
+    footer: {
+        height: '70%'
+    }
+}
+
 const mapStateToProps = state => ({
     districts: state.districts,
     selectedActivity: state.selectedActivity
@@ -34,7 +40,7 @@ const Edit = props => {
 
     if (props.confirmation) {
         return (
-            <footer className="card-footer">
+            <footer className="card-footer" style={style.footer}>
 
                 <div className="card-footer-item">
                     <div className="buttons">
@@ -57,19 +63,13 @@ const Edit = props => {
         return (
             <footer className="card-footer">
 
-                <div className="card-footer-item">
-                    <div className="field is-grouped">
-                        <div className="control">
-                            <button className="button is-danger" onClick={props.toggleConfirmation}>
-                                Eliminar deporte
+                <div className="buttons is-centered">
+                    <button className="button is-danger is-small" onClick={props.toggleConfirmation}>
+                        Eliminar deporte
                     </button>
-                            <button className="button is-primary" onClick={() => props.editFeature({ type: "Feature", properties: data, geometry: props.geom })}>
-                                Editar deporte
+                    <button className="button is-primary is-small" onClick={() => props.editFeature({ type: "Feature", properties: data, geometry: props.geom })}>
+                        Editar deporte
                     </button>
-                        </div>
-                    </div>
-
-
                 </div>
             </footer>
 

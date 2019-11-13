@@ -57,23 +57,23 @@ const Header = props => {
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <button className={filterButtonClass} style={style.button} onClick={() => props.toggleComponent('activityFilter')}>
+              <Link to='/activities' className={filterButtonClass} style={style.button}>
                 Actividad
-              </button>
+              </Link>
             </div>
             <div className="navbar-item">
-              <button className={filterButtonClass} style={style.districtButton} onClick={() => props.toggleComponent('districtFilter')}>
+              <Link to='/districts' className={filterButtonClass} style={style.districtButton}>
                 Zonas
-              </button>
+              </Link>
             </div>
             <hr className="navbar-divider" />
             <div className="navbar-item" >
-              <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('help')}>
+              <Link to='/help' className={buttonClass} style={style.button}>
                 <i className='material-icons' style={style.icon}>help</i>
-              </button>
+              </Link>
             </div>
             <div className="navbar-item">
-              <Link to="/user" className={buttonClass} style={style.button}>
+              <Link to='/user' className={buttonClass} style={style.button}>
                 <i className='material-icons' style={style.userIcon}>person</i>
                 {user}
               </Link>

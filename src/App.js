@@ -17,8 +17,8 @@ import Header from './Components/Header/Header'
 import Dashboard from './Components/Dashboard/Dashboard'
 import Help from './Components/Help/Help'
 import Sidebar from './Components/Sidebar/Sidebar'
-import DistrictFilter from './Components/DistrictFilter/DistrictFilter'
-import ActivityFilter from './Components/ActivityFilter/ActivityFilter'
+import Districts from './Components/Filters/Districts'
+import Activities from './Components/Filters/Activities'
 import Form from './Components/Form/Form'
 import Legend from './Components/Legend/Legend'
 import sports from './assets/data/sports.json'
@@ -101,12 +101,8 @@ class App extends Component {
         selected: []
       },
       districtFilter: {
-        visible: false,
         data: [],
         selected: []
-      },
-      help: {
-        visible: true
       },
       sidebar: {
         visible: false,
@@ -144,7 +140,7 @@ class App extends Component {
   };
 
   displayStepsAfterHelp = () => {
-    this.setState({ help: { visible: false }, steps: { visible: true } })
+    this.setState({ steps: { visible: true } })
   }
 
   stepsOnExit = () => {
@@ -460,24 +456,20 @@ class App extends Component {
         />
         <Router>
           <Dashboard path='/user' />
-        </Router>
-        <Help
-          {...this.state.help}
-          toggleComponent={this.toggleComponent}
-          displayStepsAfterHelp={this.displayStepsAfterHelp}
-        />
-        <DistrictFilter
+        <Help path='/help' displayStepsAfterHelp={this.displayStepsAfterHelp} />
+        <Districts
           {...this.state.districtFilter}
-          toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
           clearFilters={this.clearFilters}
+          path='/districts'
         />
-        <ActivityFilter
+        <Activities
           {...this.state.activityFilter}
-          toggleComponent={this.toggleComponent}
           updateFilters={this.updateFilters}
           clearFilters={this.clearFilters}
+          path='/activities'
         />
+        </Router>
 
         {this.state.sidebar.visible ? <Sidebar {...this.state.sidebar} toggleComponent={this.toggleComponent} editFeature={this.editFeature} /> : null}
 
