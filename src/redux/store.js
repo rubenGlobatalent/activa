@@ -56,10 +56,14 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         comments: action.payload
       })
-      case `DELETE_COMMENT`:
-        return Object.assign({}, state, {
-          comments: state.comments.filter(element => element.id !== action.payload.id)
-        })
+    case `DELETE_COMMENT`:
+      return Object.assign({}, state, {
+        comments: state.comments.filter(element => element.id !== action.payload.id)
+      })
+    case `ADD_COMMENT`:
+      return Object.assign({}, state, {
+        comments: [...action.payload, ...state.comments]
+      })
     default:
       return state
   }

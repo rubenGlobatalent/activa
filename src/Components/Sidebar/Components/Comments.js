@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import { formatRelative } from 'date-fns'
 import { es } from 'date-fns/locale'
 
-import {store, setComments, deleteComment, addComment} from '../../../redux/store'
+import { store, setComments, deleteComment, addComment } from '../../../redux/store'
 
 const style = {
     paddedBot: {
@@ -29,26 +29,29 @@ const mapStateToProps = state => ({
 
 const Comment = props => {
     const { t } = useTranslation('general', { useSuspense: false }),
-    [result, executeMutation] = useMutation(gql`
+        [result, executeMutation] = useMutation(gql`
     mutation DeleteComment($id: ID!){
         DeleteComment(id: $id)
     }
   `)
 
-  const deleteComment = async () => {
-    const payload = {
-        id: props.id
-    }
+    const deleteCommentMutation = async () => {
+        const payload = {
+            id: props.id
+        }
 
-    try {
-        const result = await executeMutation(payload)
-        // store.dispatch(deleteComment({id: result.data.DeleteComment}))
-        
+        console.log(payload)
+
+        try {
+            await executeMutation(payload)
+            store.dispatch(deleteComment({ id: result.data.DeleteComment }))
+            // store.dispatch(deleteComment({ id: payload.id }))
+
+        }
+        catch (error) {
+            console.error(error)
+        }
     }
-    catch (error) {
-        console.error(error)
-    }
-}
 
     return (
         <article className="media">
@@ -59,7 +62,7 @@ const Comment = props => {
                 </div>
             </div>
             <div class={`media-right ${props.user ? (props.user.uid === props.author ? `` : `is-sr-only`) : `is-sr-only`}`}>
-                <button className="button is-small has-text-weight-bold is-danger" onClick={deleteComment}>{t('comments.delete')}</button>
+                <button className="button is-small has-text-weight-bold is-danger" onClick={deleteCommentMutation}>{t('comments.delete')}</button>
             </div>
         </article>
     )
@@ -73,7 +76,9 @@ const Comment = props => {
             PostComment(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
                 id
                 comment
-                activity
+                date
+                username
+                author
             }
         }
       `
@@ -94,6 +99,9 @@ const Comment = props => {
             try {
                 await executeMutation(payload)
                 setEditorState(EditorState.createEmpty())
+                store.dispatch(addComment([result.data.PostComment]))
+                                // store.dispatch(addComment([{...payload, id: 'test'}]))
+
 
             }
             catch (error) {
@@ -212,9 +220,9 @@ const Comment = props => {
           `
         })
 
-        if (result.error) return <p></p>
-        if (result.fetching) return <p></p>
-        store.dispatch(setComments(result.data.comments))
+        // if (result.error) return <p></p>
+        // if (result.fetching) return <p></p>
+        // store.dispatch(setComments(result.data.comments))
 
         const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (
