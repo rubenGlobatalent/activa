@@ -39,20 +39,32 @@ const Comment = props => {
     RichEditor = props => {
         const { t } = useTranslation('general', { useSuspense: false })
 
-        const [editorState, setEditorState] = useState(EditorState.createEmpty())
+        const [editorState, setEditorState] = useState(EditorState.createEmpty()),
+            [result, executeMutation] = useMutation(gql`
+        mutation comments($author: String!, $activity: String!, $comment: String!, $date: String!, $username: String!){
+            comments(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
+                id
+                comment
+                activity
+            }
+        }
+      `
+            )
 
         const inputElement = useRef(null)
 
         const submitComment = async event => {
             event.preventDefault()
+            const payload = {
+                author: props.user.uid,
+                activity: props.activity,
+                comment: toMarkdown(editorState),
+                date: new Date().toISOString(),
+                username: props.user.displayName
+            }
+
             try {
-                console.log(await executeMutation({
-                    author: props.user.uid,
-                    activity: props.activity,
-                    comment: toMarkdown(editorState),
-                    date: new Date().toISOString(),
-                    username: props.user.displayName
-                }))
+                await executeMutation(payload)
                 setEditorState(EditorState.createEmpty())
 
             }
@@ -60,21 +72,21 @@ const Comment = props => {
                 console.log(error)
             }
         },
-            textBold = () => {
-                setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
-            },
-            textItalic = () => {
-                setEditorState(RichUtils.toggleInlineStyle(editorState, 'ITALIC'))
-            },
-            textUnderline = () => {
-                setEditorState(RichUtils.toggleInlineStyle(editorState, 'UNDERLINE'))
-            },
-            textUnorderedList = () => {
-                setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'))
-            },
-            textHeader = () => {
-                setEditorState(RichUtils.toggleBlockType(editorState, 'header-six'))
-            },
+            // textBold = () => {
+            //     setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
+            // },
+            // textItalic = () => {
+            //     setEditorState(RichUtils.toggleInlineStyle(editorState, 'ITALIC'))
+            // },
+            // textUnderline = () => {
+            //     setEditorState(RichUtils.toggleInlineStyle(editorState, 'UNDERLINE'))
+            // },
+            // textUnorderedList = () => {
+            //     setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'))
+            // },
+            // textHeader = () => {
+            //     setEditorState(RichUtils.toggleBlockType(editorState, 'header-six'))
+            // },
             handleKeyCommand = (command, editorState) => {
                 const newState = RichUtils.handleKeyCommand(editorState, command)
 
@@ -88,18 +100,6 @@ const Comment = props => {
                 // `current` points to the mounted text input element
                 inputElement.current.focus();
             }
-
-
-        const [result, executeMutation] = useMutation(gql`
-                mutation {
-                    comments(author: $author, activity: $activity, comment: $comment, date: $date, username: $username){
-                        id
-                        comment
-                        activity
-                    }
-                }
-              `
-        )
 
         return (
             <form style={style.paddedBot} onSubmit={submitComment}>

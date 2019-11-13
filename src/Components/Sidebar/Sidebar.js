@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { connect } from 'react-redux'
 import * as firebase from 'firebase'
 
@@ -13,7 +11,7 @@ import Comments from './Components/Comments'
 
 const style = {
     footer: {
-        height: '70%'
+        display: 'block'
     }
 }
 
@@ -61,7 +59,7 @@ const Edit = props => {
 
     else {
         return (
-            <footer className="card-footer">
+            <footer className="card-footer" style={style.footer}>
 
                 <div className="buttons is-centered">
                     <button className="button is-danger is-small" onClick={props.toggleConfirmation}>
@@ -165,14 +163,6 @@ const Edit = props => {
 const Sidebar = props => {
     const [expanded, setExpanded] = useState(true),
         [confirmation, setConfirmation] = useState(false)
-
-    const toMarkdown = editorState => {
-        return draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
-    },
-        toRaw = stringToParse => {
-            stringToParse = typeof stringToParse === 'object' ? JSON.stringify(stringToParse) : stringToParse
-            return EditorState.createWithContent(convertFromRaw(markdownToDraft(stringToParse)))
-        }
 
     const toggleConfirmation = () => {
         setConfirmation(!confirmation)
