@@ -7,7 +7,8 @@ import { Steps } from 'intro.js-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
-import {store, setActivities, setUser ,selectActivity} from './redux/store'
+import { Router } from "@reach/router"
+import { store, setActivities, setUser, selectActivity } from './redux/store'
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
@@ -31,7 +32,7 @@ const sportsIcons = sports.list.map(sport => ({
   icon: reqSvgs(`./${sport.key}.png`)
 }))
 
-mapboxgl.accessToken=process.env.REACT_APP_MAPBOX_TOKEN 
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -107,9 +108,6 @@ class App extends Component {
       help: {
         visible: true
       },
-      dashboard: {
-        visible: false
-      },
       sidebar: {
         visible: false,
         data: {},
@@ -158,7 +156,7 @@ class App extends Component {
   }
 
   editFeature = feature => {
-    this.setState({ form: { ...this.state.form, feature: feature,visible: !this.state.form.visible }, sidebar: { ...this.state.sidebar, visible: !this.state.sidebar.visible } })
+    this.setState({ form: { ...this.state.form, feature: feature, visible: !this.state.form.visible }, sidebar: { ...this.state.sidebar, visible: !this.state.sidebar.visible } })
   }
 
   componentDidMount() {
@@ -186,22 +184,22 @@ class App extends Component {
           return data
         }),
 
-      exploded = features
-      .filter(feature => turf.getType(feature ) === 'LineString')
-      .map(feature => turf.explode(feature).features)
-      .flat()
-      // Deep clone properties to be able to set pointInLine property immutably
-      .map(feature => {
-        const propertiesDeepClone = { ...feature.properties }
-        feature.properties = propertiesDeepClone
-        return feature
-      })
-      /* Add property pointInLine to be able to separate the pointActivities layer
-      from the pointInLineActivities layer */
-      .map(feature => {
-        feature.properties.pointInLine = true
-        return feature
-      })
+        exploded = features
+          .filter(feature => turf.getType(feature) === 'LineString')
+          .map(feature => turf.explode(feature).features)
+          .flat()
+          // Deep clone properties to be able to set pointInLine property immutably
+          .map(feature => {
+            const propertiesDeepClone = { ...feature.properties }
+            feature.properties = propertiesDeepClone
+            return feature
+          })
+          /* Add property pointInLine to be able to separate the pointActivities layer
+          from the pointInLineActivities layer */
+          .map(feature => {
+            feature.properties.pointInLine = true
+            return feature
+          })
 
       store.dispatch(setActivities(turf.featureCollection([...features, ...exploded])))
     })
@@ -300,7 +298,7 @@ class App extends Component {
         },
         filter: ['match', ['get', 'name'], ['none'], true, false]
       });
-      
+
       this.map.addLayer({
         id: 'lineActivities',
         source: 'activities',
@@ -356,8 +354,8 @@ class App extends Component {
 
         this.map.on('click', activityType, e => {
           let properties = e.features[0].properties,
-          geometry,
-          feature
+            geometry,
+            feature
           if (properties.pointInLine) {
             geometry = this.props.activities.features.find(feature => feature.properties.id === properties.id).geometry
             feature = turf.lineString(geometry.coordinates, properties)
@@ -436,7 +434,7 @@ class App extends Component {
       const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false];
       const pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true];
 
-      if(activityFilter === null) {
+      if (activityFilter === null) {
         this.map.setFilter('lineActivities', activityFilter);
         this.map.setFilter('pointActivities', pointActivitiesFilter);
         this.map.setFilter('pointInLineActivities', pointInLineActivitiesFilter);
@@ -460,11 +458,9 @@ class App extends Component {
           user={{ ...this.state.user }}
           toggleComponent={this.toggleComponent}
         />
-        <Dashboard
-          {...this.state.dashboard}
-          user={{ ...this.state.user }}
-          toggleComponent={this.toggleComponent}
-        />
+        <Router>
+          <Dashboard path='/user' />
+        </Router>
         <Help
           {...this.state.help}
           toggleComponent={this.toggleComponent}

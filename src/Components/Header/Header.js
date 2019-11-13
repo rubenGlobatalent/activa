@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from "@reach/router"
 import logo from '../../assets/img/logo.png'
 
 const style = {
@@ -72,10 +73,10 @@ const Header = props => {
               </button>
             </div>
             <div className="navbar-item">
-              <button className={buttonClass} style={style.button} onClick={() => props.toggleComponent('dashboard')}>
+              <Link to="/user" className={buttonClass} style={style.button}>
                 <i className='material-icons' style={style.userIcon}>person</i>
                 {user}
-              </button>
+              </Link>
             </div>
           </div>
         </div>

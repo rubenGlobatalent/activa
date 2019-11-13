@@ -3,6 +3,7 @@ import { NotificationManager } from 'react-notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
+import { navigate } from "@reach/router"
 import {store, setUser} from '../../redux/store'
 // OPTIMIZE IMPORTS
 import * as firebase from 'firebase'
@@ -32,13 +33,13 @@ const Dashboard = props => {
       if (forgot) {
         firebase.auth().sendPasswordResetEmail(email)
           .then(() => {
-            props.toggleComponent('dashboard');
+            navigate('/')
             NotificationManager.info('Te hemos enviado instrucciones de cómo restablecer tu contraseña a la cuenta de correo indicada.')
             setWaiting(false)
             setForgot(false)
           })
           .catch(() => {
-            props.toggleComponent('dashboard');
+            navigate('/')
             NotificationManager.error('No existe la cuenta indicada.')
             setWaiting(false)
             setForgot(false)
@@ -47,7 +48,7 @@ const Dashboard = props => {
       else {
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then(() => {
-            props.toggleComponent('dashboard');
+            navigate('/')
             NotificationManager.success('¡Cuenta creada!')
             setWaiting(false)
           })
@@ -55,7 +56,7 @@ const Dashboard = props => {
             if (error.code === 'auth/email-already-in-use') {
               firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
-                  props.toggleComponent('dashboard');
+                  navigate('/')
                   NotificationManager.success('¡Autenticación correcta!')
                   setWaiting(false)
                   setForgot(false)
@@ -80,7 +81,7 @@ const Dashboard = props => {
         .then(() => {
           store.dispatch(setUser(null))
           NotificationManager.success('Desconectado. ¡Vuelve pronto!');
-          props.toggleComponent('dashboard');
+          navigate('/')
         })
         .catch((error) => {
           console.error(error)
@@ -95,7 +96,7 @@ const Dashboard = props => {
       }).then(function () {
         store.dispatch(setUser(user))
         NotificationManager.success('Perfil actualizado')
-        props.toggleComponent('dashboard')
+        navigate('/')
         
       }).catch(function (error) {
         console.error(error)
@@ -109,15 +110,14 @@ const Dashboard = props => {
     }
   }, [firebase.auth().currentUser])
 
-  if (props.visible) {
     if (props.user) {
       return (
         <div className="modal is-active animated fadeIn faster">
-          <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
+          <div className="modal-background" onClick={() => navigate('/')}></div>
           <form className="modal-card" onSubmit={updateProfile}>
             <header className="modal-card-head">
               <h2 className="modal-card-title is-size-5 has-text-weight-light">Panel de usuario</h2>
-              <button className="delete" onClick={() => props.toggleComponent('dashboard')}></button>
+              <button className="delete" onClick={() => navigate('/')}></button>
             </header>
             <section className="modal-card-body">
               <h3 className="title has-text-centered is-size-6">¡Hola!</h3>
@@ -161,11 +161,11 @@ const Dashboard = props => {
     else {
       return (
         <div className="modal is-active">
-          <div className="modal-background" onClick={() => props.toggleComponent('dashboard')}></div>
+          <div className="modal-background" onClick={() => navigate('/')}></div>
           <form className="modal-card" onSubmit={handleLogin}>
             <header className="modal-card-head">
               <h2 className="modal-card-title is-size-5 has-text-weight-light">Accede o crea tu cuenta</h2>
-              <button className="delete" type="button" onClick={() => props.toggleComponent('dashboard')}></button>
+              <button className="delete" type="button" onClick={() => navigate('/')}></button>
             </header>
             <section className="modal-card-body">
               <p className="is-uppercase" style={style.text}>
@@ -218,12 +218,6 @@ const Dashboard = props => {
         </div>
       )
     }
-  }
-  else {
-    return (
-      null
-    )
-  }
 
 }
 
