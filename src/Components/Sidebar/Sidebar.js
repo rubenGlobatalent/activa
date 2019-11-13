@@ -78,7 +78,7 @@ const Edit = props => {
     Image = props => {
         return (
             <picture className="card-image image is-square">
-                <img src={props.data.image} style={{ objectFit: 'contain' }} />
+                <img src={props.data.image} alt="" style={{ objectFit: 'contain' }} />
             </picture>
         )
     },

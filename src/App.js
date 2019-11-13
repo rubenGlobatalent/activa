@@ -39,8 +39,7 @@ firebase.initializeApp({
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: 428207234830
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET
 })
 
 const mapStateToProps = state => ({
@@ -92,11 +91,7 @@ class App extends Component {
     this.displayStepsAfterHelp = this.displayStepsAfterHelp.bind(this)
     this.editFeature = this.editFeature.bind(this)
     this.state = {
-      header: {
-        visible: false
-      },
       activityFilter: {
-        visible: false,
         data: [],
         selected: []
       },
@@ -158,7 +153,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        store.dispatch(setUser(user))
+        store.dispatch(setUser({displayName: user.displayName, email: user.email}))
         this.setState({ user: user })
       } else {
         store.dispatch(setUser(null))
@@ -449,13 +444,8 @@ class App extends Component {
   render() {
     return (
       <div style={style.map} ref={el => this.mapContainer = el} >
-        <Header
-          {...this.state.header}
-          user={{ ...this.state.user }}
-          toggleComponent={this.toggleComponent}
-        />
+        <Header />
         <NotificationContainer />
-
         <Router>
           <Dashboard path='/user' />
           <Help path='/help' displayStepsAfterHelp={this.displayStepsAfterHelp} />

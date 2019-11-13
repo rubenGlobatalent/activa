@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { connect } from 'react-redux'
 import { Link } from "@reach/router"
+import { useTranslation } from 'react-i18next'
+
 import logo from '../../assets/img/logo.png'
 
 const style = {
@@ -21,23 +23,21 @@ const style = {
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.user
+})
+
+
 const Header = props => {
-  let navbarBurguerClass = 'navbar-burger',
-    navbarMenuClass = 'navbar-menu',
-    buttonClass = 'button is-large is-size-7 is-uppercase',
-    user;
-  if (props.visible) {
-    navbarBurguerClass = navbarBurguerClass + ' is-active'
-    navbarMenuClass = navbarMenuClass + ' is-active'
-    buttonClass = buttonClass + ' is-fullwidth'
-  }
-  let filterButtonClass = buttonClass + ' filterButton';
-  if (props.user.email) {
-    user = props.user.email
-  }
-  else {
-    user = 'Inicia sesión'
-  }
+
+  const [visible, setVisible] = useState(false),
+  { t } = useTranslation('general', { useSuspense: false })
+
+  const navbarBurguerClass = `navbar-burger ${visible ? `is-active` : `` }`,
+    navbarMenuClass = `navbar-menu ${visible ? `is-active` : `` }`,
+    buttonClass = `button is-large is-size-7 is-uppercase ${visible ? `is-fullwidth` : `` }`,
+    user = props.user ? props.user.email : 'Inicia sesión',
+    filterButtonClass = `${buttonClass} filterButton`
 
   return (
     <header>
@@ -47,23 +47,23 @@ const Header = props => {
             <img src={logo} alt="Málaga Áctiva"/>
           </a>
 
-          <a className={navbarBurguerClass} onClick={() => props.toggleComponent('header')} >
+          <span className={navbarBurguerClass} onClick={() => setVisible(!visible)} >
             <span></span>
             <span></span>
             <span></span>
-          </a>
+          </span>
         </div>
 
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
               <Link to='/activities' className={filterButtonClass} style={style.button}>
-                Actividad
+                {t('activity')}
               </Link>
             </div>
             <div className="navbar-item">
               <Link to='/districts' className={filterButtonClass} style={style.districtButton}>
-                Zonas
+                {t('district')}
               </Link>
             </div>
             <hr className="navbar-divider" />
@@ -86,6 +86,6 @@ const Header = props => {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   null
 )(Header)

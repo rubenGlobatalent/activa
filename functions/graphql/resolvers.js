@@ -22,7 +22,7 @@ exports.getComments = async (parent, args) => {
         let result
 
         if (args.activity)
-            result = await query.where('activity', '==', args.activity).get()
+            result = await query.where('activity', '==', args.activity).orderBy('date', 'desc').get()
 
         else {
             result = await query.get()
@@ -64,19 +64,6 @@ exports.postComment = async (parent, args) => {
             username: args.username
         })
         return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id, username: args.username }
-    }
-    catch (error) {
-        console.log(error)
-        return error
-    }
-}
-
-exports.postUser = async (parent, args) => {
-    try {
-        await admin.firestore().collection('users').doc(args.id).set({
-            username: args.username
-        })
-        return { username: args.username, id: args.id}
     }
     catch (error) {
         console.log(error)

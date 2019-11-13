@@ -1,4 +1,4 @@
-import { createStore} from 'redux'
+import { createStore } from 'redux'
 import * as turf from '@turf/turf'
 import districts from '../assets/data/districts.json'
 
@@ -17,20 +17,40 @@ const initialState = {
   user: null
 };
 
-const rootReducer = (state = initialState, action)  => {
-  switch(action.type) {
+const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('state');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+},
+  saveState = state => {
+    try {
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem('state', serializedState);
+    } catch {
+      // ignore write errors
+    }
+  };
+
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
     case `SET_ACTIVITIES`:
       return Object.assign({}, state, {
         activities: action.payload
       })
-      case `SET_USER`:
-        return Object.assign({}, state, {
-          user: action.payload
-        })
+    case `SET_USER`:
+      return Object.assign({}, state, {
+        user: action.payload
+      })
     case `SELECT_ACTIVITY`:
-        return Object.assign({}, state, {
-          selectedActivity: action.payload
-        })
+      return Object.assign({}, state, {
+        selectedActivity: action.payload
+      })
     default:
       return state
   }
@@ -51,11 +71,11 @@ export const setUser = payload => {
 
 // Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
-export const store = createStore(rootReducer)
+export const store = createStore(rootReducer, loadState())
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
 // However it can also be handy to persist the current state in the localStorage.
 
-// store.subscribe(() => console.log(store.getState()))
+store.subscribe(() => saveState(store.getState()))
 

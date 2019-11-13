@@ -23,8 +23,7 @@ const Dashboard = props => {
     [password, setPassword] = useState(''),
     [forgot, setForgot] = useState(false),
     [waiting, setWaiting] = useState(false),
-    [username, setUsername] = useState(''),
-    [terms, setTerms] = useState(false)
+    [username, setUsername] = useState('')
 
   const handleLogin = event => {
     event.preventDefault();
@@ -94,7 +93,7 @@ const Dashboard = props => {
       user.updateProfile({
         displayName: username
       }).then(function () {
-        store.dispatch(setUser(user))
+        store.dispatch(setUser({displayName: user.displayName, email: user.email}))
         NotificationManager.success('Perfil actualizado')
         navigate('/')
         
@@ -205,7 +204,7 @@ const Dashboard = props => {
               <div className={forgot ? 'is-sr-only' : 'field'}>
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" required={!forgot} onChange={e => setTerms(e.target.checked)} />
+                    <input type="checkbox" required={!forgot}/>
                     <span> Acepto los <a target="_blank" rel="noopener noreferrer" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">terminos y condiciones</a></span>
                   </label>
                 </div>

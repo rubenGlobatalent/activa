@@ -174,7 +174,7 @@ const Comment = props => {
             query: gql`
             {
                 comments (activity: "${props.activity}") {
-                    author
+                    id
                     comment
                     date
                     username

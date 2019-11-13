@@ -67,7 +67,7 @@ const style = {
     }
 };
 
-export default function Help(props) {
+const Help = props => {
 
     const buttonClickHandler = () => {
         props.displayStepsAfterHelp();
@@ -166,3 +166,5 @@ export default function Help(props) {
     )
 
 }
+
+export default Help

@@ -36,5 +36,7 @@
         "smallTextName": "El nombre se asociara a tu cuenta de usuario",
         "name": "Usuario",
         "sendComment": "Enviar"
-    }
+    },
+    "activity": "Actividad",
+    "district": "Zona"
 }

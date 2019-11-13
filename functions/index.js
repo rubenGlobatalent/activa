@@ -2,18 +2,17 @@ const { ApolloServer } = require('apollo-server-cloud-functions'),
     { https } = require('firebase-functions'),
     admin = require('firebase-admin'),
     schema = require('./graphql/schema'),
-    functions = require('./graphql/functions')
+    resolversFunctions = require('./graphql/resolvers')
 
 admin.initializeApp()
 
 // Provide resolver functions for your schema fields
 const resolvers = {
     Query: {
-        comments: functions.getComments
+        comments: resolversFunctions.getComments
     },
     Mutation: {
-        comments: functions.postComment,
-        users: functions.postUser
+        comments: resolversFunctions.postComment
     }
 };
 
