@@ -21,7 +21,7 @@ exports.getComments = async (parent, args) => {
         const query = admin.firestore().collection('comments')
         let result
 
-        if (args.author)
+        if (args.activity)
             result = await query.where('activity', '==', args.activity).get()
 
         else {
@@ -60,9 +60,10 @@ exports.postComment = async (parent, args) => {
             activity: args.activity,
             author: args.author,
             comment: args.comment,
-            date: new Date(args.date)
+            date: new Date(args.date),
+            username: args.username
         })
-        return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id, username: response.username }
+        return { activity: args.activity, author: args.author, comment: args.comment, date: args.date, id: response.id, username: args.username }
     }
     catch (error) {
         console.log(error)

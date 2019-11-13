@@ -81,9 +81,10 @@ const Comment = props => {
                 inputElement.current.focus();
             }
 
+
         const [result, executeMutation] = useMutation(gql`
                 mutation {
-                    comments(author: "${props.user.id}", activity: "${props.activity}", comment: "${toMarkdown(editorState)}", date: "${new Date().toISOString()}", username: "${props.user.username}"){
+                    comments(author: "${props.user.uid}", activity: "${props.activity}", comment: "${toMarkdown(editorState)}", date: "${new Date().toISOString()}", username: "${props.user.displayName}"){
                         id
                         comment
                         activity
@@ -168,6 +169,7 @@ const Comment = props => {
                     author
                     comment
                     date
+                    username
                 }
             }
           `
@@ -175,6 +177,8 @@ const Comment = props => {
 
         if (result.error) return <p></p>
         if (result.fetching) return <p></p>
+
+        console.log(result.data.comments)
 
         const comments = result.data.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} /></li>)
         return (
