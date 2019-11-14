@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
 import { draftToMarkdown } from 'markdown-draft-js'
@@ -58,7 +58,7 @@ const Comment = props => {
                     {props.comment}
                 </div>
             </div>
-            <div class={`media-right ${props.user ? ((props.user.uid === props.author || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2') ? `` : `is-sr-only`) : `is-sr-only`}`}>
+            <div className={`media-right ${props.user ? ((props.user.uid === props.author || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2') ? `` : `is-sr-only`) : `is-sr-only`}`}>
                 <button className="button is-small has-text-weight-bold is-danger" onClick={deleteCommentMutation}>{t('comments.delete')}</button>
             </div>
         </article>
@@ -201,10 +201,11 @@ const Comment = props => {
     },
     Comments = props => {
 
-        const [result] = useQuery({
+        const [result, executeQuery] = useQuery({
+            pause: true,
             query: gql`
-            {
-                comments (activity: "${props.activity}") {
+            query GetComments ($activity: ID!){
+                comments (activity: $activity) {
                     id
                     comment
                     date
@@ -212,12 +213,25 @@ const Comment = props => {
                     author
                 }
             }
-          `
-        })
+          `,
+            variables: { activity: props.activity }
+        }),
+            [renew, setRenew] = useState(false)
 
-        if (result.error) return <p></p>
-        if (result.fetching) return <p></p>
-        store.dispatch(setComments(result.data.comments))
+        useEffect(() => {
+
+            executeQuery()
+            // if (result.data) store.dispatch(setComments(result.data.comments))
+
+        }, [props.activity])
+
+        useEffect(() => {
+            if (!result.fetching && result.data) {
+                store.dispatch(setComments(result.data.comments))
+            }
+        }, [result.fetching])
+
+
 
         const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (
