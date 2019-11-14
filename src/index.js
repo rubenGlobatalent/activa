@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider as StateProvider} from 'react-redux'
-import { Provider as GraphQLProvider, createClient } from 'urql'
+import { Provider as StateProvider } from 'react-redux'
+import { Provider as GraphQLProvider, createClient, dedupExchange, fetchExchange } from 'urql'
+import { cacheExchange } from '@urql/exchange-graphcache'
 
 import { store } from './redux/store'
 import './index.scss'
@@ -15,9 +16,17 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 const rootElement = document.getElementById("root"),
-client = createClient({
-    url: process.env.REACT_APP_API_PATH
-})
+    client = createClient({
+        url: process.env.REACT_APP_API_PATH,
+        exchanges: [
+            dedupExchange,
+            // Replace the default cacheExchange with the new one
+            cacheExchange({
+                /* config */
+            }),
+            fetchExchange
+        ],
+    })
 
 const app = <StateProvider store={store}> <GraphQLProvider value={client}> <App /> </GraphQLProvider> </StateProvider>
 

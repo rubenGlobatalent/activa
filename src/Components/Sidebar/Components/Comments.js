@@ -215,13 +215,11 @@ const Comment = props => {
             }
           `,
             variables: { activity: props.activity }
-        }),
-            [renew, setRenew] = useState(false)
+        })
 
         useEffect(() => {
 
             executeQuery()
-            // if (result.data) store.dispatch(setComments(result.data.comments))
 
         }, [props.activity])
 
