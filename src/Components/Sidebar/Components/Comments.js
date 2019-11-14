@@ -58,7 +58,7 @@ const Comment = props => {
                     {props.comment}
                 </div>
             </div>
-            <div class={`media-right ${props.user ? (props.user.uid === props.author ? `` : `is-sr-only`) : `is-sr-only`}`}>
+            <div class={`media-right ${props.user ? ((props.user.uid === props.author || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2') ? `` : `is-sr-only`) : `is-sr-only`}`}>
                 <button className="button is-small has-text-weight-bold is-danger" onClick={deleteCommentMutation}>{t('comments.delete')}</button>
             </div>
         </article>
