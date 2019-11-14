@@ -75,7 +75,7 @@ const Form = props => {
         [phone, setPhone] = useState('');
 
     const closeAndRemove = () => {
-        props.deleteDrawnPoint(props.feature.id)
+        props.deleteDrawnPoint(props.selectedActivity.id)
         props.toggleComponent('form')
     },
         saveData = (uid, ref, data) => {

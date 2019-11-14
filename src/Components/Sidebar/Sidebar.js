@@ -6,6 +6,7 @@ import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import * as firebase from 'firebase'
+import uuidv4 from 'uuid/v4'
 
 import Comments from './Components/Comments'
 
@@ -97,7 +98,7 @@ const Edit = props => {
             const safeCollection = collection ? JSON.parse(collection) : {},
                 selected = Object.entries(safeCollection).filter(entry => entry[1]).map(entry => {
                     return (
-                        <span className={`tag`}>{t(`${collectionName}.${entry[0]}`)}</span>
+                        <span key={uuidv4()} className={`tag`}>{t(`${collectionName}.${entry[0]}`)}</span>
                     )
                 })
             return selected
