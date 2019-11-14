@@ -40,12 +40,9 @@ const Comment = props => {
             id: props.id
         }
 
-        console.log(payload)
-
         try {
-            await executeMutation(payload)
-            store.dispatch(deleteComment({ id: result.data.DeleteComment }))
-            // store.dispatch(deleteComment({ id: payload.id }))
+            const response = await executeMutation(payload)
+            store.dispatch(deleteComment({ id: response.data.DeleteComment }))
 
         }
         catch (error) {
@@ -97,11 +94,9 @@ const Comment = props => {
             }
 
             try {
-                await executeMutation(payload)
+                const response = await executeMutation(payload)
                 setEditorState(EditorState.createEmpty())
-                store.dispatch(addComment([result.data.PostComment]))
-                                // store.dispatch(addComment([{...payload, id: 'test'}]))
-
+                store.dispatch(addComment([response.data.PostComment]))
 
             }
             catch (error) {
@@ -220,9 +215,9 @@ const Comment = props => {
           `
         })
 
-        // if (result.error) return <p></p>
-        // if (result.fetching) return <p></p>
-        // store.dispatch(setComments(result.data.comments))
+        if (result.error) return <p></p>
+        if (result.fetching) return <p></p>
+        store.dispatch(setComments(result.data.comments))
 
         const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (
