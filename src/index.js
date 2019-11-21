@@ -13,6 +13,7 @@ import 'intro.js/introjs.css'
 import 'animate.css'
 import './i18n'
 import App from './App'
+import ErrorBoundary from './ErrorBoundary'
 import * as serviceWorker from './serviceWorker'
 
 const rootElement = document.getElementById("root"),
@@ -28,7 +29,7 @@ const rootElement = document.getElementById("root"),
         ],
     })
 
-const app = <StateProvider store={store}> <GraphQLProvider value={client}> <App /> </GraphQLProvider> </StateProvider>
+const app = <ErrorBoundary><StateProvider store={store}> <GraphQLProvider value={client}> <App /> </GraphQLProvider> </StateProvider></ErrorBoundary>
 
 ReactDOM.render(app, rootElement)
 

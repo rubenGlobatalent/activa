@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { NotificationManager } from 'react-notifications'
 import { useTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
+import { Link, navigate } from '@reach/router'
 import * as firebase from 'firebase'
 import uuidv4 from 'uuid/v4'
 
@@ -17,27 +18,30 @@ const style = {
 }
 
 const mapStateToProps = state => ({
-    districts: state.districts,
-    selectedActivity: state.selectedActivity
+    activities: state.activities,
+    user: state.user
 })
 
 const Edit = props => {
+
+    const [confirmation, setConfirmation] = useState(false)
+
     const removePoint = async () => {
         try {
             firebase.firestore().collection('sports').doc(props.data.id).delete()
             NotificationManager.success('Actividad eliminada con éxito.')
-            props.toggleComponent('sidebar')
         }
         catch (error) {
             console.error(error)
-            props.toggleComponent('sidebar')
             NotificationManager.error('Ha ocurrido un error al eliminar la actividad.')
         }
+        finally {
+            navigate('/')
+        }
+
     }
 
-    const data = { ...props.data, urbanFurniture: JSON.parse(props.data.urbanFurniture), improvements: JSON.parse(props.data.improvements), feature: JSON.parse(props.data.feature) }
-
-    if (props.confirmation) {
+    if (confirmation) {
         return (
             <footer className="card-footer" style={style.footer}>
 
@@ -46,7 +50,7 @@ const Edit = props => {
                         <button className="button is-danger is-small" onClick={removePoint}>
                             Confirmar
                     </button>
-                        <button className="button is-light is-small" onClick={props.toggleConfirmation}>
+                        <button className="button is-light is-small" onClick={() => setConfirmation(false)}>
                             Cancelar
                     </button>
                     </div>
@@ -63,10 +67,10 @@ const Edit = props => {
             <footer className="card-footer" style={style.footer}>
 
                 <div className="buttons is-centered">
-                    <button className="button is-danger is-small" onClick={props.toggleConfirmation}>
+                    <button className="button is-danger is-small" onClick={() => setConfirmation(true)}>
                         Eliminar deporte
                     </button>
-                    <button className="button is-primary is-small" onClick={() => props.editFeature({ type: "Feature", properties: data, geometry: props.geom })}>
+                    <button className="button is-primary is-small">
                         Editar deporte
                     </button>
                 </div>
@@ -95,7 +99,7 @@ const Edit = props => {
         const { t } = useTranslation('general', { useSuspense: false });
 
         const selectedTags = (collection, collectionName) => {
-            const safeCollection = collection ? JSON.parse(collection) : {},
+            const safeCollection = collection ? collection : {},
                 selected = Object.entries(safeCollection).filter(entry => entry[1]).map(entry => {
                     return (
                         <span key={uuidv4()} className={`tag`}>{t(`${collectionName}.${entry[0]}`)}</span>
@@ -107,7 +111,7 @@ const Edit = props => {
                 if (!collection) {
                     return false
                 }
-                else if (Object.values(JSON.parse(collection)).filter(value => value).length === 0) {
+                else if (Object.values(collection).filter(value => value).length === 0) {
                     return false
                 }
                 else {
@@ -115,6 +119,7 @@ const Edit = props => {
                 }
 
             }
+
         return (
             <>
                 <p><span className="has-text-weight-bold">Deporte: </span>{props.data.sport}</p>
@@ -163,52 +168,60 @@ const Edit = props => {
 
 const Sidebar = props => {
     const [expanded, setExpanded] = useState(true),
-        [confirmation, setConfirmation] = useState(false)
+        [data, setData] = useState(undefined)
 
-    const toggleConfirmation = () => {
-        setConfirmation(!confirmation)
+    useEffect(() => {
+        setData(props.activities.features.find(feature => feature.properties.id === props.id))
+    }, [props.id])
+
+    if (data) {
+        const image = data.properties.image ? <Image data={{ ...data.properties }} /> : null,
+            description = data.properties.description ? <Description className="content" data={data.properties.description} /> : null,
+            details = (data.properties.facebook || data.properties.twitter || data.properties.youtube || data.properties.email || data.properties.phone) ? <Details data={{ ...data.properties }} /> : null,
+            footer = props.user ? (props.user.uid === data.properties.creatorUID || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit /> : null) : null;
+
+        return (
+            <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
+                <header className="card-header">
+                    <h2 className="is-size-6 card-header-title">
+                        {data.properties.name ? data.properties.name : data.properties.sport}
+                    </h2>
+                    <div className="card-header-icon" onClick={() => setExpanded(!expanded)}>
+                        <span className="icon">
+                            <FontAwesomeIcon icon={faMinus} />
+                        </span>
+                    </div>
+                    <Link to='/' className="card-header-icon">
+                        <span className="icon">
+                            <FontAwesomeIcon icon={faTimes} />
+                        </span>
+                    </Link>
+                </header>
+
+                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem 1rem 1rem" }}>
+                    {image}
+
+                    <div className="card-content">
+                        <Basics data={data.properties} />
+                        {description}
+                        {details}
+                        <Comments activity={data.properties.id} />
+                    </div>
+                </div>
+                {footer}
+            </article>
+        )
     }
 
-    const image = props.selectedActivity.properties.image ? <Image data={{ ...props.selectedActivity.properties }} /> : null,
-        description = props.selectedActivity.properties.description ? <Description className="content" data={props.selectedActivity.properties.description} /> : null,
-        details = (props.selectedActivity.properties.facebook || props.selectedActivity.properties.twitter || props.selectedActivity.properties.youtube || props.selectedActivity.properties.email || props.selectedActivity.properties.phone) ? <Details data={{ ...props.selectedActivity.properties }} /> : null,
-        footer = firebase.auth().currentUser ? (firebase.auth().currentUser.uid === props.selectedActivity.properties.creatorUID || firebase.auth().currentUser.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit toggleComponent={props.toggleComponent} confirmation={confirmation} toggleConfirmation={toggleConfirmation} editFeature={props.editFeature} data={props.selectedActivity.properties} geom={props.selectedActivity.geometry} /> : null) : null;
+    else {
+        return (
+            <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
+                hola
+            </article>
+        )
+    }
 
 
-    return (
-        <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
-            <header className="card-header">
-                <h2 className="is-size-6 card-header-title">
-                    {props.selectedActivity.properties.name ? props.selectedActivity.properties.name : props.selectedActivity.properties.sport}
-                </h2>
-                <div className="card-header-icon" onClick={() => setExpanded(!expanded)}>
-                    <span className="icon">
-                        <FontAwesomeIcon icon={faMinus} />
-                    </span>
-                </div>
-                <div className="card-header-icon" onClick={() => props.toggleComponent('sidebar')}>
-                    <span className="icon">
-                        <FontAwesomeIcon icon={faTimes} />
-                    </span>
-                </div>
-            </header>
-
-            <div style={{ display: expanded ? "block" : "none", padding: "0 1rem 1rem 1rem" }}>
-                {image}
-
-                <div className="card-content">
-                    <Basics data={props.selectedActivity.properties} />
-                    {description}
-                    {details}
-                    <Comments activity={props.selectedActivity.properties.id} />
-                    {/* <RichEditor/> */}
-
-                </div>
-            </div>
-
-            {footer}
-        </article>
-    )
 
 }
 

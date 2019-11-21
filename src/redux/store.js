@@ -2,6 +2,7 @@ import { createStore } from 'redux'
 import * as turf from '@turf/turf'
 import districts from '../assets/data/districts.json'
 
+
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
  * It describes how an action transforms the state into the next state.
@@ -12,6 +13,10 @@ import districts from '../assets/data/districts.json'
  */
 const initialState = {
   activities: turf.featureCollection([]),
+  events: turf.featureCollection([]),
+  categories_activities: [],
+  filters_activities: [],
+  filters_districts: [],
   districts: districts,
   selectedActivity: null,
   user: null,
@@ -41,29 +46,52 @@ const loadState = () => {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case `SET_ACTIVITIES`:
+      const categories = new Set(turf.propReduce(action.payload, (acc, current) => [...acc, current.sport], []))
       return Object.assign({}, state, {
-        activities: action.payload
+        activities: action.payload,
+        categories_activities: Array.from(categories)
+      })
+    case `SET_EVENTS`:
+      return Object.assign({}, state, {
+        events: action.payload
+      })
+    case `SET_ACTIVITY_FILTER`:
+      return Object.assign({}, state, {
+        filters_activities: action.payload
+      })
+    case `SET_DISTRICT_FILTER`:
+      return Object.assign({}, state, {
+        filters_districts: action.payload
       })
     case `SET_USER`:
       return Object.assign({}, state, {
         user: action.payload
       })
-    case `SELECT_ACTIVITY`:
-      return Object.assign({}, state, {
-        selectedActivity: action.payload
-      })
     case `SET_COMMENTS`:
       return Object.assign({}, state, {
         comments: action.payload
+      })
+    case `SELECT_ACTIVITY`:
+      return Object.assign({}, state, {
+        selectedActivity: action.payload
       })
     case `DELETE_COMMENT`:
       return Object.assign({}, state, {
         comments: state.comments.filter(element => element.id !== action.payload.id)
       })
+    case `DELETE_FILTERS`:
+      return Object.assign({}, state, {
+        filters_activities: [],
+        filters_districts: [],
+      })
     case `ADD_COMMENT`:
       return Object.assign({}, state, {
         comments: [...action.payload, ...state.comments]
       })
+    // case `ADD_ACTIVITY`:
+    //   return Object.assign({}, state, {
+    //     activities: [...action.payload, ...state.activities]
+    //   })
     default:
       return state
   }
@@ -72,6 +100,18 @@ const rootReducer = (state = initialState, action) => {
 // ACTIONS
 export const setActivities = payload => {
   return { type: `SET_ACTIVITIES`, payload };
+}
+
+export const setEvents = payload => {
+  return { type: `SET_EVENTS`, payload };
+}
+
+export const setActivityFilter = payload => {
+  return { type: `SET_ACTIVITY_FILTER`, payload };
+}
+
+export const setDistrictFilter = payload => {
+  return { type: `SET_DISTRICT_FILTER`, payload };
 }
 
 export const selectActivity = payload => {
@@ -88,6 +128,10 @@ export const setComments = payload => {
 
 export const deleteComment = payload => {
   return { type: `DELETE_COMMENT`, payload };
+}
+
+export const deleteFilters = payload => {
+  return { type: `DELETE_FILTERS`, payload };
 }
 
 export const addComment = payload => {

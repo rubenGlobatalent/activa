@@ -1,48 +1,52 @@
 import React, { useState } from 'react'
 import { navigate } from '@reach/router'
+import { connect } from 'react-redux'
+
+import { store, setDistrictFilter, deleteFilters } from '../../redux/store'
+
+const mapStateToProps = state => ({
+    districts: state.districts,
+    selected: state.filters_districts
+})
 
 const Districts = props => {
 
-    const [filter, setFilter] = useState({}),
+    const [filter, setFilter] = useState({})
 
-        submitFilter = () => {
-            props.updateFilters('districtFilter',
-                Object.entries(filter)
-                    .filter(filter => filter[1])
-                    .map(filter => filter[0])
-            )
-        },
+    const submitFilter = () => {
+        const selected = Object.entries(filter)
+            .filter(filter => filter[1])
+            .map(filter => filter[0])
 
+        store.dispatch(setDistrictFilter(selected))
+        navigate('/')
+    },
         clearFilter = () => {
             setFilter({})
-            props.clearFilters('districtFilter')
+            store.dispatch(deleteFilters())
+            navigate('/')
         }
 
     const selected = Object.fromEntries(
-        props.data
-            .map(district => [district, props.selected.includes(district)])
+        props.districts.features.map(district => [district.properties.name, props.selected.includes(district.properties.name)])
     ),
-        districts = props.data.map(district => {
+        districts = props.districts.features.map(district => {
             return (
-                <li key={district}>
+                <li key={district.properties.name}>
                     <label className="checkbox is-size-6">
                         <input type="checkbox"
-                            name={district}
-                            defaultChecked={selected[district]}
+                            name={district.properties.name}
+                            defaultChecked={selected[district.properties.name]}
                             onChange={e => setFilter(() => {
-                                // We create those variables because it doesn't let us directly put using dot notation
-                                // on Object.assign (which we use because spread notation throws an error after the
-                                // first change of state)
-                                const name = e.target.name,
-                                    checked = e.target.checked
-                                return Object.assign(filter, { [name]: checked })
+                                return Object.assign(filter, { [e.target.name]: e.target.checked })
                             })}
                         />
-                        {` ${district}`}
+                        {` ${district.properties.name}`}
                     </label>
                 </li>
             )
-        });
+        })
+
     return (
         <div className="modal is-active animated fadeIn faster">
             <div className="modal-background" onClick={() => navigate('/')}></div>
@@ -66,4 +70,7 @@ const Districts = props => {
 
 }
 
-export default Districts
+export default connect(
+    mapStateToProps,
+    null
+)(Districts)

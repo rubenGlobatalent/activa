@@ -46,7 +46,7 @@ const style = {
   }
 }
 
-export default function Legend(props) {
+const Legend = props => {
   if (props.visible) {
   	return(
 			<div className="card" style={style.card}>
@@ -65,6 +65,8 @@ export default function Legend(props) {
 			</div>
   	);
   } else {
-  	return null;
+  	return null
   }
 }
+
+export default Legend

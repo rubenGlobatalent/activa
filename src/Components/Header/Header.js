@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Link } from "@reach/router"
 import { useTranslation } from 'react-i18next'
@@ -31,11 +31,12 @@ const mapStateToProps = state => ({
 const Header = props => {
 
   const [visible, setVisible] = useState(false),
-  { t } = useTranslation('general', { useSuspense: false })
+    { t } = useTranslation('general', { useSuspense: false })
 
-  const navbarBurguerClass = `navbar-burger ${visible ? `is-active` : `` }`,
-    navbarMenuClass = `navbar-menu ${visible ? `is-active` : `` }`,
-    buttonClass = `button is-large is-size-7 is-uppercase ${visible ? `is-fullwidth` : `` }`,
+
+  const navbarBurguerClass = `navbar-burger ${visible ? `is-active` : ``}`,
+    navbarMenuClass = `navbar-menu ${visible ? `is-active` : ``}`,
+    buttonClass = `button is-large is-size-7 is-uppercase ${visible ? `is-fullwidth` : ``}`,
     user = props.user ? props.user.email : 'Inicia sesión',
     filterButtonClass = `${buttonClass} filterButton`
 
@@ -44,7 +45,7 @@ const Header = props => {
       <nav className="navbar is-fixed-top">
         <div className="navbar-brand">
           <a className="navbar-item" href="/">
-            <img src={logo} alt="Málaga Áctiva"/>
+            <img src={logo} alt="Málaga Áctiva" />
           </a>
 
           <span className={navbarBurguerClass} onClick={() => setVisible(!visible)} >

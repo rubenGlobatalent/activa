@@ -5,6 +5,7 @@ import { faUpload, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons
 import { NotificationManager } from 'react-notifications'
 import uuidv4 from 'uuid/v4'
 import { useTranslation } from 'react-i18next'
+import { navigate } from "@reach/router"
 import { connect } from 'react-redux'
 
 // OPTIMIZE IMPORTS
@@ -13,7 +14,8 @@ import * as firebase from 'firebase'
 
 const mapStateToProps = state => ({
     districts: state.districts,
-    selectedActivity: state.selectedActivity
+    selectedActivity: state.selectedActivity,
+    user: state.user
 })
 
 
@@ -75,8 +77,8 @@ const Form = props => {
         [phone, setPhone] = useState('');
 
     const closeAndRemove = () => {
-        props.deleteDrawnPoint(props.selectedActivity.id)
-        props.toggleComponent('form')
+        // props.deleteDrawnPoint(props.selectedActivity.id)
+        navigate('/')
     },
         saveData = (uid, ref, data) => {
             if (uid) {
@@ -239,7 +241,7 @@ const Form = props => {
             </div> : null,
         submitButtonClass = progress ? "button is-loading" : "button";
 
-    if (props.visible && firebase.auth().currentUser) {
+    if (props.user) {
         const sports = props.data.map(sport => {
             return (
                 <option key={sport} value={sport}>{sport}</option>
@@ -440,14 +442,14 @@ const Form = props => {
         )
     }
 
-    else if (props.visible) {
+    else {
         return (
             <div className="modal is-active animated fadeIn faster">
-                <div className="modal-background" onClick={() => props.toggleComponent('form')}></div>
+                <div className="modal-background" onClick={() => navigate('/')}></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
                         <h2 className="modal-card-title is-size-5 has-text-weight-light">Regístrate</h2>
-                        <button className="delete" onClick={() => props.toggleComponent('form')}></button>
+                        <button className="delete" onClick={() => navigate('/')}></button>
                     </header>
 
                     <section className="modal-card-body">
@@ -466,12 +468,6 @@ const Form = props => {
                     </footer>
                 </div>
             </div>
-        )
-    }
-
-    else {
-        return (
-            null
         )
     }
 
