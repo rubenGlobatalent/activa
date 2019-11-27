@@ -13,11 +13,12 @@ import Map from './Components/Map/Map'
 import Header from './Components/Header/Header'
 import Dashboard from './Components/User/User'
 import Help from './Components/Help/Help'
-import Sidebar from './Components/Sidebar/Sidebar'
+import ActivitySidebar from './Components/Sidebar/Activity'
 import Districts from './Components/Filters/Districts'
 import Activities from './Components/Filters/Activities'
 import SportForm from './Components/Forms/Sport'
 import EventForm from './Components/Forms/Event'
+import EventSidebar from './Components/Sidebar/Event'
 
 ReactGA.initialize(process.env.REACT_APP_GA_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
@@ -592,7 +593,8 @@ const App = props => {
         <Dashboard path='/user' />
         <Districts path='/districts' />
         <Activities path='/sports' />
-        <Sidebar path='/activities/:id' />
+        <ActivitySidebar path='/activities/:id' />
+        <EventSidebar path='/events/:id' />
         <SportForm path='/activities/:id/edit' />
         <EventForm path='/events/:id/edit' />
         <Help path='/help' displayStepsAfterHelp={displayStepsAfterHelp} />
