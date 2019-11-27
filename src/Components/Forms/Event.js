@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload, faEnvelope, faExternalLinkAlt, faMapMarked, faSitemap, faCalendar } from '@fortawesome/free-solid-svg-icons'
 import { NotificationManager } from 'react-notifications'
@@ -15,7 +15,8 @@ import { store, selectActivity, addActivity } from '../../redux/store'
 const mapStateToProps = state => ({
     selected: state.selected,
     user: state.user,
-    categories: state.categories_activities
+    categories: state.categories_activities,
+    events: state.events
 })
 
 
@@ -30,11 +31,12 @@ const FileName = props => {
     }
 
 const Event = props => {
+
     // Hooks
     const { t } = useTranslation('general', { useSuspense: false }),
         [name, setName] = useState(''),
         [date, setDate] = useState(''),
-        [file, setFile] = useState(null),
+        [image, setImage] = useState(null),
         [schedule, setSchedule] = useState(''),
         [place, setPlace] = useState(''),
         [description, setDescription] = useState(''),
@@ -43,6 +45,21 @@ const Event = props => {
         [organizer, setOrganizer] = useState(''),
         [terms, setTerms] = useState(false),
         [progress, setProgress] = useState(false)
+
+    const feature = props.events.features.find(feature => feature.properties.id === props.id)
+    useEffect(() => {
+        if (feature) {
+            const data = feature.properties
+            setName(data.name || '')
+            setDate(data.date || '')
+            setImage(data.image || null)
+            setPlace(data.place || '')
+            setDescription(data.description || '')
+            setLink(data.link || '')
+            setEmail(data.email || '')
+            setOrganizer(data.organizer || '')
+        }
+    }, [feature])
 
     const saveData = (uid, ref, data) => {
         if (uid) {
@@ -124,11 +141,11 @@ const Event = props => {
                                 </div>
                             </div>
                             <div className="column">
-                                <ImagePreview file={file} />
+                                <ImagePreview file={image} />
                                 <hr className="is-invisible" />
                                 <div className="file has-name is-boxed columns is-centered">
                                     <label className="file-label">
-                                        <input className="file-input" type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} />
+                                        <input className="file-input" type="file" accept="image/*" onChange={e => setImage(e.target.files[0])} />
                                         <span className="file-cta">
                                             <span className="file-icon">
                                                 <FontAwesomeIcon icon={faUpload} />
@@ -137,7 +154,7 @@ const Event = props => {
                                                 Elige una imagen
                                            </span>
                                         </span>
-                                        <FileName file={file} />
+                                        <FileName file={image} />
                                     </label>
                                 </div>
                             </div>
@@ -221,7 +238,7 @@ const Event = props => {
                     <footer className="modal-card-foot buttons is-centered">
                         <div className="field is-grouped">
                             <div className="control">
-                                <button className={'buttons'} onClick={() => {
+                                <button className='button is-primary' onClick={() => {
                                     navigate('/')
                                     NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
                                 }}>Cerrar</button>

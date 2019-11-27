@@ -209,22 +209,28 @@ const loadLayers = (map, sources, mode, filters) => {
 
         navigate(`/${mode}/${feature.properties.id}`)
     },
-    addInteractivity = (map, types, handler, data, mode) => {
+    handleDraw = (e, draw, mode) => {
+        const feature = e.features[0]
+        draw.delete(feature.id)
+        store.dispatch(selectActivity(feature))
+        navigate(`/${mode}/${feature.id}/edit`)
+    },
+    addInteractivity = (map, types, handler, data) => {
         types.forEach(type => {
-            map.on('mouseenter', type, () => {
+            map.on('mouseenter', type.name, () => {
                 map.getCanvas().style.cursor = 'pointer'
             })
 
-            map.on('mouseleave', type, () => {
+            map.on('mouseleave', type.name, () => {
                 map.getCanvas().style.cursor = ''
             })
 
-            map.on('click', type, e => handler(e, data, mode))
+            map.on('click', type.name, e => handler(e, data, type.mode))
 
-            map.on('touchend', type, e => handler(e, data, mode))
+            map.on('touchend', type.name, e => handler(e, data, type.mode))
         })
     },
-    initializeMap = ({ setMap, mapContainer, layers, mode, sources, filters }) => {
+    initializeMap = ({ setMap, setDraw, mapContainer, layers, mode, sources, filters }) => {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
         const map = new mapboxgl.Map({
             container: mapContainer.current,
@@ -242,13 +248,19 @@ const loadLayers = (map, sources, mode, filters) => {
                     polygon: false
                 }
             }),
-            layerTypes = ['pointActivities', 'pointInLineActivities', 'lineActivities', 'events']
+            layerTypes = [{name: 'pointActivities', mode: mapModes[0]},
+            {name: 'pointInLineActivities', mode: mapModes[0]},
+            {name: 'lineActivities', mode: mapModes[0]},
+            {name: 'events', mode: mapModes[1]}]
 
         map.on("load", () => {
             setMap(map)
+            setDraw(draw)
             map.addControl(attribution, 'bottom-right')
             map.addControl(navigation, 'bottom-right')
             map.addControl(draw, 'bottom-right')
+
+            map.on('draw.create', e => handleDraw(e, draw, mode))
 
             loadLayers(map, {
                 sportsIcons: sportsIcons,
@@ -266,6 +278,7 @@ const loadLayers = (map, sources, mode, filters) => {
 
 const Map = props => {
     const [map, setMap] = useState(null),
+        [draw, setDraw] = useState(null),
         [legend, setLegend] = useState(false),
         [layers, setLayers] = useState(0),
         [mode, setMode] = useState(mapModes[0]),
@@ -380,6 +393,7 @@ const Map = props => {
 
         initializeMap({
             setMap,
+            setDraw,
             mapContainer,
             layers,
             mode,
@@ -402,22 +416,46 @@ const Map = props => {
     useEffect(() => {
         const activities = ['pointActivities', 'lineActivities', 'pointInLineActivities']
         if (map) {
+            const oldControl = draw
             switch (mode) {
                 case ('events'):
+                    const newEventControl = new MapboxDraw({
+                        controls: {
+                            combine_features: false,
+                            uncombine_features: false,
+                            polygon: false,
+                            line_string: false
+                        }
+                    })
                     activities.forEach(layer => {
                         map.setLayoutProperty(layer, 'visibility', 'none')
                     })
                     map.setLayoutProperty('events', 'visibility', 'visible')
+                    map.removeControl(oldControl)
+                    map.addControl(newEventControl, 'bottom-right')
+                    setDraw(newEventControl)
+                    
                     break;
                 case ('activities'):
+                        const newActivityControl = new MapboxDraw({
+                            controls: {
+                                combine_features: false,
+                                uncombine_features: false,
+                                polygon: false
+                            }
+                        })
                         activities.forEach(layer => {
                             map.setLayoutProperty(layer, 'visibility', 'visible')
                         })
                         map.setLayoutProperty('events', 'visibility', 'none')
+                        map.removeControl(oldControl)
+                        map.addControl(newActivityControl, 'bottom-right')
+                        setDraw(newActivityControl)
                     break;
                 default:
                     break;
             }
+            map.on('draw.create', e => handleDraw(e, draw, mode))
         }
 
     }, [mode])
@@ -455,11 +493,3 @@ export default connect(
     mapStateToProps,
     null
 )(Map)
-
-
-// map.on('draw.create', e => {
-//     const feature = e.features[0]
-//     draw.delete(feature.id)
-//     store.dispatch(selectActivity(feature))
-//     navigate(`activity/${feature.id}/edit`)
-// })

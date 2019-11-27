@@ -49,6 +49,12 @@
         "emailPlaceholder": "Email",
         "linkPlaceholder": "Enlace de inscripción",
         "descriptionTitle": "Descripción del evento",
-        "descriptionPlaceholder": "Describe brevemente en que consiste el evento"
+        "descriptionPlaceholder": "Describe brevemente en que consiste el evento",
+        "placeTitle": "Lugar",
+        "placePlaceholder": "¿Dondé se celebrará?",
+        "organizerTitle": "Organizador",
+        "organizerPlaceholder": "¿Quien lo organiza?",
+        "dateTitle": "Fecha",
+        "datePlaceholder": "¿Cuándo será?"
     }
 }
