@@ -8,7 +8,7 @@ import { faInfoCircle, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import * as turf from '@turf/turf'
 
-import { store, selectActivity } from '../../redux/store'
+import { store, selectFeature } from '../../redux/store'
 import sports from '../../assets/data/sports.json'
 import Legend from './Components/Legend.js'
 
@@ -181,8 +181,8 @@ const loadLayers = (map, sources, mode, filters) => {
                 // zoom is 10 (or greater) -> circle radius will be 5px
                 12, 6
             ],
-            'circle-color': '#d75d00',
-            'circle-stroke-color': '#d75d00'
+            'circle-color': '#00aec7',
+            'circle-stroke-color': '#00aec7'
         }
     })
 },
@@ -192,7 +192,6 @@ const loadLayers = (map, sources, mode, filters) => {
             geometry,
             feature
         
-            console.log(mode)
         if (properties.pointInLine) {
             geometry = data.features.find(feature => feature.properties.id === properties.id).geometry
             feature = turf.lineString(geometry.coordinates, properties)
@@ -211,9 +210,18 @@ const loadLayers = (map, sources, mode, filters) => {
     },
     handleDraw = (e, draw, mode) => {
         const feature = e.features[0]
-        draw.delete(feature.id)
-        store.dispatch(selectActivity(feature))
-        navigate(`/${mode}/${feature.id}/edit`)
+        try {
+            draw.delete(feature.id)
+        }
+        catch (error) {
+            console.error(error)
+        }
+        finally {
+            console.log(feature)
+            store.dispatch(selectFeature(feature))
+            navigate(`/${mode}/${feature.id}/edit`)
+
+        }
     },
     addInteractivity = (map, types, handler, data) => {
         types.forEach(type => {
@@ -433,6 +441,7 @@ const Map = props => {
                     map.setLayoutProperty('events', 'visibility', 'visible')
                     map.removeControl(oldControl)
                     map.addControl(newEventControl, 'bottom-right')
+                    map.on('draw.create', e => handleDraw(e, newEventControl, mode))
                     setDraw(newEventControl)
                     
                     break;
@@ -450,12 +459,12 @@ const Map = props => {
                         map.setLayoutProperty('events', 'visibility', 'none')
                         map.removeControl(oldControl)
                         map.addControl(newActivityControl, 'bottom-right')
+                        map.on('draw.create', e => handleDraw(e, newActivityControl, mode))
                         setDraw(newActivityControl)
                     break;
                 default:
                     break;
             }
-            map.on('draw.create', e => handleDraw(e, draw, mode))
         }
 
     }, [mode])

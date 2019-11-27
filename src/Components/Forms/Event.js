@@ -10,8 +10,6 @@ import { connect } from 'react-redux'
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
-import { store, selectActivity, addActivity } from '../../redux/store'
-
 const mapStateToProps = state => ({
     selected: state.selected,
     user: state.user,
@@ -75,32 +73,54 @@ const Event = props => {
             setProgress(true)
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
             databaseRef = firebase.firestore().collection(`events`),
-            location = [0,0],
             properties = {
                 name: name,
                 organizer: organizer,
                 description: description.length > 0 ? description.replace(/\r?\n/g, '<br/>') : '',
                 email: email,
                 creatorUID: props.user.uid,
-                date: new Date(date).toISOString()
-            },
-            data = turf.point(location, properties)
+                date: new Date(date).toISOString(),
+                schedule: schedule,
+                place: place,
+                link: link
+            }
 
-            await saveData(null, databaseRef, data)
+            let data
 
-            NotificationManager.success('Evento creado con éxito.')
+            if (image) {
+                const upload = await storageRef.put(image),
+                url = await upload.ref.getDownloadURL()
+                data = turf.point(props.selected.geometry.coordinates, {...properties, image: url})
+            }
+            else {
+                data = turf.point(props.selected.geometry.coordinates, properties)
+            }
             
+            await saveData(false, databaseRef, data)
+            setProgress(false)
+            NotificationManager.success(t('eventsForm.eventSuccess'))
         }
         catch (error) {
             console.error(error)
-            NotificationManager.error('Ha ocurrido un error al crear el evento.')
+            setProgress(false)
+            NotificationManager.error(t('eventsForm.eventError'))
         }
         finally {
             navigate('/')
         }
     },
         clearData = () => {
-
+            setName('')
+            setDate('')
+            setImage(null)
+            setSchedule('')
+            setPlace('')
+            setDescription('')
+            setLink('')
+            setEmail('')
+            setOrganizer('')
+            setTerms(false)
+            setProgress(false)
         }
 
     if (props.user) {
@@ -196,13 +216,21 @@ const Event = props => {
                                 </div>
                             </div>
                             <div className="field column">
-                                <label className="label">{t('eventsForm.organizerTitle')}</label>
+                                <label className="label">{t('eventsForm.scheduleTitle')}</label>
                                 <div className="control has-icons-left is-expanded">
-                                    <input className="input" type="text" placeholder={t('eventsForm.organizerPlaceholder')} value={organizer} onChange={e => setOrganizer(e.target.value)} />
+                                    <input className="input" type="text" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faSitemap} />
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="field">
+                            <div className="control">
+                                <label className="checkbox">
+                                    <input type="checkbox" required defaultChecked={terms} onChange={e => setTerms(e.target.checked)} />
+                                    {` `}Acepto los <a target="_blank" rel="noopener noreferrer" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">términos y condiciones</a> y permito que mis datos aparezcan en la web
+                                </label>
                             </div>
                         </div>
                     </section>

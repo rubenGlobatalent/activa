@@ -55,6 +55,9 @@
         "organizerTitle": "Organizador",
         "organizerPlaceholder": "¿Quien lo organiza?",
         "dateTitle": "Fecha",
-        "datePlaceholder": "¿Cuándo será?"
+        "scheduleTitle": "Horario",
+        "schedulePlaceholder": "Describe brevemente el horario",
+        "eventSuccess": "Evento creado con éxito",
+        "eventError": "Algo ha salido mal al crear tu evento"
     }
 }

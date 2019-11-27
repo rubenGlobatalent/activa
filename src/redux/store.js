@@ -71,7 +71,7 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         comments: action.payload
       })
-    case `SELECT_ACTIVITY`:
+    case `SELECT_FEATURE`:
       return Object.assign({}, state, {
         selected: action.payload
       })
@@ -87,12 +87,6 @@ const rootReducer = (state = initialState, action) => {
     case `ADD_COMMENT`:
       return Object.assign({}, state, {
         comments: [...action.payload, ...state.comments]
-      })
-    case `ADD_ACTIVITY`:
-      // const categories = new Set(turf.propReduce(action.payload, (acc, current) => [...acc, current.sport], []))
-      return Object.assign({}, state, {
-        activities: turf.featureCollection([...state.activities.features, ...action.payload])
-        // categories_activities: Array.from(categories)
       })
     default:
       return state
@@ -116,8 +110,8 @@ export const setDistrictFilter = payload => {
   return { type: `SET_DISTRICT_FILTER`, payload };
 }
 
-export const selectActivity = payload => {
-  return { type: `SELECT_ACTIVITY`, payload };
+export const selectFeature = payload => {
+  return { type: `SELECT_FEATURE`, payload };
 }
 
 export const setUser = payload => {
@@ -138,10 +132,6 @@ export const deleteFilters = payload => {
 
 export const addComment = payload => {
   return { type: `ADD_COMMENT`, payload };
-}
-
-export const addActivity = payload => {
-  return { type: `ADD_ACTIVITY`, payload };
 }
 
 // Create a Redux store holding the state of your app.

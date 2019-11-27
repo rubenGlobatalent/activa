@@ -11,51 +11,48 @@ import { connect } from 'react-redux'
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
-import { store, selectActivity, addActivity } from '../../redux/store'
-
 const mapStateToProps = state => ({
     selected: state.selected,
     user: state.user,
     categories: state.categories_activities
 })
 
+const defaultFeature = {
+    safe: false,
+    large: false,
+    natural: false,
+    lineal: false,
+    near: false,
+    gathering: false,
+    suitable: false,
+    quiet: false,
+    rest: false,
+    noVehicles: false
+},
+    defaultImprovements = {
+        pavement: false,
+        furniture: false,
+        accesibility: false,
+        sportsFacilities: false,
+        lighting: false,
+        restZones: false,
+        safety: false,
+        allOk: false
+    },
+    defaultFurniture = {
+        fountains: false,
+        bench: false,
+        shadow: false,
+        greenZones: false,
+        bikeParking: false,
+        stretching: false,
+        lightningImprovements: false,
+        restrooms: false,
+        allOk: false
+    }
 
 const Form = props => {
     const { t } = useTranslation('general', { useSuspense: false })
-
-    const defaultFeature = {
-        safe: false,
-        large: false,
-        natural: false,
-        lineal: false,
-        near: false,
-        gathering: false,
-        suitable: false,
-        quiet: false,
-        rest: false,
-        noVehicles: false
-    },
-        defaultImprovements = {
-            pavement: false,
-            furniture: false,
-            accesibility: false,
-            sportsFacilities: false,
-            lighting: false,
-            restZones: false,
-            safety: false,
-            allOk: false
-        },
-        defaultFurniture = {
-            fountains: false,
-            bench: false,
-            shadow: false,
-            greenZones: false,
-            bikeParking: false,
-            stretching: false,
-            lightningImprovements: false,
-            restrooms: false,
-            allOk: false
-        }
 
     // Hooks
     const [name, setName] = useState(''),
@@ -155,12 +152,9 @@ const Form = props => {
                     }
                     const response = await saveData(props.selected.properties.id, databaseRef, feature)
 
-                    // console.log(response.id)
-                    // console.log(feature)
 
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
-                    // store.dispatch(addActivity([feature]))
                     clearForm()
                 }
                 catch (error) {
@@ -421,7 +415,7 @@ const Form = props => {
                             <div className="control">
                                 <label className="checkbox">
                                     <input type="checkbox" required defaultChecked={terms} onChange={e => setTerms(e.target.checked)} />
-                                    {` `}Acepto los <a href="/">términos y condiciones</a> y permito que mis datos aparezcan en la web *
+                                    {` `}Acepto los <a target="_blank" rel="noopener noreferrer" href="https://www.uma.es/secretariageneral/newsecgen/index.php?option=com_content&view=article&id=259:reglamento-de-proteccion-de-datos-de-caracter-personal-de-la-universidad-de-malaga&catid=13&Itemid=124">términos y condiciones</a> y permito que mis datos aparezcan en la web *
                                 </label>
                             </div>
                         </div>
