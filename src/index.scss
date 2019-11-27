@@ -1,9 +1,10 @@
-$navbar-background-color: #00aec7;
+$primary: #00aec7;
+$navbar-background-color: $primary;
 $navbar-height: 4rem;
 
-$button-background-color: #00aec7;
-$button-border-color: #00aec7;
-$button-hover-border-color: #00aec7;
+$button-background-color: $primary;
+$button-border-color: $primary;
+$button-hover-border-color: $primary;
 $button-hover-color: hsl(0, 0%, 100%);
 $button-color: hsl(0, 0%, 100%);
 
@@ -11,14 +12,17 @@ $modal-card-head-background-color: hsl(0, 0%, 100%);
 $modal-background-background-color: rgba(black, 0.02);
 $card-footer-border-top: 0px solid hsl(0, 0%, 100%);
 
-$input-border-color: transparent transparent #00aec7 transparent;
+$input-border-color: transparent transparent $primary transparent;
 $input-shadow: transparent;
-$input-focus-border-color: #00aec7;
-$input-hover-border-color: #00aec7;
+$input-focus-border-color: $primary;
+$input-hover-border-color: $primary;
 
-$tabs-link-active-border-bottom-color: #00aec7;
-$tabs-link-active-color: #00aec7;
-$primary: #00aec7;
+$tabs-link-active-border-bottom-color: $primary;
+$tabs-link-active-color: $primary;
+
+
+$tabs-toggle-link-active-background-color: $primary;
+$tabs-toggle-link-active-border-color: $primary;
 
 @import "bulma/sass/utilities/_all.sass";
 @import "bulma/sass/base/_all.sass";
@@ -76,11 +80,11 @@ $primary: #00aec7;
 .button.helpButton:focus {
   color: white;
   box-shadow: none;
-  border-color: #00aec7;
+  border-color: $primary;
 }
 
 .introjs-helperNumberLayer {
-  background: #00aec7 !important;
+  background: $primary !important;
 }
 
 .mapboxgl-ctrl.mapboxgl-ctrl-attrib p {
@@ -94,4 +98,8 @@ $primary: #00aec7;
 .text-area-overflow {
   overflow: auto;
   word-break: break-all;
+}
+
+.has-background {
+  background-color: whitesmoke;
 }

@@ -1,7 +1,7 @@
 import React from 'react'
-import sportsData from '../../assets/data/sports.json'
+import sportsData from '../../../assets/data/sports.json'
 
-const reqSvgs = require.context('../../assets/icons', true, /\.svg$/)
+const reqSvgs = require.context('../../../assets/icons', true, /\.svg$/)
 const sports = sportsData.list.map(sport => ({
 	...sport,
 	icon: reqSvgs(`./${sport.key}.svg`)
@@ -47,12 +47,11 @@ const style = {
 }
 
 const Legend = props => {
-  if (props.visible) {
   	return(
 			<div className="card" style={style.card}>
 				<div className="card-header" style={style.cardHeader}>
 					<p className="card-header-title is-centered" style={style.cardHeaderTitle}>LEYENDA</p>
-					<button className="delete" style={style.delete} onClick={() => props.toggleComponent('legend')}></button>
+					<button className="delete" style={style.delete} onClick={() => props.toggleLegend()}></button>
 				</div>
 				<div className="card-content" style={style.cardContent}>
 					{sports.map(sport => (
@@ -63,10 +62,7 @@ const Legend = props => {
 					))}
 				</div>
 			</div>
-  	);
-  } else {
-  	return null
-  }
+  	)
 }
 
 export default Legend

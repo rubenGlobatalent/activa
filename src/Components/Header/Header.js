@@ -58,7 +58,7 @@ const Header = props => {
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <Link to='/activities' className={filterButtonClass} style={style.button}>
+              <Link to='/sports' className={filterButtonClass} style={style.button}>
                 {t('activity')}
               </Link>
             </div>

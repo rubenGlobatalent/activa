@@ -39,5 +39,16 @@
         "delete": "Eliminar"
     },
     "activity": "Actividad",
-    "district": "Zona"
+    "district": "Zona",
+    "activities": "Actividades",
+    "events": "Eventos",
+    "addAnEvent": "Añade un evento",
+    "eventsForm": {
+        "nameTitle": "Nombre del evento",
+        "namePlaceholder": "Personaliza el nombre de tu evento (ej. \"Gran carrera solidaria\")",
+        "emailPlaceholder": "Email",
+        "linkPlaceholder": "Enlace de inscripción",
+        "descriptionTitle": "Descripción del evento",
+        "descriptionPlaceholder": "Describe brevemente en que consiste el evento"
+    }
 }

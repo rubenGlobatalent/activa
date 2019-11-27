@@ -6,8 +6,9 @@ import { connect } from 'react-redux'
 import { Router } from "@reach/router"
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
+import * as turf from '@turf/turf'
 
-import { store, setActivities, setUser } from './redux/store'
+import { store, setActivities, setUser, setEvents } from './redux/store'
 import Map from './Components/Map/Map'
 import Header from './Components/Header/Header'
 import Dashboard from './Components/User/User'
@@ -15,8 +16,8 @@ import Help from './Components/Help/Help'
 import Sidebar from './Components/Sidebar/Sidebar'
 import Districts from './Components/Filters/Districts'
 import Activities from './Components/Filters/Activities'
-import Form from './Components/Form/Form'
-import Legend from './Components/Legend/Legend'
+import SportForm from './Components/Forms/Sport'
+import EventForm from './Components/Forms/Event'
 
 ReactGA.initialize(process.env.REACT_APP_GA_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
@@ -30,7 +31,8 @@ firebase.initializeApp({
 })
 
 const mapStateToProps = state => ({
-  activities: state.activities
+  activities: state.activities,
+  events: state.events
 })
 
 
@@ -517,9 +519,6 @@ const App = props => {
   },
     stepsOnExit = () => {
       setVisibility({ ...visibility, steps: false })
-    },
-    toggleComponent = component => {
-      setVisibility({ ...visibility, [component]: !visibility[component] })
     }
 
   useEffect(() => {
@@ -532,6 +531,58 @@ const App = props => {
     });
   }, [])
 
+  useEffect(() => {
+    const fetch = async () => {
+      firebase.firestore().collection('sports').onSnapshot(async querySnapshot => {
+        const snapshot = await querySnapshot,
+
+          features = snapshot.docs.map(doc => {
+            let data = doc.data()
+            data.properties.id = doc.id
+            data.properties.pointInLine = false
+            if (turf.getType(data) === 'LineString') {
+              data.geometry.coordinates = Object.values(data.geometry.coordinates)
+            }
+
+            return data
+          }),
+
+          exploded = features
+            .filter(feature => turf.getType(feature) === 'LineString')
+            .map(feature => turf.explode(feature).features)
+            .flat()
+            // Deep clone properties to be able to set pointInLine property immutably
+            .map(feature => {
+              const propertiesDeepClone = { ...feature.properties }
+              feature.properties = propertiesDeepClone
+              return feature
+            })
+            /* Add property pointInLine to be able to separate the pointActivities layer
+            from the pointInLineActivities layer */
+            .map(feature => {
+              feature.properties.pointInLine = true
+              return feature
+            })
+
+        store.dispatch(setActivities(turf.featureCollection([...features, ...exploded])))
+      })
+
+      firebase.firestore().collection('events').onSnapshot(async querySnapshot => {
+        const snapshot = await querySnapshot
+
+        const features = snapshot.docs.map(doc => {
+            let data = doc.data()
+            data.properties.id = doc.id
+            return data
+          })
+
+        store.dispatch(setEvents(turf.featureCollection(features)))
+      })
+    }
+
+    fetch()
+  }, [])
+
 
   return (
     <Map>
@@ -540,15 +591,12 @@ const App = props => {
       <Router>
         <Dashboard path='/user' />
         <Districts path='/districts' />
-        <Activities path='/activities' />
-        <Form
-          path='/new'
-        // deleteDrawnPoint={this.deleteDrawnPoint}
-        />
-        <Sidebar path='/activity/:id' />
+        <Activities path='/sports' />
+        <Sidebar path='/activities/:id' />
+        <SportForm path='/activities/:id/edit' />
+        <EventForm path='/events/:id/edit' />
         <Help path='/help' displayStepsAfterHelp={displayStepsAfterHelp} />
       </Router>
-      <Legend toggleComponent={toggleComponent} />
       <Steps
         enabled={visibility.steps}
         steps={steps}

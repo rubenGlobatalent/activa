@@ -17,11 +17,11 @@ const initialState = {
   categories_activities: [],
   filters_activities: [],
   filters_districts: [],
+  comments: [],
   districts: districts,
-  selectedActivity: null,
-  user: null,
-  comments: []
-};
+  selected: null,
+  user: null
+}
 
 const loadState = () => {
   try {
@@ -73,7 +73,7 @@ const rootReducer = (state = initialState, action) => {
       })
     case `SELECT_ACTIVITY`:
       return Object.assign({}, state, {
-        selectedActivity: action.payload
+        selected: action.payload
       })
     case `DELETE_COMMENT`:
       return Object.assign({}, state, {
@@ -88,10 +88,12 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         comments: [...action.payload, ...state.comments]
       })
-    // case `ADD_ACTIVITY`:
-    //   return Object.assign({}, state, {
-    //     activities: [...action.payload, ...state.activities]
-    //   })
+    case `ADD_ACTIVITY`:
+      // const categories = new Set(turf.propReduce(action.payload, (acc, current) => [...acc, current.sport], []))
+      return Object.assign({}, state, {
+        activities: turf.featureCollection([...state.activities.features, ...action.payload])
+        // categories_activities: Array.from(categories)
+      })
     default:
       return state
   }
@@ -137,6 +139,11 @@ export const deleteFilters = payload => {
 export const addComment = payload => {
   return { type: `ADD_COMMENT`, payload };
 }
+
+export const addActivity = payload => {
+  return { type: `ADD_ACTIVITY`, payload };
+}
+
 // Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
 export const store = createStore(rootReducer, loadState())

@@ -28,7 +28,7 @@ const Edit = props => {
 
     const removePoint = async () => {
         try {
-            firebase.firestore().collection('sports').doc(props.data.id).delete()
+            firebase.firestore().collection('sports').doc(props.id).delete()
             NotificationManager.success('Actividad eliminada con éxito.')
         }
         catch (error) {
@@ -178,7 +178,7 @@ const Sidebar = props => {
         const image = data.properties.image ? <Image data={{ ...data.properties }} /> : null,
             description = data.properties.description ? <Description className="content" data={data.properties.description} /> : null,
             details = (data.properties.facebook || data.properties.twitter || data.properties.youtube || data.properties.email || data.properties.phone) ? <Details data={{ ...data.properties }} /> : null,
-            footer = props.user ? (props.user.uid === data.properties.creatorUID || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit /> : null) : null;
+            footer = props.user ? (props.user.uid === data.properties.creatorUID || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2' ? <Edit id={props.id} /> : null) : null;
 
         return (
             <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>

@@ -7,15 +7,16 @@ import uuidv4 from 'uuid/v4'
 import { useTranslation } from 'react-i18next'
 import { navigate } from "@reach/router"
 import { connect } from 'react-redux'
-
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
 
+import { store, selectActivity, addActivity } from '../../redux/store'
+
 const mapStateToProps = state => ({
-    districts: state.districts,
-    selectedActivity: state.selectedActivity,
-    user: state.user
+    selected: state.selected,
+    user: state.user,
+    categories: state.categories_activities
 })
 
 
@@ -76,25 +77,21 @@ const Form = props => {
         [urbanFurniture, setUrbanFurniture] = useState(defaultFurniture),
         [phone, setPhone] = useState('');
 
-    const closeAndRemove = () => {
-        // props.deleteDrawnPoint(props.selectedActivity.id)
-        navigate('/')
+    const saveData = (uid, ref, data) => {
+        if (uid) {
+            return ref.doc(uid).update(data)
+        }
+        else {
+            return ref.add(data)
+        }
     },
-        saveData = (uid, ref, data) => {
-            if (uid) {
-                return ref.doc(uid).update(data)
-            }
-            else {
-                return ref.add(data)
-            }
-        },
         submitData = async event => {
             event.preventDefault();
             setProgress(true)
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
                 databaseRef = firebase.firestore().collection(`sports`);
 
-            let geometry = turf.getGeom(props.selectedActivity),
+            let geometry = turf.getGeom(props.selected),
                 properties = {
                     name: name.length > 0 ? name : false,
                     sport: sport,
@@ -109,7 +106,7 @@ const Form = props => {
                     image: file ? file : false,
                     email: email.length > 0 ? email : false,
                     phone: phone.length > 0 ? phone : false,
-                    creatorUID: firebase.auth().currentUser.uid,
+                    creatorUID: props.user.uid,
                     improvements: improvements,
                     urbanFurniture: urbanFurniture,
                     feature: feature
@@ -133,17 +130,18 @@ const Form = props => {
                                     feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
-                                await saveData(props.selectedActivity.properties.id, databaseRef, feature)
+                                await saveData(props.selected.properties.id, databaseRef, feature)
 
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
                                 clearForm()
-                                closeAndRemove()
                             }
                             catch (error) {
                                 console.error(error)
                                 NotificationManager.error('Ha ocurrido un error al crear la actividad.')
-                                closeAndRemove()
+                            }
+                            finally {
+                                navigate('/')
                             }
                         }
                     )
@@ -155,17 +153,22 @@ const Form = props => {
                     if (turf.getType(feature) === 'LineString') {
                         feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
-                    await saveData(props.selectedActivity.properties.id, databaseRef, feature)
+                    const response = await saveData(props.selected.properties.id, databaseRef, feature)
+
+                    // console.log(response.id)
+                    // console.log(feature)
 
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')
-                    closeAndRemove()
+                    // store.dispatch(addActivity([feature]))
                     clearForm()
                 }
                 catch (error) {
                     console.error(error)
-                    closeAndRemove()
                     NotificationManager.error('Ha ocurrido un error al crear la actividad.')
+                }
+                finally {
+                    navigate('/')
                 }
 
             }
@@ -198,7 +201,7 @@ const Form = props => {
                     const name = entry[0],
                         status = entry[1]
                     return (
-                        <span className={`tag ${status ? `is-primary` : ``}`} onClick={() => setCollection({ ...collection, [name]: !status })} >{t(`${collectionName}.${name}`)}</span>
+                        <li key={uuidv4()} className={`tag ${status ? `is-primary` : ``}`} onClick={() => setCollection({ ...collection, [name]: !status })} >{t(`${collectionName}.${name}`)}</li>
                     )
                 })
             return collectionComponent
@@ -222,13 +225,13 @@ const Form = props => {
             setUrbanFurniture(data.furniture ? JSON.parse(data.furniture) : defaultFurniture)
         }
 
-    useEffect(() => {
-        if (props.visible && firebase.auth().currentUser) {
-            if (props.selectedActivity.properties.id) {
-                setData(props.selectedActivity.properties)
-            }
-        }
-    }, [props.visible])
+    // useEffect(() => {
+    //     if (props.visible && firebase.auth().currentUser) {
+    //         if (props.selectedActivity.properties.id) {
+    //             setData(props.selectedActivity.properties)
+    //         }
+    //     }
+    // }, [props.visible])
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
@@ -242,7 +245,7 @@ const Form = props => {
         submitButtonClass = progress ? "button is-loading" : "button";
 
     if (props.user) {
-        const sports = props.data.map(sport => {
+        const sports = props.categories.map(sport => {
             return (
                 <option key={sport} value={sport}>{sport}</option>
             )
@@ -254,7 +257,7 @@ const Form = props => {
                     <header className="modal-card-head">
                         <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una actividad</h2>
                         <button className="delete" onClick={() => {
-                            closeAndRemove()
+                            navigate('/')
                             NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
                         }}></button>
                     </header>
@@ -310,28 +313,26 @@ const Form = props => {
                         <div className="columns is-multiline">
                             <div className="column">
                                 <h5 className="subtitle is-size-7 has-text-weight-bold">¿Cuál es la cualidad que más te gusta de este espacio?</h5>
-                                <div className="tags">
+                                <ul className="tags">
                                     {renderTags(feature, setFeature, 'feature')}
-                                </div>
+                                </ul>
                             </div>
 
                             <div className="column">
                                 <h5 className="subtitle is-size-7 has-text-weight-bold">¿Qué mejoras introducirías en este espacio?</h5>
-                                <div className="tags">
+                                <ul className="tags">
                                     {renderTags(improvements, setImprovements, 'improvements')}
-                                </div>
+                                </ul>
                             </div>
 
                             <div className="column">
                                 <h5 className="subtitle is-size-7 has-text-weight-bold">¿Qué mejoras introducirías en el mobiliario urbano?</h5>
-                                <div className="tags">
+                                <ul className="tags">
                                     {renderTags(urbanFurniture, setUrbanFurniture, 'urbanFurniture')}
-                                </div>
+                                </ul>
                             </div>
 
-
                         </div>
-
 
                         <div className="field">
                             <label className="label">Comentarios sobre tu actividad deportiva</label>
@@ -460,7 +461,7 @@ const Form = props => {
                         <div className="field is-grouped">
                             <div className="control">
                                 <button className={submitButtonClass} onClick={() => {
-                                    closeAndRemove()
+                                    navigate('/')
                                     NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
                                 }}>Cerrar</button>
                             </div>

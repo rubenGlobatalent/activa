@@ -125,7 +125,7 @@ const Dashboard = props => {
 
             <div class="field is-horizontal">
               <div class="field-label is-normal">
-                <label class="label">Estas registrado cómo:</label>
+                <label className="label">Estas registrado cómo:</label>
               </div>
               <div class="field-body">
                 <div class="field">
