@@ -8,7 +8,7 @@ import { faInfoCircle, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import * as turf from '@turf/turf'
 
-import { store, selectFeature } from '../../redux/store'
+import { store, selectFeature, setMode as set_Mode } from '../../redux/store'
 import sports from '../../assets/data/sports.json'
 import Legend from './Components/Legend.js'
 
@@ -48,6 +48,7 @@ const mapStateToProps = state => ({
     districts: state.districts,
     filters_activities: state.filters_activities,
     filters_districts: state.filters_districts,
+    mode: state.mode
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -217,7 +218,6 @@ const loadLayers = (map, sources, mode, filters) => {
             console.error(error)
         }
         finally {
-            console.log(feature)
             store.dispatch(selectFeature(feature))
             navigate(`/${mode}/${feature.id}/edit`)
 
@@ -245,7 +245,8 @@ const loadLayers = (map, sources, mode, filters) => {
             style: `mapbox://styles/mapbox/${mapStyles[layers]}-v9`,
             center: [-4.4214, 36.7213],
             zoom: 12,
-            attributionControl: false
+            attributionControl: false,
+            minZoom: 12
         }),
             attribution = new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com" target="_blank"><strong>Cartometrics</strong></a>'] }),
             navigation = new mapboxgl.NavigationControl(),
@@ -289,12 +290,12 @@ const Map = props => {
         [draw, setDraw] = useState(null),
         [legend, setLegend] = useState(false),
         [layers, setLayers] = useState(0),
-        [mode, setMode] = useState(mapModes[0]),
+        [mode, setMode] = useState(props.mode),
         [filterLineActivity, setFilterLineActivity] = useState(null),
         [filterPointsActivity, setFilterPointsActivity] = useState(["==", ['get', 'pointInLine'], false]),
         [filterPointsInLineActivity, setFilterPointsInLineActivity] = useState(["==", ['get', 'pointInLine'], true]),
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
-        [filteredData, setFilteredData] = useState(props.activities),
+        [filteredData, setFilteredData] = useState(mapModes[0]),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
@@ -304,6 +305,10 @@ const Map = props => {
     },
         toggleLayers = () => {
             setLayers((layers + 1) % (mapStyles.length))
+        },
+        changeMode = mode => {
+            setMode(mode)
+            store.dispatch(set_Mode(mode))
         }
 
     useEffect(() => {
@@ -422,6 +427,10 @@ const Map = props => {
     }, [])
 
     useEffect(() => {
+        setMode(props.mode)
+    }, [])
+
+    useEffect(() => {
         const activities = ['pointActivities', 'lineActivities', 'pointInLineActivities']
         if (map) {
             const oldControl = draw
@@ -469,7 +478,7 @@ const Map = props => {
 
     }, [mode])
 
-    const modes = mapModes.map(mapMode => <li key={mapMode} className={`has-text-weight-bold ${mapMode === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => setMode(mapMode)}><Link to=''>{t(mapMode)}</Link></li>)
+    const modes = mapModes.map(mapMode => <li key={mapMode} className={`has-text-weight-bold ${mapMode === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode(mapMode)}><Link to=''>{t(mapMode)}</Link></li>)
 
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >

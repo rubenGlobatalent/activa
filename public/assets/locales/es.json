@@ -58,6 +58,8 @@
         "scheduleTitle": "Horario",
         "schedulePlaceholder": "Describe brevemente el horario",
         "eventSuccess": "Evento creado con éxito",
-        "eventError": "Algo ha salido mal al crear tu evento"
+        "eventError": "Algo ha salido mal al crear tu evento",
+        "send": "Enviar",
+        "clear": "Borrar"
     }
 }

@@ -20,7 +20,8 @@ const initialState = {
   comments: [],
   districts: districts,
   selected: null,
-  user: null
+  user: null,
+  mode: 'activities'
 }
 
 const loadState = () => {
@@ -88,6 +89,10 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         comments: [...action.payload, ...state.comments]
       })
+    case `SET_MODE`:
+      return Object.assign({}, state, {
+        mode: action.payload
+      })
     default:
       return state
   }
@@ -132,6 +137,10 @@ export const deleteFilters = payload => {
 
 export const addComment = payload => {
   return { type: `ADD_COMMENT`, payload };
+}
+
+export const setMode = payload => {
+  return { type: `SET_MODE`, payload };
 }
 
 // Create a Redux store holding the state of your app.

@@ -237,10 +237,10 @@ const Event = props => {
                     <footer className="modal-card-foot buttons is-centered">
                         <div className="field is-grouped">
                             <div className="control">
-                                <button type='submit' className={`button is-primary ${progress ? 'is-loading' : ''}`}>Enviar</button>
+                                <button type='submit' className={`button is-primary ${progress ? 'is-loading' : ''}`}>{t('eventsForm.send')}</button>
                             </div>
                             <div className="control">
-                                <button type="reset" className={`button is-text ${progress ? 'is-loading' : ''}`} onClick={clearData}>Borrar</button>
+                                <button type="reset" className={`button is-text ${progress ? 'is-loading' : ''}`} onClick={clearData}>{t('eventsForm.clear')}</button>
                             </div>
                         </div>
                     </footer>

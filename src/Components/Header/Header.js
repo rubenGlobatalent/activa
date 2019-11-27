@@ -24,7 +24,8 @@ const style = {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  mode: state.mode
 })
 
 
@@ -58,7 +59,7 @@ const Header = props => {
         <div className={navbarMenuClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <Link to='/sports' className={filterButtonClass} style={style.button}>
+              <Link to='/sports' className={`button is-large is-size-7 is-uppercase filterButton ${visible ? `is-fullwidth` : ``} ${props.mode === 'events' ? `is-sr-only` : ``}`} style={style.button}>
                 {t('activity')}
               </Link>
             </div>
