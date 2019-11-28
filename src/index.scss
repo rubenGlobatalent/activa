@@ -47,8 +47,8 @@ $tabs-toggle-link-active-border-color: $primary;
 @import "bulma/sass/components/navbar.sass";
 @import "bulma/sass/components/menu.sass";
 @import "bulma/sass/components/tabs.sass";
-@import '~react-notifications/lib/notifications.css';
-
+@import "~react-notifications/lib/notifications.css";
+@import "~bulma-badge/dist/css/bulma-badge.min.css";
 .navbar-item img {
   max-height: 40px;
 }
@@ -102,4 +102,8 @@ $tabs-toggle-link-active-border-color: $primary;
 
 .has-background {
   background-color: whitesmoke;
+}
+
+[data-badge].has-badge-small::after {
+  top: 20%;
 }

@@ -2,13 +2,13 @@ import React, { useRef, useState, useEffect } from 'react'
 import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import { connect } from 'react-redux'
-import { navigate, Link } from "@reach/router"
+import { navigate} from "@reach/router"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import * as turf from '@turf/turf'
 
-import { store, selectFeature, setMode as set_Mode } from '../../redux/store'
+import { store, selectFeature, deleteFilters, setMode as set_Mode } from '../../redux/store'
 import sports from '../../assets/data/sports.json'
 import Legend from './Components/Legend.js'
 
@@ -48,7 +48,8 @@ const mapStateToProps = state => ({
     districts: state.districts,
     filters_activities: state.filters_activities,
     filters_districts: state.filters_districts,
-    mode: state.mode
+    mode: state.mode,
+    user: state.user
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -297,6 +298,7 @@ const Map = props => {
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
         [filteredData, setFilteredData] = useState(props.activities),
         [filteredEventsData, setFilteredEventsData] = useState(props.events),
+        [unread, setUnread] = useState(0),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
@@ -387,6 +389,9 @@ const Map = props => {
             setFilteredData(sourceData)
             setFilteredEventsData(sourceEventsData)
 
+        }
+        else {
+            store.dispatch(deleteFilters())
         }
     }, [props.activities.features.length, props.filters_activities.length, props.filters_districts.length])
 
@@ -482,7 +487,25 @@ const Map = props => {
 
     }, [mode])
 
-    const modes = mapModes.map(mapMode => <li key={mapMode} className={`has-text-weight-bold ${mapMode === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode(mapMode)}><a>{t(mapMode)}</a></li>)
+    useEffect(() => {
+        if (props.user) {
+            setUnread(props.events.features.filter(event => new Date(event.properties.modifiedDate) >= new Date(props.user.lastConnection)).length)
+        }
+    }, [props.user, props.events])
+
+    let unreadLink
+
+    if (!props.user) {
+        unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge="">{t('events')}</a>
+    }
+    else {
+        if (unread === 0){
+            unreadLink = <a>{t('events')}</a>
+        }
+        else {
+            unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge={unread}>{t('events')}</a>
+        }
+    }
 
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >
@@ -491,7 +514,10 @@ const Map = props => {
             <div style={style.tabsContainer}>
                 <div className="tabs is-centered is-toggle is-small" style={style.tabs}>
                     <ul>
-                        {modes}
+                        <li className={`has-text-weight-bold ${'activities' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('activities')}><a >{t('activities')}</a></li>
+                        <li className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
+                            {unreadLink}
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -35,7 +35,8 @@ const Event = props => {
         [organizer, setOrganizer] = useState(''),
         [terms, setTerms] = useState(false),
         [geometry, setGeometry] = useState([0, 0]),
-        [progress, setProgress] = useState(false)
+        [progress, setProgress] = useState(false),
+        [uid, setUID] = useState(null)
 
     const feature = props.events.features.find(feature => feature.properties.id === props.id)
     useEffect(() => {
@@ -47,6 +48,7 @@ const Event = props => {
             data = props.selected
         }
         if (data) {
+            setUID(data.properties.id ? data.properties.id : null)
             setName(data.properties.name || '')
             setDate(data.properties.date || '')
             setImage(data.properties.image || null)
@@ -102,7 +104,7 @@ const Event = props => {
                 else {
                     data = turf.point(geometry, properties)
                 }
-                await saveData(false, databaseRef, data)
+                await saveData(uid, databaseRef, data)
                 setProgress(false)
                 NotificationManager.success(t('eventsForm.eventSuccess'))
             }

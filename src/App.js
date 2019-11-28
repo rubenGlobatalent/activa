@@ -523,9 +523,13 @@ const App = props => {
     }
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        store.dispatch(setUser({ displayName: user.displayName, email: user.email, uid: user.uid }))
+        const lastConnection = user.photoURL
+        store.dispatch(setUser({ displayName: user.displayName, email: user.email, uid: user.uid, lastConnection: lastConnection }))
+        await user.updateProfile({
+          photoURL: new Date().toISOString()
+        })
       } else {
         store.dispatch(setUser(null))
       }
@@ -590,6 +594,7 @@ const App = props => {
         "email": "foo@bar.test",
         "creatorUID": "qbFycZmYNsgUIsr7w1fcNROd0xv1",
         "date": "2019-11-28T00:00:00.000Z",
+        "modifiedDate": "2019-11-30T00:00:00.000Z",
         "schedule": "",
         "place": "foo",
         "id": "test",

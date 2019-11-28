@@ -78,7 +78,8 @@ const Form = props => {
         [improvements, setImprovements] = useState(defaultImprovements),
         [urbanFurniture, setUrbanFurniture] = useState(defaultFurniture),
         [phone, setPhone] = useState(''),
-        [featureGeometry, setFeatureGeometry] = useState([])
+        [featureGeometry, setFeatureGeometry] = useState([]),
+        [uid, setUID] = useState(null)
 
     const saveData = (uid, ref, data) => {
         if (uid) {
@@ -133,7 +134,7 @@ const Form = props => {
                                     feature.geometry.coordinates = { ...feature.geometry.coordinates }
                                 }
 
-                                await saveData(props.selected.properties.id, databaseRef, feature)
+                                await saveData(uid, databaseRef, feature)
 
                                 setProgress(false)
                                 NotificationManager.success('Actividad creada con éxito.')
@@ -224,6 +225,7 @@ const Form = props => {
             setImprovements(data.properties.improvements ? JSON.parse(data.properties.improvements) : defaultImprovements)
             setUrbanFurniture(data.properties.furniture ? JSON.parse(data.properties.furniture) : defaultFurniture)
             setFeatureGeometry(data.geometry)
+            setUID(data.properties.id ? data.properties.id : null)
         }
 
         const featureToEdit = props.activities.features.find(feature => feature.properties.id === props.id)
