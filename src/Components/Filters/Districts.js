@@ -19,6 +19,8 @@ const Districts = props => {
             .filter(filter => filter[1])
             .map(filter => filter[0])
 
+        console.log(selected)
+
         store.dispatch(setDistrictFilter(selected))
         navigate('/')
     },

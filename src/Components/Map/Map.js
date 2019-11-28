@@ -380,7 +380,6 @@ const Map = props => {
                 sourceData = props.activities
                 sourceEventsData = props.events
             }
-
             map.setFilter('districts', districtFilter)
             map.getSource('activities').setData(sourceData)
             map.getSource('events').setData(sourceEventsData)
@@ -393,7 +392,7 @@ const Map = props => {
         else {
             store.dispatch(deleteFilters())
         }
-    }, [props.activities.features.length, props.filters_activities.length, props.filters_districts.length])
+    }, [props.activities.features.length, props.filters_activities.join(), props.filters_districts.join()])
 
     useEffect(() => {
         if (map) {
