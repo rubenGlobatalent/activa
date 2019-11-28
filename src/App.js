@@ -16,7 +16,7 @@ import Help from './Components/Help/Help'
 import ActivitySidebar from './Components/Sidebar/Activity'
 import Districts from './Components/Filters/Districts'
 import Activities from './Components/Filters/Activities'
-import SportForm from './Components/Forms/Sport'
+import SportForm from './Components/Forms/Activity'
 import EventForm from './Components/Forms/Event'
 import EventSidebar from './Components/Sidebar/Event'
 
@@ -579,9 +579,33 @@ const App = props => {
 
         store.dispatch(setEvents(turf.featureCollection(features)))
       })
+      
     }
-
-    fetch()
+    const test = {
+      "type": "Feature",
+      "properties": {
+        "name": "foo",
+        "organizer": "bar",
+        "description": "foo",
+        "email": "foo@bar.test",
+        "creatorUID": "qbFycZmYNsgUIsr7w1fcNROd0xv1",
+        "date": "2019-11-28T00:00:00.000Z",
+        "schedule": "",
+        "place": "foo",
+        "id": "test",
+        "link": "https://foo.com",
+        "image": "https://firebasestorage.googleapis.com/v0/b/recomendador-534fb.appspot.com/o/image%2Fcb0581a9-669d-4e18-9f3d-e7064daca235?alt=media&token=16e57907-7941-4e46-bf9d-7be2bb3b7aa1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.408762096090982,
+          36.724568043058454
+        ]
+      }
+    }
+    store.dispatch(setEvents(turf.featureCollection([test])))
+    // fetch()
   }, [])
 
 

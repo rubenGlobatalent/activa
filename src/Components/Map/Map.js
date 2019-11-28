@@ -192,7 +192,7 @@ const loadLayers = (map, sources, mode, filters) => {
         let properties = e.features[0].properties,
             geometry,
             feature
-        
+
         if (properties.pointInLine) {
             geometry = data.features.find(feature => feature.properties.id === properties.id).geometry
             feature = turf.lineString(geometry.coordinates, properties)
@@ -257,10 +257,10 @@ const loadLayers = (map, sources, mode, filters) => {
                     polygon: false
                 }
             }),
-            layerTypes = [{name: 'pointActivities', mode: mapModes[0]},
-            {name: 'pointInLineActivities', mode: mapModes[0]},
-            {name: 'lineActivities', mode: mapModes[0]},
-            {name: 'events', mode: mapModes[1]}]
+            layerTypes = [{ name: 'pointActivities', mode: mapModes[0] },
+            { name: 'pointInLineActivities', mode: mapModes[0] },
+            { name: 'lineActivities', mode: mapModes[0] },
+            { name: 'events', mode: mapModes[1] }]
 
         map.on("load", () => {
             setMap(map)
@@ -295,7 +295,8 @@ const Map = props => {
         [filterPointsActivity, setFilterPointsActivity] = useState(["==", ['get', 'pointInLine'], false]),
         [filterPointsInLineActivity, setFilterPointsInLineActivity] = useState(["==", ['get', 'pointInLine'], true]),
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
-        [filteredData, setFilteredData] = useState(mapModes[0]),
+        [filteredData, setFilteredData] = useState(props.activities),
+        [filteredEventsData, setFilteredEventsData] = useState(props.events),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
@@ -317,7 +318,8 @@ const Map = props => {
                 pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true]
 
             let districtFilter,
-                sourceData
+                sourceData,
+                sourceEventsData
 
             if (props.filters_activities.length > 0) {
                 const activityFilter = ['match', ['get', 'sport'], [...props.filters_activities], true, false]
@@ -362,21 +364,28 @@ const Map = props => {
                     points = turf.pointsWithinPolygon(
                         turf.featureCollection(props.activities.features.filter(feature => feature.geometry.type === 'Point')),
                         districtsCollection
-                    ).features;
+                    ).features,
+                    events = turf.pointsWithinPolygon(
+                        props.events,
+                        districtsCollection
+                    )
 
                 sourceData = turf.featureCollection([...lines, ...points])
+                sourceEventsData = events
             }
             else {
                 districtFilter = ['match', ['get', 'name'], 'none', true, false]
                 sourceData = props.activities
+                sourceEventsData = props.events
             }
 
             map.setFilter('districts', districtFilter)
             map.getSource('activities').setData(sourceData)
+            map.getSource('events').setData(sourceEventsData)
 
             setFilterDistrict(districtFilter)
             setFilteredData(sourceData)
-
+            setFilteredEventsData(sourceEventsData)
 
         }
     }, [props.activities.features.length, props.filters_activities.length, props.filters_districts.length])
@@ -389,7 +398,7 @@ const Map = props => {
                     sportsIcons: sportsIcons,
                     districts: props.districts,
                     activities: filteredData,
-                    events: props.events
+                    events: filteredEventsData
                 },
                     mode,
                     {
@@ -403,7 +412,6 @@ const Map = props => {
     }, [layers])
 
     useEffect(() => {
-
         initializeMap({
             setMap,
             setDraw,
@@ -424,10 +432,6 @@ const Map = props => {
             }
         })
 
-    }, [])
-
-    useEffect(() => {
-        setMode(props.mode)
     }, [])
 
     useEffect(() => {
@@ -452,24 +456,24 @@ const Map = props => {
                     map.addControl(newEventControl, 'bottom-right')
                     map.on('draw.create', e => handleDraw(e, newEventControl, mode))
                     setDraw(newEventControl)
-                    
+
                     break;
                 case ('activities'):
-                        const newActivityControl = new MapboxDraw({
-                            controls: {
-                                combine_features: false,
-                                uncombine_features: false,
-                                polygon: false
-                            }
-                        })
-                        activities.forEach(layer => {
-                            map.setLayoutProperty(layer, 'visibility', 'visible')
-                        })
-                        map.setLayoutProperty('events', 'visibility', 'none')
-                        map.removeControl(oldControl)
-                        map.addControl(newActivityControl, 'bottom-right')
-                        map.on('draw.create', e => handleDraw(e, newActivityControl, mode))
-                        setDraw(newActivityControl)
+                    const newActivityControl = new MapboxDraw({
+                        controls: {
+                            combine_features: false,
+                            uncombine_features: false,
+                            polygon: false
+                        }
+                    })
+                    activities.forEach(layer => {
+                        map.setLayoutProperty(layer, 'visibility', 'visible')
+                    })
+                    map.setLayoutProperty('events', 'visibility', 'none')
+                    map.removeControl(oldControl)
+                    map.addControl(newActivityControl, 'bottom-right')
+                    map.on('draw.create', e => handleDraw(e, newActivityControl, mode))
+                    setDraw(newActivityControl)
                     break;
                 default:
                     break;

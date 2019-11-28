@@ -3,6 +3,7 @@ import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 
 import { store, setActivityFilter, deleteFilters } from '../../redux/store'
+import Header from './Components/Header'
 
 const mapStateToProps = state => ({
     categories: state.categories_activities,
@@ -10,8 +11,8 @@ const mapStateToProps = state => ({
 })
 
 const Activities = props => {
-
-    const [filter, setFilter] = useState({})
+    const initial = Object.fromEntries(props.selected.map(item => [item, true]))
+    const [filter, setFilter] = useState(initial)
 
     const submitFilter = () => {
         const selected = Object.entries(filter)
@@ -25,6 +26,10 @@ const Activities = props => {
             setFilter({})
             store.dispatch(deleteFilters())
             navigate('/')
+        },
+        handleInput = e => {
+            const payload = Object.assign(filter, { [e.target.name]: e.target.checked })
+            setFilter(payload)
         }
 
     const selected = Object.fromEntries(
@@ -39,9 +44,7 @@ const Activities = props => {
                             <input type="checkbox"
                                 name={activity}
                                 defaultChecked={selected[activity]}
-                                onChange={e => setFilter(() => {
-                                    return Object.assign(filter, { [e.target.name]: e.target.checked })
-                                })} />
+                                onChange={handleInput} />
                             {` ${activity}`}
                         </label>
                     </li>
@@ -52,10 +55,7 @@ const Activities = props => {
         <div className="modal is-active animated fadeIn faster">
             <div className="modal-background" onClick={() => navigate('/')}></div>
             <div className="modal-card">
-                <header className="modal-card-head">
-                    <h2 className="modal-card-title is-size-5 has-text-weight-light">Actividades</h2>
-                    <button className="delete" onClick={() => navigate('/')}></button>
-                </header>
+                <Header type={'Activity'}/>
                 <section className="modal-card-body">
                     <ul>
                         {activities}

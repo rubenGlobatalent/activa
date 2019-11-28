@@ -39,10 +39,17 @@
         "delete": "Eliminar"
     },
     "activity": "Actividad",
+    "filterDistrict": "Filtrar por zona",
+    "filterActivity": "Filtrar por actividad",
     "district": "Zona",
     "activities": "Actividades",
     "events": "Eventos",
     "addAnEvent": "Añade un evento",
+    "addAnActivity": "Añade una actividad",
+    "close": "Cerrar",
+    "register": "Regístrate",
+    "haveToRegisterActivity": "Debes de estar registrado para añadir una actividad",
+    "haveToRegisterEvent": "Debes de estar registrado para añadir un evento",
     "eventsForm": {
         "nameTitle": "Nombre del evento",
         "namePlaceholder": "Personaliza el nombre de tu evento (ej. \"Gran carrera solidaria\")",

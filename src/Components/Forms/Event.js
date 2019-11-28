@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUpload, faEnvelope, faExternalLinkAlt, faMapMarked, faSitemap, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faUpload, faEnvelope, faExternalLinkAlt, faMapMarked, faSitemap, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons'
 import { NotificationManager } from 'react-notifications'
 import uuidv4 from 'uuid/v4'
 import { useTranslation } from 'react-i18next'
@@ -9,24 +9,16 @@ import { connect } from 'react-redux'
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
+import Header from './Components/Header'
+import ImagePreview from './Components/ImagePreview'
+import FileName from './Components/FileName'
+import AskRegistration from './Components/AskRegistration'
 
 const mapStateToProps = state => ({
     selected: state.selected,
     user: state.user,
-    categories: state.categories_activities,
     events: state.events
 })
-
-
-const FileName = props => {
-    if (props.file) return <span className="file-name"> {props.file.name} </span>
-
-    else return null
-},
-    ImagePreview = props => {
-        if (props.file) return <picture className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(props.file)} alt={props.file.name} /></picture>
-        else return null
-    }
 
 const Event = props => {
 
@@ -42,22 +34,30 @@ const Event = props => {
         [email, setEmail] = useState(''),
         [organizer, setOrganizer] = useState(''),
         [terms, setTerms] = useState(false),
+        [geometry, setGeometry] = useState([0, 0]),
         [progress, setProgress] = useState(false)
 
     const feature = props.events.features.find(feature => feature.properties.id === props.id)
     useEffect(() => {
+        let data
         if (feature) {
-            const data = feature.properties
-            setName(data.name || '')
-            setDate(data.date || '')
-            setImage(data.image || null)
-            setPlace(data.place || '')
-            setDescription(data.description || '')
-            setLink(data.link || '')
-            setEmail(data.email || '')
-            setOrganizer(data.organizer || '')
+            data = feature
         }
-    }, [feature])
+        if (props.selected && props.id === props.id) {
+            data = props.selected
+        }
+        if (data) {
+            setName(data.properties.name || '')
+            setDate(data.properties.date || '')
+            setImage(data.properties.image || null)
+            setPlace(data.properties.place || '')
+            setDescription(data.properties.description || '')
+            setLink(data.properties.link || '')
+            setEmail(data.properties.email || '')
+            setOrganizer(data.properties.organizer || '')
+            setGeometry(data.geometry.coordinates)
+        }
+    }, [feature, props.selected])
 
     const saveData = (uid, ref, data) => {
         if (uid) {
@@ -67,48 +67,55 @@ const Event = props => {
             return ref.add(data)
         }
     },
-    submitData = async event => {
-        event.preventDefault();
-        try {
-            setProgress(true)
-            const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
-            databaseRef = firebase.firestore().collection(`events`),
-            properties = {
-                name: name,
-                organizer: organizer,
-                description: description.length > 0 ? description.replace(/\r?\n/g, '<br/>') : '',
-                email: email,
-                creatorUID: props.user.uid,
-                date: new Date(date).toISOString(),
-                schedule: schedule,
-                place: place,
-                link: link
-            }
+        submitData = async event => {
+            event.preventDefault();
+            try {
+                setProgress(true)
+                const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
+                    databaseRef = firebase.firestore().collection(`events`),
+                    properties = {
+                        name: name,
+                        organizer: organizer,
+                        description: description.length > 0 ? description.replace(/\r?\n/g, '<br/>') : '',
+                        email: email,
+                        creatorUID: props.user.uid,
+                        date: new Date(date).toISOString(),
+                        schedule: schedule,
+                        place: place,
+                        link: link
+                    }
 
-            let data
+                let data
 
-            if (image) {
-                const upload = await storageRef.put(image),
-                url = await upload.ref.getDownloadURL()
-                data = turf.point(props.selected.geometry.coordinates, {...properties, image: url})
+                if (image) {
+                    switch (typeof image) {
+                        case 'string':
+                            data = turf.point(props.selected.geometry.coordinates, { ...properties, image: image })
+                            break;
+                        case 'object':
+                            const upload = await storageRef.put(image),
+                                url = await upload.ref.getDownloadURL()
+                            data = turf.point(props.selected.geometry.coordinates, { ...properties, image: url })
+                            break;
+                    }
+                }
+                else {
+                    data = turf.point(geometry, properties)
+                }
+                console.log(data)
+                // await saveData(false, databaseRef, data)
+                setProgress(false)
+                NotificationManager.success(t('eventsForm.eventSuccess'))
             }
-            else {
-                data = turf.point(props.selected.geometry.coordinates, properties)
+            catch (error) {
+                console.error(error)
+                setProgress(false)
+                NotificationManager.error(t('eventsForm.eventError'))
             }
-            
-            await saveData(false, databaseRef, data)
-            setProgress(false)
-            NotificationManager.success(t('eventsForm.eventSuccess'))
-        }
-        catch (error) {
-            console.error(error)
-            setProgress(false)
-            NotificationManager.error(t('eventsForm.eventError'))
-        }
-        finally {
-            navigate('/')
-        }
-    },
+            finally {
+                navigate('/')
+            }
+        },
         clearData = () => {
             setName('')
             setDate('')
@@ -128,11 +135,7 @@ const Event = props => {
             <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background" onClick={() => navigate('/')}></div>
                 <form className="modal-card" onSubmit={submitData}>
-                    <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">{t('addAnEvent')}</h2>
-                        <button className="delete" onClick={() => navigate('/')}></button>
-                    </header>
-
+                    <Header type={'Event'}/>
                     <section className="modal-card-body">
                         <div className="field">
                             <label className="label">{t('eventsForm.nameTitle')}</label>
@@ -218,9 +221,15 @@ const Event = props => {
                             <div className="field column">
                                 <label className="label">{t('eventsForm.scheduleTitle')}</label>
                                 <div className="control has-icons-left is-expanded">
-                                    <input className="input" type="text" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
+                                    <input className="input" type="time" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
                                     <span className="icon is-small is-left">
-                                        <FontAwesomeIcon icon={faSitemap} />
+                                        <FontAwesomeIcon icon={faClock} />
+                                    </span>
+                                </div>
+                                <div className="control has-icons-left is-expanded">
+                                    <input className="input" type="time" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
+                                    <span className="icon is-small is-left">
+                                        <FontAwesomeIcon icon={faClock} />
                                     </span>
                                 </div>
                             </div>
@@ -249,34 +258,7 @@ const Event = props => {
         )
     }
 
-    else {
-        return (
-            <div className="modal is-active animated fadeIn faster">
-                <div className="modal-background" onClick={() => navigate('/')}></div>
-                <div className="modal-card">
-                    <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Regístrate</h2>
-                        <button className="delete" onClick={() => navigate('/')}></button>
-                    </header>
-
-                    <section className="modal-card-body">
-                        <p className="is-size-6 has-text-centered has-text-weight-bold">Debes de estar registrado para añadir una actividad</p>
-                    </section>
-
-                    <footer className="modal-card-foot buttons is-centered">
-                        <div className="field is-grouped">
-                            <div className="control">
-                                <button className='button is-primary' onClick={() => {
-                                    navigate('/')
-                                    NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
-                                }}>Cerrar</button>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        )
-    }
+    else return <AskRegistration type='Event'/>
 
 }
 

@@ -3,6 +3,7 @@ import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 
 import { store, setDistrictFilter, deleteFilters } from '../../redux/store'
+import Header from './Components/Header'
 
 const mapStateToProps = state => ({
     districts: state.districts,
@@ -10,8 +11,8 @@ const mapStateToProps = state => ({
 })
 
 const Districts = props => {
-
-    const [filter, setFilter] = useState({})
+    const initial = Object.fromEntries(props.selected.map(item => [item, true]))
+    const [filter, setFilter] = useState(initial)
 
     const submitFilter = () => {
         const selected = Object.entries(filter)
@@ -25,6 +26,10 @@ const Districts = props => {
             setFilter({})
             store.dispatch(deleteFilters())
             navigate('/')
+        },
+        handleInput = e => {
+            const payload = Object.assign(filter, { [e.target.name]: e.target.checked })
+            setFilter(payload)
         }
 
     const selected = Object.fromEntries(
@@ -37,9 +42,7 @@ const Districts = props => {
                         <input type="checkbox"
                             name={district.properties.name}
                             defaultChecked={selected[district.properties.name]}
-                            onChange={e => setFilter(() => {
-                                return Object.assign(filter, { [e.target.name]: e.target.checked })
-                            })}
+                            onChange={handleInput}
                         />
                         {` ${district.properties.name}`}
                     </label>
@@ -51,10 +54,7 @@ const Districts = props => {
         <div className="modal is-active animated fadeIn faster">
             <div className="modal-background" onClick={() => navigate('/')}></div>
             <div className="modal-card">
-                <header className="modal-card-head">
-                    <h2 className="modal-card-title is-size-5 has-text-weight-light">Zonas</h2>
-                    <button className="delete" onClick={() => navigate('/')}></button>
-                </header>
+                <Header type={'District'} />
                 <section className="modal-card-body">
                     <ul>
                         {districts}

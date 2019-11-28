@@ -10,6 +10,10 @@ import { connect } from 'react-redux'
 // OPTIMIZE IMPORTS
 import * as turf from '@turf/turf'
 import * as firebase from 'firebase'
+import AskRegistration from './Components/AskRegistration'
+import Header from './Components/Header'
+import FileName from './Components/FileName'
+import ImagePreview from './Components/ImagePreview'
 
 const mapStateToProps = state => ({
     selected: state.selected,
@@ -219,17 +223,8 @@ const Form = props => {
             setUrbanFurniture(data.furniture ? JSON.parse(data.furniture) : defaultFurniture)
         }
 
-    // useEffect(() => {
-    //     if (props.visible && firebase.auth().currentUser) {
-    //         if (props.selectedActivity.properties.id) {
-    //             setData(props.selectedActivity.properties)
-    //         }
-    //     }
-    // }, [props.visible])
-
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
-        imagePreview = file ? <picture className="image is-128by128 animated zoomIn faster"><img src={URL.createObjectURL(file)} alt={file.name} /></picture> : null,
         scheduleField = type === 'periódica' ?
             <div className="field column animated zoomIn faster">
                 <div className="control">
@@ -248,13 +243,7 @@ const Form = props => {
             <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background"></div>
                 <form className="modal-card" onSubmit={submitData}>
-                    <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Añade una actividad</h2>
-                        <button className="delete" onClick={() => {
-                            navigate('/')
-                            NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
-                        }}></button>
-                    </header>
+                    <Header type={'Activity'} />
 
                     <section className="modal-card-body">
                         <div className="field">
@@ -363,7 +352,7 @@ const Form = props => {
                                 </div>
                             </div>
                             <div className="column">
-                                {imagePreview}
+                                <ImagePreview file={file} />
                                 <hr className="is-invisible" />
                                 <div className="file has-name is-boxed columns is-centered">
                                     <label className="file-label">
@@ -376,7 +365,7 @@ const Form = props => {
                                                 Elige una imagen
                                            </span>
                                         </span>
-                                        {imageName}
+                                        <FileName file={file} />
                                     </label>
                                 </div>
                             </div>
@@ -437,34 +426,7 @@ const Form = props => {
         )
     }
 
-    else {
-        return (
-            <div className="modal is-active animated fadeIn faster">
-                <div className="modal-background" onClick={() => navigate('/')}></div>
-                <div className="modal-card">
-                    <header className="modal-card-head">
-                        <h2 className="modal-card-title is-size-5 has-text-weight-light">Regístrate</h2>
-                        <button className="delete" onClick={() => navigate('/')}></button>
-                    </header>
-
-                    <section className="modal-card-body">
-                        <p className="is-size-6 has-text-centered has-text-weight-bold">Debes de estar registrado para añadir una actividad</p>
-                    </section>
-
-                    <footer className="modal-card-foot buttons is-centered">
-                        <div className="field is-grouped">
-                            <div className="control">
-                                <button className={submitButtonClass} onClick={() => {
-                                    navigate('/')
-                                    NotificationManager.info('Tu actividad NO ha sido registrada. Creala de nuevo si quieres añadirla a nuestra base de datos')
-                                }}>Cerrar</button>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        )
-    }
+    else return <AskRegistration type={'Activity'}/>
 
 }
 
