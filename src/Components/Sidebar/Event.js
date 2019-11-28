@@ -28,6 +28,7 @@ const Event = props => {
     }, [feature])
 
     if (data) {
+        console.log(data)
 
         return (
             <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>

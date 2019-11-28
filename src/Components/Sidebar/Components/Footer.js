@@ -29,7 +29,7 @@ const Footer = props => {
         if (true) {
             if (confirmation) {
                 return (
-                    <footer className="card-footer" style={style.footer}>
+                    <footer className="card-footer" style={style}>
 
                         <div className="buttons is-centered">
                             <button className="button is-danger is-small" onClick={() => removePoint(props.id, props.collection)}>
@@ -47,7 +47,7 @@ const Footer = props => {
 
             else {
                 return (
-                    <footer className="card-footer" style={style.footer}>
+                    <footer className="card-footer" style={style}>
 
                         <div className="buttons is-centered">
                             <button className="button is-danger is-small" onClick={() => setConfirmation(true)}>

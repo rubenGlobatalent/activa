@@ -18,6 +18,7 @@ import ImagePreview from './Components/ImagePreview'
 const mapStateToProps = state => ({
     selected: state.selected,
     user: state.user,
+    activities: state.activities,
     categories: state.categories_activities
 })
 
@@ -76,7 +77,8 @@ const Form = props => {
         [feature, setFeature] = useState(defaultFeature),
         [improvements, setImprovements] = useState(defaultImprovements),
         [urbanFurniture, setUrbanFurniture] = useState(defaultFurniture),
-        [phone, setPhone] = useState('');
+        [phone, setPhone] = useState(''),
+        [featureGeometry, setFeatureGeometry] = useState([])
 
     const saveData = (uid, ref, data) => {
         if (uid) {
@@ -92,7 +94,7 @@ const Form = props => {
             const storageRef = firebase.storage().ref().child(`image/${uuidv4()}`),
                 databaseRef = firebase.firestore().collection(`sports`);
 
-            let geometry = turf.getGeom(props.selected),
+            let geometry = featureGeometry,
                 properties = {
                     name: name.length > 0 ? name : false,
                     sport: sport,
@@ -205,23 +207,39 @@ const Form = props => {
             return collectionComponent
         },
         setData = data => {
-            setName(data.name ? data.name : '')
-            setSport(data.sport ? data.sport : '')
-            setOrganization(data.organization ? data.organization : '')
-            setSchedule(data.schedule ? data.schedule : '')
-            setDescription(data.description ? data.description : '')
-            setType(data.type ? data.type : '')
-            setTwitter(data.twitter ? data.twitter : '')
-            setFacebook(data.facebook ? data.facebook : '')
-            setYoutube(data.youtube ? data.youtube : '')
-            setFile(data.file ? data.file : null)
-            setOrganizer(data.organizer ? data.organizer : false)
-            setEmail(data.email ? data.email : '')
-            setPhone(data.phone ? data.phone : '')
-            setFeature(data.feature ? JSON.parse(data.feature) : defaultFeature)
-            setImprovements(data.improvements ? JSON.parse(data.improvements) : defaultImprovements)
-            setUrbanFurniture(data.furniture ? JSON.parse(data.furniture) : defaultFurniture)
+            setName(data.properties.name || '')
+            setSport(data.properties.sport ? data.properties.sport : '')
+            setOrganization(data.properties.organization ? data.properties.organization : '')
+            setSchedule(data.properties.schedule ? data.properties.schedule : '')
+            setDescription(data.properties.description ? data.properties.description : '')
+            setType(data.properties.type ? data.properties.type : '')
+            setTwitter(data.properties.twitter ? data.properties.twitter : '')
+            setFacebook(data.properties.facebook ? data.properties.facebook : '')
+            setYoutube(data.properties.youtube ? data.properties.youtube : '')
+            setFile(data.properties.image ? data.properties.image : null)
+            setOrganizer(data.properties.organizer ? data.properties.organizer : false)
+            setEmail(data.properties.email ? data.properties.email : '')
+            setPhone(data.properties.phone ? data.properties.phone : '')
+            setFeature(data.properties.feature ? JSON.parse(data.properties.feature) : defaultFeature)
+            setImprovements(data.properties.improvements ? JSON.parse(data.properties.improvements) : defaultImprovements)
+            setUrbanFurniture(data.properties.furniture ? JSON.parse(data.properties.furniture) : defaultFurniture)
+            setFeatureGeometry(data.geometry)
         }
+
+        const featureToEdit = props.activities.features.find(feature => feature.properties.id === props.id)
+        useEffect(() => {
+            let data
+            if (featureToEdit) {
+                console.log(featureToEdit)
+                data = featureToEdit
+            }
+            else if (props.selected && props.id === props.id) {
+                data = props.selected
+            }
+            if (data) {
+                setData(data)
+            }
+        }, [featureToEdit, props.selected])
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,

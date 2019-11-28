@@ -43,7 +43,7 @@ const Event = props => {
         if (feature) {
             data = feature
         }
-        if (props.selected && props.id === props.id) {
+        else if (props.selected && props.id === props.id) {
             data = props.selected
         }
         if (data) {
@@ -102,8 +102,7 @@ const Event = props => {
                 else {
                     data = turf.point(geometry, properties)
                 }
-                console.log(data)
-                // await saveData(false, databaseRef, data)
+                await saveData(false, databaseRef, data)
                 setProgress(false)
                 NotificationManager.success(t('eventsForm.eventSuccess'))
             }
