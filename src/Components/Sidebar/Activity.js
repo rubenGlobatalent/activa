@@ -129,7 +129,7 @@ const Sidebar = props => {
                         <Comments activity={data.properties.id} />
                     </div>
                 </div>
-                <Footer user={props.user} id={data.properties.id} creatorUID={data.properties.creatorUID} collection={'sports'}/>
+                <Footer user={props.user} id={data.properties.id} creatorUID={data.properties.creatorUID} collection={'sports'} type={'Activity'}/>
             </article>
         )
     }

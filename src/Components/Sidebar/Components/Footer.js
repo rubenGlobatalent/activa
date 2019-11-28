@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import * as firebase from 'firebase'
 import { Link, navigate } from '@reach/router'
 import { NotificationManager } from 'react-notifications'
+import { useTranslation } from 'react-i18next'
+
 
 const style = {
     display: 'block'
@@ -23,21 +25,17 @@ const removePoint = async (id, collection) => {
 }
 
 const Footer = props => {
-    const [confirmation, setConfirmation] = useState(false)
+    const [confirmation, setConfirmation] = useState(false),
+    { t } = useTranslation('general', { useSuspense: false })
     if (props.user) {
-        // if (props.user.uid === props.creatorUID || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2') {
-        if (true) {
+        if (props.user.uid === props.creatorUID || props.user.uid === 'poV55zFFd9aepcRuZWhYnV8RD1a2') {
             if (confirmation) {
                 return (
                     <footer className="card-footer" style={style}>
 
                         <div className="buttons is-centered">
-                            <button className="button is-danger is-small" onClick={() => removePoint(props.id, props.collection)}>
-                                Confirmar
-                                </button>
-                            <button className="button is-light is-small" onClick={() => setConfirmation(false)}>
-                                Cancelar
-                                </button>
+                            <button className="button is-danger is-small" onClick={() => removePoint(props.id, props.collection)}>{t(`confirm`)}</button>
+                            <button className="button is-light is-small" onClick={() => setConfirmation(false)}>{t(`cancel`)}</button>
                         </div>
 
                     </footer>
@@ -50,12 +48,8 @@ const Footer = props => {
                     <footer className="card-footer" style={style}>
 
                         <div className="buttons is-centered">
-                            <button className="button is-danger is-small" onClick={() => setConfirmation(true)}>
-                                Eliminar deporte
-                            </button>
-                            <Link className="button is-primary is-small" to={'edit'}>
-                                Editar deporte
-                            </Link>
+                <button className="button is-danger is-small" onClick={() => setConfirmation(true)}>{t(`remove${props.type}`)}</button>
+                            <Link className="button is-primary is-small" to={'edit'}>{t(`edit${props.type}`)}</Link>
                         </div>
 
                     </footer>

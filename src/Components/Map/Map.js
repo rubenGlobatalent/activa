@@ -482,7 +482,7 @@ const Map = props => {
 
     }, [mode])
 
-    const modes = mapModes.map(mapMode => <li key={mapMode} className={`has-text-weight-bold ${mapMode === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode(mapMode)}><Link to=''>{t(mapMode)}</Link></li>)
+    const modes = mapModes.map(mapMode => <li key={mapMode} className={`has-text-weight-bold ${mapMode === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode(mapMode)}><a>{t(mapMode)}</a></li>)
 
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >
