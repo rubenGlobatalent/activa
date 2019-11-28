@@ -232,7 +232,6 @@ const Form = props => {
         useEffect(() => {
             let data
             if (featureToEdit) {
-                console.log(featureToEdit)
                 data = featureToEdit
             }
             else if (props.selected && props.id === props.id) {
