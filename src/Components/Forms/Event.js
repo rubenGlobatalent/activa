@@ -84,7 +84,8 @@ const Event = props => {
                         date: new Date(date).toISOString(),
                         schedule: schedule,
                         place: place,
-                        link: link
+                        link: link,
+                        modifiedDate: new Date().toISOString()
                     }
 
                 let data
