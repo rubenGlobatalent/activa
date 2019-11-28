@@ -609,8 +609,8 @@ const App = props => {
         ]
       }
     }
-    store.dispatch(setEvents(turf.featureCollection([test])))
-    // fetch()
+    // store.dispatch(setEvents(turf.featureCollection([test])))
+    fetch()
   }, [])
 
 
