@@ -65,7 +65,7 @@ const Form = props => {
         [organization, setOrganization] = useState(''),
         [schedule, setSchedule] = useState(''),
         [description, setDescription] = useState(''),
-        [type, setType] = useState(''),
+        [type, setType] = useState('periódica'),
         [twitter, setTwitter] = useState(''),
         [facebook, setFacebook] = useState(''),
         [youtube, setYoutube] = useState(''),
@@ -176,13 +176,16 @@ const Form = props => {
         },
         clearForm = () => {
             // Until we do have a more elegant way to select all hooks, we will have
-            // to set them one by one by hand
+            // to set them one by one by hand.
+            // UPDATE: We do have a more elegant way. Instead of using useState, we can use
+            // a reducer, store all local state in a single state object and dispatch actions
+            // to the local reducer, a la redux
             setName('')
             setSport('')
             setOrganization('')
             setSchedule('')
             setDescription('')
-            setType('puntual')
+            setType('periódica')
             setTwitter('')
             setFacebook('')
             setYoutube('')
@@ -213,7 +216,7 @@ const Form = props => {
             setOrganization(data.properties.organization ? data.properties.organization : '')
             setSchedule(data.properties.schedule ? data.properties.schedule : '')
             setDescription(data.properties.description ? data.properties.description : '')
-            setType(data.properties.type ? data.properties.type : '')
+            setType(data.properties.type ? data.properties.type : 'periódica')
             setTwitter(data.properties.twitter ? data.properties.twitter : '')
             setFacebook(data.properties.facebook ? data.properties.facebook : '')
             setYoutube(data.properties.youtube ? data.properties.youtube : '')
@@ -228,19 +231,19 @@ const Form = props => {
             setUID(data.properties.id ? data.properties.id : null)
         }
 
-        const featureToEdit = props.activities.features.find(feature => feature.properties.id === props.id)
-        useEffect(() => {
-            let data
-            if (featureToEdit) {
-                data = featureToEdit
-            }
-            else if (props.selected && props.id === props.id) {
-                data = props.selected
-            }
-            if (data) {
-                setData(data)
-            }
-        }, [featureToEdit, props.selected])
+    const featureToEdit = props.activities.features.find(feature => feature.properties.id === props.id)
+    useEffect(() => {
+        let data
+        if (featureToEdit) {
+            data = featureToEdit
+        }
+        else if (props.selected && props.id === props.id) {
+            data = props.selected
+        }
+        if (data) {
+            setData(data)
+        }
+    }, [featureToEdit, props.selected])
 
     // Conditional rendering
     const imageName = file ? <span className="file-name"> {file.name} </span> : null,
@@ -299,12 +302,6 @@ const Form = props => {
                                         <label className="radio">
                                             <input type="radio" required checked={type === 'periódica'} name="type" value="periódica" onChange={e => setType(e.target.value)} />
                                             {` `}Periódica
-                                </label>
-                                    </div>
-                                    <div className="is-fullwidth">
-                                        <label className="radio">
-                                            <input type="radio" required name="type" checked={type === 'puntual'} value="puntual" onChange={e => setType(e.target.value)} />
-                                            {` `}Puntual
                                 </label>
                                     </div>
                                 </div>
@@ -445,7 +442,7 @@ const Form = props => {
         )
     }
 
-    else return <AskRegistration type={'Activity'}/>
+    else return <AskRegistration type={'Activity'} />
 
 }
 
