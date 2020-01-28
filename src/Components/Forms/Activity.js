@@ -224,9 +224,9 @@ const Form = props => {
             setOrganizer(data.properties.organizer ? data.properties.organizer : false)
             setEmail(data.properties.email ? data.properties.email : '')
             setPhone(data.properties.phone ? data.properties.phone : '')
-            setFeature(data.properties.feature ? JSON.parse(data.properties.feature) : defaultFeature)
-            setImprovements(data.properties.improvements ? JSON.parse(data.properties.improvements) : defaultImprovements)
-            setUrbanFurniture(data.properties.furniture ? JSON.parse(data.properties.furniture) : defaultFurniture)
+            setFeature(data.properties.feature ? data.properties.feature : defaultFeature)
+            setImprovements(data.properties.improvements ? data.properties.improvements : defaultImprovements)
+            setUrbanFurniture(data.properties.furniture ? data.properties.furniture : defaultFurniture)
             setFeatureGeometry(data.geometry)
             setUID(data.properties.id ? data.properties.id : null)
         }
