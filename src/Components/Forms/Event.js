@@ -13,6 +13,7 @@ import Header from './Components/Header'
 import ImagePreview from './Components/ImagePreview'
 import FileName from './Components/FileName'
 import AskRegistration from './Components/AskRegistration'
+import Calendar from 'react-calendar'
 
 const mapStateToProps = state => ({
     selected: state.selected,
@@ -25,7 +26,7 @@ const Event = props => {
     // Hooks
     const { t } = useTranslation('general', { useSuspense: false }),
         [name, setName] = useState(''),
-        [date, setDate] = useState(''),
+        [date, setDate] = useState(new Date()),
         [image, setImage] = useState(null),
         [schedule, setSchedule] = useState(''),
         [place, setPlace] = useState(''),
@@ -50,7 +51,8 @@ const Event = props => {
         if (data) {
             setUID(data.properties.id ? data.properties.id : null)
             setName(data.properties.name || '')
-            setDate(data.properties.date || '')
+            if (data.properties.date) setDate(new Date(data.properties.date))
+            else setDate(new Date())
             setImage(data.properties.image || null)
             setPlace(data.properties.place || '')
             setDescription(data.properties.description || '')
@@ -81,7 +83,7 @@ const Event = props => {
                         description: description.length > 0 ? description.replace(/\r?\n/g, '<br/>') : '',
                         email: email,
                         creatorUID: props.user.uid,
-                        date: new Date(date).toISOString(),
+                        date: date.toISOString(),
                         schedule: schedule,
                         place: place,
                         link: link,
@@ -120,7 +122,7 @@ const Event = props => {
         },
         clearData = () => {
             setName('')
-            setDate('')
+            setDate(new Date())
             setImage(null)
             setSchedule('')
             setPlace('')
@@ -137,7 +139,7 @@ const Event = props => {
             <div className="modal is-active animated fadeIn faster">
                 <div className="modal-background" onClick={() => navigate('/')}></div>
                 <form className="modal-card" onSubmit={submitData}>
-                    <Header type={'Event'}/>
+                    <Header type={'Event'} />
                     <section className="modal-card-body">
                         <div className="field">
                             <label className="label">{t('eventsForm.nameTitle')}</label>
@@ -213,11 +215,14 @@ const Event = props => {
                         <div className="columns">
                             <div className="field column">
                                 <label className="label">{t('eventsForm.dateTitle')}</label>
-                                <div className="control has-icons-left is-expanded">
+                                {/* <div className="control has-icons-left is-expanded">
                                     <input required type="date" className="input" value={date} onChange={e => setDate(e.target.value)} />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faCalendar} />
                                     </span>
+                                </div> */}
+                                <div>
+                                    <Calendar value={date} onChange={setDate} minDate={new Date()} />
                                 </div>
                             </div>
                             <div className="field column">
@@ -260,7 +265,7 @@ const Event = props => {
         )
     }
 
-    else return <AskRegistration type='Event'/>
+    else return <AskRegistration type='Event' />
 
 }
 
