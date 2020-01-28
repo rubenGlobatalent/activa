@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import { connect } from 'react-redux'
-import { navigate} from "@reach/router"
+import { navigate } from "@reach/router"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
@@ -183,8 +183,8 @@ const loadLayers = (map, sources, mode, filters) => {
                 // zoom is 10 (or greater) -> circle radius will be 5px
                 12, 6
             ],
-            'circle-color': '#00aec7',
-            'circle-stroke-color': '#00aec7'
+            'circle-color': '#ff1f4b',
+            'circle-stroke-color': '#ff1f4b'
         }
     })
 },
@@ -498,7 +498,7 @@ const Map = props => {
         unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge="">{t('events')}</a>
     }
     else {
-        if (unread === 0){
+        if (unread === 0) {
             unreadLink = <a>{t('events')}</a>
         }
         else {
