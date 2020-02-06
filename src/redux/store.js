@@ -21,19 +21,18 @@ const initialState = {
   districts: districts,
   selected: null,
   user: null,
-  mode: 'activities'
+  mode: 'activities',
+  fetching: true
 }
 
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
-    console.log(serializedState)
     if (serializedState === null) {
       return undefined;
     }
     return JSON.parse(serializedState);
   } catch (err) {
-    console.log(err)
     return undefined;
   }
 }
@@ -92,6 +91,8 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         mode: action.payload
       })
+    case `SET_FETCHING`:
+      return { ...state, fetching: action.payload }
     default:
       return state
   }
@@ -140,6 +141,10 @@ export const addComment = payload => {
 
 export const setMode = payload => {
   return { type: `SET_MODE`, payload };
+}
+
+export const setFetching = payload => {
+  return { type: `SET_FETCHING`, payload };
 }
 
 // Create a Redux store holding the state of your app.

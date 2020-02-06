@@ -49,7 +49,8 @@ const mapStateToProps = state => ({
     filters_activities: state.filters_activities,
     filters_districts: state.filters_districts,
     mode: state.mode,
-    user: state.user
+    user: state.user,
+    fetching: state.fetching
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -239,15 +240,15 @@ const loadLayers = (map, sources, mode, filters) => {
             map.on('touchend', type.name, e => handler(e, data, type.mode))
         })
     },
-    initializeMap = ({ setMap, setDraw, mapContainer, layers, mode, sources, filters }) => {
+    initializeMap = ({ setMap, setWritableMap, setDraw, mapContainer, layers, mode, sources, filters }) => {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: `mapbox://styles/mapbox/${mapStyles[layers]}-v9`,
             center: [-4.4214, 36.7213],
-            // zoom: 12,
+            zoom: 12,
             attributionControl: false,
-            // minZoom: 12
+            minZoom: 12
         }),
             attribution = new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com" target="_blank"><strong>Cartometrics</strong></a>'] }),
             navigation = new mapboxgl.NavigationControl(),
@@ -282,6 +283,7 @@ const loadLayers = (map, sources, mode, filters) => {
                 filters)
 
             addInteractivity(map, layerTypes, handleInteraction, sources.activities, mode)
+            setWritableMap(true)
         })
 
     }
@@ -299,6 +301,7 @@ const Map = props => {
         [filteredData, setFilteredData] = useState(props.activities),
         [filteredEventsData, setFilteredEventsData] = useState(props.events),
         [unread, setUnread] = useState(0),
+        [writableMap, setWritableMap] = useState(false),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
@@ -315,6 +318,7 @@ const Map = props => {
         }
 
     useEffect(() => {
+
         if (map) {
             const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false],
                 pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true]
@@ -392,7 +396,7 @@ const Map = props => {
         else {
             store.dispatch(deleteFilters())
         }
-    }, [props.activities.features.length, props.filters_activities.join(), props.filters_districts.join()])
+    }, [props.fetching, writableMap, props.filters_activities.join(), props.filters_districts.join()])
 
     useEffect(() => {
         if (map) {
@@ -418,6 +422,7 @@ const Map = props => {
     useEffect(() => {
         initializeMap({
             setMap,
+            setWritableMap,
             setDraw,
             mapContainer,
             layers,
