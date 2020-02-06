@@ -245,9 +245,9 @@ const loadLayers = (map, sources, mode, filters) => {
             container: mapContainer.current,
             style: `mapbox://styles/mapbox/${mapStyles[layers]}-v9`,
             center: [-4.4214, 36.7213],
-            zoom: 12,
+            // zoom: 12,
             attributionControl: false,
-            minZoom: 12
+            // minZoom: 12
         }),
             attribution = new mapboxgl.AttributionControl({ customAttribution: ['Developed by <a href="https://cartometrics.com" target="_blank"><strong>Cartometrics</strong></a>'] }),
             navigation = new mapboxgl.NavigationControl(),

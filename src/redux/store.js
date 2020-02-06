@@ -27,31 +27,30 @@ const initialState = {
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
+    console.log(serializedState)
     if (serializedState === null) {
       return undefined;
     }
     return JSON.parse(serializedState);
   } catch (err) {
+    console.log(err)
     return undefined;
   }
-},
-  saveState = state => {
-    try {
-      const serializedState = JSON.stringify(state);
-      localStorage.setItem('state', serializedState);
-    } catch {
-      // ignore write errors
-    }
-  };
+}
+const saveState = state => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('state', serializedState);
+  } catch {
+    // ignore write errors
+  }
+};
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case `SET_ACTIVITIES`:
       const categories = new Set(turf.propReduce(action.payload, (acc, current) => [...acc, current.sport], []))
-      return Object.assign({}, state, {
-        activities: action.payload,
-        categories_activities: Array.from(categories)
-      })
+      return { ...state, activities: action.payload, categories_activities: Array.from(categories) }
     case `SET_EVENTS`:
       return Object.assign({}, state, {
         events: action.payload

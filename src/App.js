@@ -7,6 +7,7 @@ import { Router } from "@reach/router"
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
+import { assocPath, pipe, ifElse, identity } from 'ramda'
 
 import { store, setActivities, setUser, setEvents } from './redux/store'
 import Map from './Components/Map/Map'
@@ -537,79 +538,52 @@ const App = props => {
   }, [])
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetch = () => {
       firebase.firestore().collection('sports').onSnapshot(async querySnapshot => {
-        const snapshot = await querySnapshot,
+        const snapshot = querySnapshot
 
-          features = snapshot.docs.map(doc => {
-            let data = doc.data()
-            data.properties.id = doc.id
-            data.properties.pointInLine = false
-            if (turf.getType(data) === 'LineString') {
-              data.geometry.coordinates = Object.values(data.geometry.coordinates)
-            }
+        const features = snapshot.docs.map(doc => {
+          const data = doc.data()
+          const id = doc.id
 
-            return data
-          }),
+          const addId = assocPath(['properties', 'id'], id)
+          const addFalseLineProperty = assocPath(['properties', 'pointInLine'], false)
 
-          exploded = features
-            .filter(feature => turf.getType(feature) === 'LineString')
-            .map(feature => turf.explode(feature).features)
-            .flat()
-            // Deep clone properties to be able to set pointInLine property immutably
-            .map(feature => {
-              const propertiesDeepClone = { ...feature.properties }
-              feature.properties = propertiesDeepClone
-              return feature
-            })
-            /* Add property pointInLine to be able to separate the pointActivities layer
-            from the pointInLineActivities layer */
-            .map(feature => {
-              feature.properties.pointInLine = true
-              return feature
-            })
+          let object
+          if (turf.getType(data) === 'LineString') {
+            object = assocPath(['geometry', 'coordinates'], Object.values(data.geometry.coordinates), data)
+          }
+          else object = data
 
-        store.dispatch(setActivities(turf.featureCollection([...features, ...exploded])))
+          return pipe(addId, addFalseLineProperty)(object)
+
+        })
+
+        const exploded = features
+          .filter(feature => turf.getType(feature) === 'LineString')
+          .map(feature => turf.explode(feature).features)
+          .flat()
+          .map(assocPath(['properties', 'pointInLine'], true))
+
+        const collection = turf.featureCollection([...features, ...exploded])
+
+        store.dispatch(setActivities(collection))
       })
 
       firebase.firestore().collection('events').onSnapshot(async querySnapshot => {
-        const snapshot = await querySnapshot
+        const snapshot = querySnapshot
 
         const features = snapshot.docs.map(doc => {
-            let data = doc.data()
-            data.properties.id = doc.id
-            return data
-          })
+          let data = doc.data()
+          return assocPath(['properties', 'id'], doc.id, data)
+        })
 
-        store.dispatch(setEvents(turf.featureCollection(features)))
+        const collection = turf.featureCollection(features)
+
+        store.dispatch(setEvents(collection))
       })
-      
+
     }
-    const test = {
-      "type": "Feature",
-      "properties": {
-        "name": "foo",
-        "organizer": "bar",
-        "description": "foo",
-        "email": "foo@bar.test",
-        "creatorUID": "qbFycZmYNsgUIsr7w1fcNROd0xv1",
-        "date": "2019-11-28T00:00:00.000Z",
-        "modifiedDate": "2019-11-30T00:00:00.000Z",
-        "schedule": "",
-        "place": "foo",
-        "id": "test",
-        "link": "https://foo.com",
-        "image": "https://firebasestorage.googleapis.com/v0/b/recomendador-534fb.appspot.com/o/image%2Fcb0581a9-669d-4e18-9f3d-e7064daca235?alt=media&token=16e57907-7941-4e46-bf9d-7be2bb3b7aa1"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.408762096090982,
-          36.724568043058454
-        ]
-      }
-    }
-    // store.dispatch(setEvents(turf.featureCollection([test])))
     fetch()
   }, [])
 
