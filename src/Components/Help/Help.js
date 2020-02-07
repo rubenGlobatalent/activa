@@ -15,6 +15,10 @@ import logoGeotecnologia from '../../assets/img/geotecnologia.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons"
+import { connect } from 'react-redux'
+import { store, setShowSteps } from '../../redux/store'
+
+
 
 const style = {
     modalCard: {
@@ -67,10 +71,14 @@ const style = {
     }
 };
 
+const mapStateToProps = state => ({
+    steps: state.steps_visibility
+})
+
 const Help = props => {
 
     const buttonClickHandler = () => {
-        props.displayStepsAfterHelp();
+        store.dispatch(setShowSteps(true))
         navigate('/')
     };
 
@@ -167,4 +175,7 @@ const Help = props => {
 
 }
 
-export default Help
+export default connect(
+    mapStateToProps,
+    null
+)(Help)

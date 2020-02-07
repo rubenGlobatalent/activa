@@ -22,7 +22,8 @@ const initialState = {
   selected: null,
   user: null,
   mode: 'activities',
-  fetching: true
+  fetching: true,
+  steps_visibility: true
 }
 
 const loadState = () => {
@@ -93,6 +94,8 @@ const rootReducer = (state = initialState, action) => {
       })
     case `SET_FETCHING`:
       return { ...state, fetching: action.payload }
+    case `SET_STEPS_VISIBILITY`:
+      return { ...state, steps_visibility: action.payload }
     default:
       return state
   }
@@ -145,6 +148,10 @@ export const setMode = payload => {
 
 export const setFetching = payload => {
   return { type: `SET_FETCHING`, payload };
+}
+
+export const setShowSteps = payload => {
+  return { type: `SET_STEPS_VISIBILITY`, payload };
 }
 
 // Create a Redux store holding the state of your app.

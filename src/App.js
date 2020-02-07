@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import ReactGA from 'react-ga'
 import { NotificationContainer } from 'react-notifications'
 import { Steps } from 'intro.js-react'
@@ -7,9 +7,9 @@ import { Router } from "@reach/router"
 // OPTIMIZE IMPORTS
 import firebase from 'firebase'
 import * as turf from '@turf/turf'
-import { assocPath, pipe, ifElse, identity } from 'ramda'
+import { assocPath, pipe } from 'ramda'
 
-import { store, setActivities, setUser, setEvents, setFetching } from './redux/store'
+import { store, setActivities, setUser, setEvents, setFetching, setShowSteps } from './redux/store'
 import Map from './Components/Map/Map'
 import Header from './Components/Header/Header'
 import Dashboard from './Components/User/User'
@@ -35,13 +35,11 @@ firebase.initializeApp({
 const mapStateToProps = state => ({
   activities: state.activities,
   events: state.events,
-  fetching: state.fetching
+  fetching: state.fetching,
+  steps: state.steps_visibility
 })
 
 const App = props => {
-  const [visibility, setVisibility] = useState({
-    steps: false
-  })
 
   const initialStep = 0,
     steps = [
@@ -67,12 +65,10 @@ const App = props => {
       }
     ]
 
-  const displayStepsAfterHelp = () => {
-    setVisibility({ ...visibility, steps: true })
-  },
-    stepsOnExit = () => {
-      setVisibility({ ...visibility, steps: false })
-    }
+  const stepsOnExit = () => {
+
+    store.dispatch(setShowSteps(false))
+  }
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
@@ -154,10 +150,10 @@ const App = props => {
         <EventSidebar path='/events/:id' />
         <SportForm path='/activities/:id/edit' />
         <EventForm path='/events/:id/edit' />
-        <Help path='/help' displayStepsAfterHelp={displayStepsAfterHelp} />
+        <Help path='/help' />
       </Router>
       <Steps
-        enabled={visibility.steps}
+        enabled={props.steps}
         steps={steps}
         initialStep={initialStep}
         onExit={stepsOnExit}
