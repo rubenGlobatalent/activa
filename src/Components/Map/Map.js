@@ -519,7 +519,7 @@ const Map = props => {
                 <div className="tabs is-centered is-toggle is-small" style={style.tabs}>
                     <ul>
                         <li className={`has-text-weight-bold ${'activities' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('activities')}><a >{t('activities')}</a></li>
-                        <li className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
+                        <li title={t('eventsDescription')} className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
                             {unreadLink}
                         </li>
                     </ul>
