@@ -30,7 +30,7 @@ const style = {
         marginBottom: 0
     },
     tabsComponent: {
-        zIndex: 1
+        zIndex: 999999
     },
     tabsContainer: {
         position: 'absolute',
