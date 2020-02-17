@@ -1,5 +1,6 @@
 import { createStore } from 'redux'
 import * as turf from '@turf/turf'
+import { v4 as uuid } from 'uuid'
 import districts from '../assets/data/districts.json'
 
 
@@ -96,6 +97,8 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, fetching: action.payload }
     case `SET_STEPS_VISIBILITY`:
       return { ...state, steps_visibility: action.payload }
+    case `SET_NEWDATA`:
+      return { ...state, newData: uuid() }
     default:
       return state
   }
@@ -104,6 +107,10 @@ const rootReducer = (state = initialState, action) => {
 // ACTIONS
 export const setActivities = payload => {
   return { type: `SET_ACTIVITIES`, payload };
+}
+
+export const setNewData = payload => {
+  return { type: `SET_NEWDATA`, payload };
 }
 
 export const setEvents = payload => {

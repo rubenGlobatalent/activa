@@ -157,8 +157,7 @@ const Form = props => {
                     if (turf.getType(feature) === 'LineString') {
                         feature.geometry.coordinates = { ...feature.geometry.coordinates }
                     }
-                    const response = await saveData(props.selected.properties.id, databaseRef, feature)
-
+                    await saveData(props.selected.properties.id, databaseRef, feature)
 
                     setProgress(false)
                     NotificationManager.success('Actividad creada con éxito.')

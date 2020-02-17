@@ -30,7 +30,7 @@ const style = {
         marginBottom: 0
     },
     tabsComponent: {
-        zIndex: 999999
+        zIndex: 1
     },
     tabsContainer: {
         position: 'absolute',
@@ -50,7 +50,8 @@ const mapStateToProps = state => ({
     filters_districts: state.filters_districts,
     mode: state.mode,
     user: state.user,
-    fetching: state.fetching
+    fetching: state.fetching,
+    newData: state.newData
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -318,7 +319,6 @@ const Map = props => {
         }
 
     useEffect(() => {
-
         if (map) {
             const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false],
                 pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true]
@@ -396,7 +396,7 @@ const Map = props => {
         else {
             store.dispatch(deleteFilters())
         }
-    }, [props.fetching, writableMap, props.filters_activities.join(), props.filters_districts.join()])
+    }, [props.fetching, props.newData, writableMap, props.filters_activities.join(), props.filters_districts.join()])
 
     useEffect(() => {
         if (map) {

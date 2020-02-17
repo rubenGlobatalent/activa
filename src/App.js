@@ -9,7 +9,7 @@ import firebase from 'firebase'
 import * as turf from '@turf/turf'
 import { assocPath, pipe } from 'ramda'
 
-import { store, setActivities, setUser, setEvents, setFetching, setShowSteps } from './redux/store'
+import { store, setActivities, setUser, setEvents, setFetching, setShowSteps, setNewData } from './redux/store'
 import Map from './Components/Map/Map'
 import Header from './Components/Header/Header'
 import Dashboard from './Components/User/User'
@@ -117,6 +117,7 @@ const App = props => {
 
         store.dispatch(setActivities(collection))
         store.dispatch(setFetching(false))
+        store.dispatch(setNewData())
       })
 
       firebase.firestore().collection('events').onSnapshot(async querySnapshot => {
@@ -131,6 +132,7 @@ const App = props => {
 
         store.dispatch(setEvents(collection))
         store.dispatch(setFetching(false))
+        store.dispatch(setNewData())
 
       })
 
