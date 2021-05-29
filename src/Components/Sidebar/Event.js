@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faMinus, faEnvelope, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 import { Link } from '@reach/router'
-import { format } from 'date-fns'
 
 import Description from './Components/Description'
 import Image from './Components/Image'
 import NotFound from './Components/NotFound'
 import Footer from './Components/Footer'
+import EventSchedule from "./Components/EventSchedule";
+import useScheduleRange from '../../hooks/useScheduleRange'
 
 const mapStateToProps = state => ({
     events: state.events,
@@ -20,11 +21,15 @@ const Event = props => {
     const [expanded, setExpanded] = useState(true),
         [data, setData] = useState(undefined)
 
+    const { scheduleStart, scheduleEnd, setSchedule } = useScheduleRange()
+
     const feature = props.events.features.find(feature => feature.properties.id === props.id)
 
     useEffect(() => {
         setData(feature)
-    }, [feature])
+
+        if (feature?.properties) setSchedule(feature.properties.schedule)
+    }, [feature, setSchedule])
 
     if (data) {
 
@@ -50,7 +55,8 @@ const Event = props => {
                     <Image data={data.properties.image} />
                     <div className="card-content">
                         <p>
-                            <span className="has-text-weight-bold">Cuándo:</span> <time dateTime={data.properties.date}>{format(new Date(data.properties.date), 'dd/MM/yyyy')}</time>
+                            <span className="has-text-weight-bold">{'Cuándo: '}</span>
+                            <EventSchedule day={data.properties.date} start={scheduleStart} end={scheduleEnd} />
                         </p>
                         <p>
                             <span className="has-text-weight-bold">Donde:</span> {data.properties.place}
