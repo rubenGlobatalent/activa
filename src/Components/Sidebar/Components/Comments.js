@@ -140,7 +140,7 @@ const Comment = props => {
                     </p>
                 </div>
                 <div className="field">
-                    {/* 
+                    {/*
                 <div className="buttons">
                     <button className="button" type="button">
                         <FontAwesomeIcon className="icon is-size-7" icon={faBold} onClick={textBold} />
@@ -227,9 +227,7 @@ const Comment = props => {
             if (!result.fetching && result.data) {
                 store.dispatch(setComments(result.data.comments))
             }
-        }, [result.fetching])
-
-
+        }, [result.data, result.fetching])
 
         const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
         return (

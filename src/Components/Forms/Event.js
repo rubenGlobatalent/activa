@@ -14,6 +14,7 @@ import ImagePreview from './Components/ImagePreview'
 import FileName from './Components/FileName'
 import AskRegistration from './Components/AskRegistration'
 import Calendar from 'react-calendar'
+import useScheduleRange from '../../hooks/useScheduleRange'
 
 const mapStateToProps = state => ({
     selected: state.selected,
@@ -28,7 +29,6 @@ const Event = props => {
         [name, setName] = useState(''),
         [date, setDate] = useState(new Date()),
         [image, setImage] = useState(null),
-        [schedule, setSchedule] = useState(''),
         [place, setPlace] = useState(''),
         [description, setDescription] = useState(''),
         [link, setLink] = useState(''),
@@ -38,6 +38,9 @@ const Event = props => {
         [geometry, setGeometry] = useState([0, 0]),
         [progress, setProgress] = useState(false),
         [uid, setUID] = useState(null)
+
+    const { schedule, setSchedule, scheduleStart, scheduleEnd, setScheduleStart, setScheduleEnd } =
+        useScheduleRange()
 
     const feature = props.events.features.find(feature => feature.properties.id === props.id)
     useEffect(() => {
@@ -54,6 +57,7 @@ const Event = props => {
             if (data.properties.date) setDate(new Date(data.properties.date))
             else setDate(new Date())
             setImage(data.properties.image || null)
+            setSchedule(data.properties.schedule || '')
             setPlace(data.properties.place || '')
             setDescription(data.properties.description || '')
             setLink(data.properties.link || '')
@@ -61,7 +65,7 @@ const Event = props => {
             setOrganizer(data.properties.organizer || '')
             setGeometry(data.geometry.coordinates)
         }
-    }, [feature, props.selected])
+    }, [feature, props.selected, setSchedule])
 
     const saveData = (uid, ref, data) => {
         if (uid) {
@@ -228,13 +232,25 @@ const Event = props => {
                             <div className="field column">
                                 <label className="label">{t('eventsForm.scheduleTitle')}</label>
                                 <div className="control has-icons-left is-expanded">
-                                    <input className="input" type="time" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
+                                    <input
+                                        className="input"
+                                        type="time"
+                                        placeholder={t('eventsForm.schedulePlaceholder')}
+                                        value={scheduleStart}
+                                        onChange={e => setScheduleStart(e.target.value)}
+                                    />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faClock} />
                                     </span>
                                 </div>
                                 <div className="control has-icons-left is-expanded">
-                                    <input className="input" type="time" placeholder={t('eventsForm.schedulePlaceholder')} value={schedule} onChange={e => setSchedule(e.target.value)} />
+                                    <input
+                                        className="input"
+                                        type="time"
+                                        placeholder={t('eventsForm.schedulePlaceholder')}
+                                        value={scheduleEnd}
+                                        onChange={e => setScheduleEnd(e.target.value)}
+                                    />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faClock} />
                                     </span>
