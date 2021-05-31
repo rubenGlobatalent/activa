@@ -34,7 +34,7 @@ const Event = props => {
     if (data) {
 
         return (
-            <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "scroll", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
+            <article className="card animated fadeIn faster" style={{ zIndex: 10, maxHeight: "75vh", overflowY: "auto", position: "absolute", top: "4.5rem", left: "0.7rem", width: "20rem" }}>
                 <header className="card-header">
                     <h2 className="is-size-6 card-header-title">
                         {data.properties.name}
