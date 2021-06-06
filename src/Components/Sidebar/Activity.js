@@ -118,8 +118,7 @@ const Sidebar = props => {
                         </span>
                     </Link>
                 </header>
-
-                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem 1rem 1rem" }}>
+                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem" }}>
                 <Image data={data.properties.image} />
 
                     <div className="card-content">

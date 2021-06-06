@@ -51,7 +51,7 @@ const Event = props => {
                     </Link>
                 </header>
 
-                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem 1rem 1rem" }}>
+                <div style={{ display: expanded ? "block" : "none", padding: "0 1rem" }}>
                     <Image data={data.properties.image} />
                     <div className="card-content">
                         <p>
@@ -65,15 +65,16 @@ const Event = props => {
                             <span className="has-text-weight-bold">Quien la organiza:</span> {data.properties.organizer}
                         </p>
                         <Description data={data.properties.description} />
-                        <div className={`box has-background-white-bis is-paddingless ${(!data.properties.email && !data.properties.link) ? 'is-sr-only' : ''}`}>
+                        {data.properties.email || data.properties.link ? (
+                          <div className="box has-background-white-bis is-paddingless">
                             <h2 className="title is-size-6 has-background-grey-lighter" style={{ paddingLeft: "0.25rem" }}>Enlaces de interes</h2>
                             <div className="subtitle is-size-7">
                                 {data.properties.email ? <div><a href={`mailto:${data.properties.email}`} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faEnvelope} /></span>Correo</a></div> : null}
                                 {data.properties.link ? <div><a href={data.properties.link} target="_blank" rel="noopener noreferrer"><span className="icon"><FontAwesomeIcon icon={faExternalLinkAlt} /></span>Inscripción</a></div> : null}
                                 <br />
                             </div>
-
-                        </div>
+                          </div>
+                        ) : null}
                     </div>
                 </div>
                 <Footer user={props.user} id={data.properties.id} creatorUID={data.properties.creatorUID} collection={'events'} type={'Event'} />
