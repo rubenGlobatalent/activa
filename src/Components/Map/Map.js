@@ -316,6 +316,7 @@ const Map = props => {
         changeMode = mode => {
             setMode(mode)
             store.dispatch(set_Mode(mode))
+            navigate('/');
         }
 
     useEffect(() => {
