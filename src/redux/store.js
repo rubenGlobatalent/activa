@@ -2,6 +2,7 @@ import { createStore } from 'redux'
 import * as turf from '@turf/turf'
 import { v4 as uuid } from 'uuid'
 import districts from '../assets/data/districts.json'
+import { omit } from 'ramda'
 
 
 /**
@@ -24,7 +25,8 @@ const initialState = {
   user: null,
   mode: 'activities',
   fetching: true,
-  steps_visibility: true
+  steps_visibility: true,
+  session_viewed_events: []
 }
 
 const loadState = () => {
@@ -40,7 +42,7 @@ const loadState = () => {
 }
 const saveState = state => {
   try {
-    const serializedState = JSON.stringify(state);
+    const serializedState = JSON.stringify(omit(['session_viewed_events'],state));
     localStorage.setItem('state', serializedState);
   } catch {
     // ignore write errors
@@ -99,6 +101,9 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, steps_visibility: action.payload }
     case `SET_NEWDATA`:
       return { ...state, newData: uuid() }
+    case `ADD_SESSION_VIEWED_EVENT`:
+      const currentViewEvents = state.session_viewed_events || []
+      return { ...state, session_viewed_events: [...currentViewEvents, action.payload ] }
     default:
       return state
   }
@@ -159,6 +164,10 @@ export const setFetching = payload => {
 
 export const setShowSteps = payload => {
   return { type: `SET_STEPS_VISIBILITY`, payload };
+}
+
+export const addSessionViewedEvent = payload => {
+  return {type: 'ADD_SESSION_VIEWED_EVENT', payload};
 }
 
 // Create a Redux store holding the state of your app.

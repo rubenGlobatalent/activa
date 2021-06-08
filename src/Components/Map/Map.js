@@ -51,7 +51,8 @@ const mapStateToProps = state => ({
     mode: state.mode,
     user: state.user,
     fetching: state.fetching,
-    newData: state.newData
+    newData: state.newData,
+    session_viewed_events: state.session_viewed_events
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -185,8 +186,20 @@ const loadLayers = (map, sources, mode, filters) => {
                 // zoom is 10 (or greater) -> circle radius will be 5px
                 12, 6
             ],
-            'circle-color': '#ff1f4b',
-            'circle-stroke-color': '#ff1f4b'
+            'circle-color':  [
+                'match',
+                ['get', 'unread'],
+                'true',
+                '#ff8326',
+                '#ff1f4b',
+            ],
+            'circle-stroke-color': [
+                'match',
+                ['get', 'unread'],
+                'true',
+                '#ff8326',
+                '#ff1f4b',
+            ],
         }
     })
 },
@@ -289,6 +302,15 @@ const loadLayers = (map, sources, mode, filters) => {
 
     }
 
+const addUnreadFlag = (events = {type: "FeatureCollection", features: []}, unreadEventIds = []) => {
+    const features = events.features.map(event => {
+        const unread = `${unreadEventIds.includes(event.properties.id)}`
+        return {...event, properties: {...event.properties, unread } }
+    })
+
+    return {...events, features};
+}
+
 const Map = props => {
     const [map, setMap] = useState(null),
         [draw, setDraw] = useState(null),
@@ -301,7 +323,7 @@ const Map = props => {
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
         [filteredData, setFilteredData] = useState(props.activities),
         [filteredEventsData, setFilteredEventsData] = useState(props.events),
-        [unread, setUnread] = useState(0),
+        [unreadEventIds, setUnreadEventIds] = useState([]),
         [writableMap, setWritableMap] = useState(false),
         { t } = useTranslation('general', { useSuspense: false })
 
@@ -324,9 +346,9 @@ const Map = props => {
             const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false],
                 pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true]
 
-            let districtFilter,
-                sourceData,
-                sourceEventsData
+            const currentEvents = addUnreadFlag(props.events, unreadEventIds)
+
+            let districtFilter, sourceData, sourceEventsData
 
             if (props.filters_activities.length > 0) {
                 const activityFilter = ['match', ['get', 'sport'], [...props.filters_activities], true, false]
@@ -337,8 +359,7 @@ const Map = props => {
                 setFilterLineActivity(activityFilter)
                 setFilterPointsActivity(['all', activityFilter, pointActivitiesFilter])
                 setFilterPointsInLineActivity(['all', activityFilter, pointInLineActivitiesFilter])
-            }
-            else {
+            } else {
                 map.setFilter('lineActivities', null)
                 map.setFilter('pointActivities', pointActivitiesFilter)
                 map.setFilter('pointInLineActivities', pointInLineActivitiesFilter)
@@ -373,17 +394,16 @@ const Map = props => {
                         districtsCollection
                     ).features,
                     events = turf.pointsWithinPolygon(
-                        props.events,
+                        currentEvents,
                         districtsCollection
                     )
 
                 sourceData = turf.featureCollection([...lines, ...points])
                 sourceEventsData = events
-            }
-            else {
+            } else {
                 districtFilter = ['match', ['get', 'name'], 'none', true, false]
                 sourceData = props.activities
-                sourceEventsData = props.events
+                sourceEventsData = currentEvents
             }
             map.setFilter('districts', districtFilter)
             map.getSource('activities').setData(sourceData)
@@ -392,12 +412,10 @@ const Map = props => {
             setFilterDistrict(districtFilter)
             setFilteredData(sourceData)
             setFilteredEventsData(sourceEventsData)
-
-        }
-        else {
+        } else {
             store.dispatch(deleteFilters())
         }
-    }, [props.fetching, props.newData, writableMap, props.filters_activities.join(), props.filters_districts.join()])
+    }, [props.fetching, props.newData, writableMap, props.filters_activities.join(), props.filters_districts.join(), unreadEventIds])
 
     useEffect(() => {
         if (map) {
@@ -494,23 +512,15 @@ const Map = props => {
 
     useEffect(() => {
         if (props.user) {
-            setUnread(props.events.features.filter(event => new Date(event.properties.modifiedDate) >= new Date(props.user.lastConnection)).length)
+            const currentViewEvents = props.session_viewed_events || []
+            setUnreadEventIds(props.events.features.filter(event => {
+              return (
+                !currentViewEvents.includes(event.properties.id) &&
+                new Date(event.properties.modifiedDate) >= new Date(props.user.lastConnection)
+              )
+            }).map(({properties: { id } }) => id))
         }
-    }, [props.user, props.events])
-
-    let unreadLink
-
-    if (!props.user) {
-        unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge="">{t('events')}</a>
-    }
-    else {
-        if (unread === 0) {
-            unreadLink = <a>{t('events')}</a>
-        }
-        else {
-            unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge={unread}>{t('events')}</a>
-        }
-    }
+    }, [props.user, props.events, props.session_viewed_events])
 
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >
@@ -521,7 +531,12 @@ const Map = props => {
                     <ul>
                         <li className={`has-text-weight-bold ${'activities' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('activities')}><a >{t('activities')}</a></li>
                         <li title={t('eventsDescription')} className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
-                            {unreadLink}
+                            <a
+                              className={'unread-link has-badge-rounded has-badge-small'}
+                              data-badge={props.user && unreadEventIds.length ? unreadEventIds.length : undefined}
+                            >
+                                {t('events')}
+                            </a>
                         </li>
                     </ul>
                 </div>

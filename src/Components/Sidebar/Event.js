@@ -10,12 +10,16 @@ import NotFound from './Components/NotFound'
 import Footer from './Components/Footer'
 import EventSchedule from "./Components/EventSchedule";
 import useScheduleRange from '../../hooks/useScheduleRange'
+import { addSessionViewedEvent } from "../../redux/store";
 
 const mapStateToProps = state => ({
     events: state.events,
     user: state.user
 })
 
+const mapDispatchToProps = (dispatch) => ({
+    addSessionViewedEvent: (payload) => dispatch(addSessionViewedEvent(payload)),
+})
 
 const Event = props => {
     const [expanded, setExpanded] = useState(true),
@@ -30,6 +34,11 @@ const Event = props => {
 
         if (feature?.properties) setSchedule(feature.properties.schedule)
     }, [feature, setSchedule])
+
+    const { id: eventId, addSessionViewedEvent } = props
+    useEffect(() => {
+        addSessionViewedEvent(eventId)
+    }, [addSessionViewedEvent, eventId])
 
     if (data) {
 
@@ -87,5 +96,5 @@ const Event = props => {
 
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(Event)
