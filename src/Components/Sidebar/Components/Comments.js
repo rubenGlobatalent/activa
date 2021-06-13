@@ -229,7 +229,12 @@ const Comment = props => {
             }
         }, [result.data, result.fetching])
 
-        const comments = props.comments.map(comment => <li key={comment.id} style={style.paddedBot}><Comment {...comment} user={props.user} /></li>)
+        const comments = props.comments.map((comment, index) => (
+            <li key={comment.id} style={index < props.comments.length - 1 ? style.paddedBot : undefined}>
+               <Comment {...comment} user={props.user} />
+            </li>
+        ))
+
         return (
             <>
                 <hr className="navbar-divider" />

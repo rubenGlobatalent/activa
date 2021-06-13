@@ -11,6 +11,9 @@ import * as turf from '@turf/turf'
 import { store, selectFeature, deleteFilters, setMode as set_Mode } from '../../redux/store'
 import sports from '../../assets/data/sports.json'
 import Legend from './Components/Legend.js'
+import { addUnreadFlag, getMapUnreadBasedValue } from "../../utils/unreadEvents";
+import useUnreadEvents from "../../hooks/useUnreadEvents";
+import animatePaintProperties, { stopAnimation as stopMapAnimation } from "../../utils/animatePaintProperties";
 
 const reqSvgs = require.context('../../assets/icons', true, /\.png$/)
 const sportsIcons = sports.list.map(sport => ({
@@ -51,7 +54,8 @@ const mapStateToProps = state => ({
     mode: state.mode,
     user: state.user,
     fetching: state.fetching,
-    newData: state.newData
+    newData: state.newData,
+    session_viewed_events: state.session_viewed_events
 })
 
 const loadLayers = (map, sources, mode, filters) => {
@@ -71,28 +75,30 @@ const loadLayers = (map, sources, mode, filters) => {
         }
     }
 
-    map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': [
-                'interpolate', ['linear'], ['zoom'],
-                15, 0,
-                15.05, ['get', 'height']
-            ],
-            'fill-extrusion-base': [
-                'interpolate', ['linear'], ['zoom'],
-                15, 0,
-                15.05, ['get', 'min_height']
-            ],
-            'fill-extrusion-opacity': 0.6
-        }
-    }, labelLayerId)
+    if (map.getSource('composite')) {
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': [
+                    'interpolate', ['linear'], ['zoom'],
+                    15, 0,
+                    15.05, ['get', 'height']
+                ],
+                'fill-extrusion-base': [
+                    'interpolate', ['linear'], ['zoom'],
+                    15, 0,
+                    15.05, ['get', 'min_height']
+                ],
+                'fill-extrusion-opacity': 0.6
+            }
+        }, labelLayerId)
+    }
 
     map.addSource('activities', {
         type: 'geojson',
@@ -174,21 +180,31 @@ const loadLayers = (map, sources, mode, filters) => {
             'circle-radius': [
                 "interpolate", ["linear"], ["zoom"],
                 // zoom is 5 (or less) -> circle radius will be 1px
-                5, 1,
+                5, 2,
                 // zoom is 10 (or greater) -> circle radius will be 5px
-                12, 4
-            ],
-            'circle-stroke-width': [
-                "interpolate", ["linear"], ["zoom"],
-                // zoom is 5 (or less) -> circle radius will be 1px
-                5, 1,
-                // zoom is 10 (or greater) -> circle radius will be 5px
-                12, 6
+                12, 10
             ],
             'circle-color': '#ff1f4b',
-            'circle-stroke-color': '#ff1f4b'
+            'circle-stroke-color': '#ff1f4b',
         }
     })
+
+      const updateFn = multiplier => ({
+          'circle-stroke-width': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              // zoom is 5 (or less) -> circle radius will be 1px
+              5,
+              getMapUnreadBasedValue(2 * multiplier, 0),
+              // zoom is 10 (or greater) -> circle radius will be 5px
+              12,
+              getMapUnreadBasedValue(8 * multiplier, 0)
+          ],
+          'circle-stroke-opacity': getMapUnreadBasedValue(1 - multiplier, 0)
+      })
+
+      animatePaintProperties({ map, updateFn })
 },
     handleInteraction = (e, data, mode) => {
 
@@ -301,11 +317,16 @@ const Map = props => {
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
         [filteredData, setFilteredData] = useState(props.activities),
         [filteredEventsData, setFilteredEventsData] = useState(props.events),
-        [unread, setUnread] = useState(0),
         [writableMap, setWritableMap] = useState(false),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
+
+    const unreadEventIds = useUnreadEvents({
+        user: props.user,
+        events: props.events,
+        sessionViewedEvents: props.session_viewed_events
+    })
 
     const toggleLegend = () => {
         setLegend(!legend)
@@ -316,6 +337,7 @@ const Map = props => {
         changeMode = mode => {
             setMode(mode)
             store.dispatch(set_Mode(mode))
+            navigate('/');
         }
 
     useEffect(() => {
@@ -323,9 +345,9 @@ const Map = props => {
             const pointActivitiesFilter = ["==", ['get', 'pointInLine'], false],
                 pointInLineActivitiesFilter = ["==", ['get', 'pointInLine'], true]
 
-            let districtFilter,
-                sourceData,
-                sourceEventsData
+            const currentEvents = addUnreadFlag(props.events, unreadEventIds)
+
+            let districtFilter, sourceData, sourceEventsData
 
             if (props.filters_activities.length > 0) {
                 const activityFilter = ['match', ['get', 'sport'], [...props.filters_activities], true, false]
@@ -336,8 +358,7 @@ const Map = props => {
                 setFilterLineActivity(activityFilter)
                 setFilterPointsActivity(['all', activityFilter, pointActivitiesFilter])
                 setFilterPointsInLineActivity(['all', activityFilter, pointInLineActivitiesFilter])
-            }
-            else {
+            } else {
                 map.setFilter('lineActivities', null)
                 map.setFilter('pointActivities', pointActivitiesFilter)
                 map.setFilter('pointInLineActivities', pointInLineActivitiesFilter)
@@ -372,17 +393,16 @@ const Map = props => {
                         districtsCollection
                     ).features,
                     events = turf.pointsWithinPolygon(
-                        props.events,
+                        currentEvents,
                         districtsCollection
                     )
 
                 sourceData = turf.featureCollection([...lines, ...points])
                 sourceEventsData = events
-            }
-            else {
+            } else {
                 districtFilter = ['match', ['get', 'name'], 'none', true, false]
                 sourceData = props.activities
-                sourceEventsData = props.events
+                sourceEventsData = currentEvents
             }
             map.setFilter('districts', districtFilter)
             map.getSource('activities').setData(sourceData)
@@ -391,31 +411,33 @@ const Map = props => {
             setFilterDistrict(districtFilter)
             setFilteredData(sourceData)
             setFilteredEventsData(sourceEventsData)
-
-        }
-        else {
+        } else {
             store.dispatch(deleteFilters())
         }
-    }, [props.fetching, props.newData, writableMap, props.filters_activities.join(), props.filters_districts.join()])
+    }, [props.fetching, props.newData, writableMap, props.filters_activities.join(), props.filters_districts.join(), unreadEventIds])
 
     useEffect(() => {
         if (map) {
-            map.setStyle(`mapbox://styles/mapbox/${mapStyles[layers]}-v9`)
-            map.once('styledata', () => {
-                loadLayers(map, {
-                    sportsIcons: sportsIcons,
-                    districts: props.districts,
-                    activities: filteredData,
-                    events: filteredEventsData
-                },
-                    mode,
-                    {
-                        pointInLineActivities: filterPointsInLineActivity,
-                        pointActivities: filterPointsActivity,
-                        lineActivities: filterLineActivity,
-                        districts: filterDistrict
-                    })
-            })
+            (async function() {
+                await stopMapAnimation();
+                map.setStyle(`mapbox://styles/mapbox/${mapStyles[layers]}-v9`)
+                map.once('styledata', () => {
+                    loadLayers(map, {
+                          sportsIcons: sportsIcons,
+                          districts: props.districts,
+                          activities: filteredData,
+                          events: filteredEventsData
+                      },
+                      mode,
+                      {
+                          pointInLineActivities: filterPointsInLineActivity,
+                          pointActivities: filterPointsActivity,
+                          lineActivities: filterLineActivity,
+                          districts: filterDistrict
+                      })
+
+                })
+            })()
         }
     }, [layers])
 
@@ -491,26 +513,6 @@ const Map = props => {
 
     }, [mode])
 
-    useEffect(() => {
-        if (props.user) {
-            setUnread(props.events.features.filter(event => new Date(event.properties.modifiedDate) >= new Date(props.user.lastConnection)).length)
-        }
-    }, [props.user, props.events])
-
-    let unreadLink
-
-    if (!props.user) {
-        unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge="">{t('events')}</a>
-    }
-    else {
-        if (unread === 0) {
-            unreadLink = <a>{t('events')}</a>
-        }
-        else {
-            unreadLink = <a className={'has-badge-danger has-badge-rounded has-badge-small'} data-badge={unread}>{t('events')}</a>
-        }
-    }
-
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >
             {props.children}
@@ -520,7 +522,12 @@ const Map = props => {
                     <ul>
                         <li className={`has-text-weight-bold ${'activities' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('activities')}><a >{t('activities')}</a></li>
                         <li title={t('eventsDescription')} className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
-                            {unreadLink}
+                            <a
+                              className={'unread-link has-badge-danger has-badge-rounded has-badge-small'}
+                              data-badge={props.user && unreadEventIds.length ? unreadEventIds.length : undefined}
+                            >
+                                {t('events')}
+                            </a>
                         </li>
                     </ul>
                 </div>

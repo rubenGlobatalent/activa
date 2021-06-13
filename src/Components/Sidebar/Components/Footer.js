@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 const style = {
     display: 'block',
-    paddingBottom: '.5rem'
+    paddingBottom: '1.25rem'
 }
 
 const removePoint = async (id, collection) => {
