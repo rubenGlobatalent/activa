@@ -11,6 +11,9 @@ import * as turf from '@turf/turf'
 import { store, selectFeature, deleteFilters, setMode as set_Mode } from '../../redux/store'
 import sports from '../../assets/data/sports.json'
 import Legend from './Components/Legend.js'
+import { addUnreadFlag, getMapUnreadBasedValue } from "../../utils/unreadEvents";
+import useUnreadEvents from "../../hooks/useUnreadEvents";
+import animatePaintProperties, { stopAnimation as stopMapAnimation } from "../../utils/animatePaintProperties";
 
 const reqSvgs = require.context('../../assets/icons', true, /\.png$/)
 const sportsIcons = sports.list.map(sport => ({
@@ -72,28 +75,30 @@ const loadLayers = (map, sources, mode, filters) => {
         }
     }
 
-    map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': [
-                'interpolate', ['linear'], ['zoom'],
-                15, 0,
-                15.05, ['get', 'height']
-            ],
-            'fill-extrusion-base': [
-                'interpolate', ['linear'], ['zoom'],
-                15, 0,
-                15.05, ['get', 'min_height']
-            ],
-            'fill-extrusion-opacity': 0.6
-        }
-    }, labelLayerId)
+    if (map.getSource('composite')) {
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': [
+                    'interpolate', ['linear'], ['zoom'],
+                    15, 0,
+                    15.05, ['get', 'height']
+                ],
+                'fill-extrusion-base': [
+                    'interpolate', ['linear'], ['zoom'],
+                    15, 0,
+                    15.05, ['get', 'min_height']
+                ],
+                'fill-extrusion-opacity': 0.6
+            }
+        }, labelLayerId)
+    }
 
     map.addSource('activities', {
         type: 'geojson',
@@ -175,33 +180,31 @@ const loadLayers = (map, sources, mode, filters) => {
             'circle-radius': [
                 "interpolate", ["linear"], ["zoom"],
                 // zoom is 5 (or less) -> circle radius will be 1px
-                5, 1,
+                5, 2,
                 // zoom is 10 (or greater) -> circle radius will be 5px
-                12, 4
+                12, 10
             ],
-            'circle-stroke-width': [
-                "interpolate", ["linear"], ["zoom"],
-                // zoom is 5 (or less) -> circle radius will be 1px
-                5, 1,
-                // zoom is 10 (or greater) -> circle radius will be 5px
-                12, 6
-            ],
-            'circle-color':  [
-                'match',
-                ['get', 'unread'],
-                'true',
-                '#ff8326',
-                '#ff1f4b',
-            ],
-            'circle-stroke-color': [
-                'match',
-                ['get', 'unread'],
-                'true',
-                '#ff8326',
-                '#ff1f4b',
-            ],
+            'circle-color': '#ff1f4b',
+            'circle-stroke-color': '#ff1f4b',
         }
     })
+
+      const updateFn = multiplier => ({
+          'circle-stroke-width': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              // zoom is 5 (or less) -> circle radius will be 1px
+              5,
+              getMapUnreadBasedValue(2 * multiplier, 0),
+              // zoom is 10 (or greater) -> circle radius will be 5px
+              12,
+              getMapUnreadBasedValue(8 * multiplier, 0)
+          ],
+          'circle-stroke-opacity': getMapUnreadBasedValue(1 - multiplier, 0)
+      })
+
+      animatePaintProperties({ map, updateFn })
 },
     handleInteraction = (e, data, mode) => {
 
@@ -302,15 +305,6 @@ const loadLayers = (map, sources, mode, filters) => {
 
     }
 
-const addUnreadFlag = (events = {type: "FeatureCollection", features: []}, unreadEventIds = []) => {
-    const features = events.features.map(event => {
-        const unread = `${unreadEventIds.includes(event.properties.id)}`
-        return {...event, properties: {...event.properties, unread } }
-    })
-
-    return {...events, features};
-}
-
 const Map = props => {
     const [map, setMap] = useState(null),
         [draw, setDraw] = useState(null),
@@ -323,11 +317,16 @@ const Map = props => {
         [filterDistrict, setFilterDistrict] = useState(['match', ['get', 'name'], 'none', true, false]),
         [filteredData, setFilteredData] = useState(props.activities),
         [filteredEventsData, setFilteredEventsData] = useState(props.events),
-        [unreadEventIds, setUnreadEventIds] = useState([]),
         [writableMap, setWritableMap] = useState(false),
         { t } = useTranslation('general', { useSuspense: false })
 
     const mapContainer = useRef(null)
+
+    const unreadEventIds = useUnreadEvents({
+        user: props.user,
+        events: props.events,
+        sessionViewedEvents: props.session_viewed_events
+    })
 
     const toggleLegend = () => {
         setLegend(!legend)
@@ -419,22 +418,26 @@ const Map = props => {
 
     useEffect(() => {
         if (map) {
-            map.setStyle(`mapbox://styles/mapbox/${mapStyles[layers]}-v9`)
-            map.once('styledata', () => {
-                loadLayers(map, {
-                    sportsIcons: sportsIcons,
-                    districts: props.districts,
-                    activities: filteredData,
-                    events: filteredEventsData
-                },
-                    mode,
-                    {
-                        pointInLineActivities: filterPointsInLineActivity,
-                        pointActivities: filterPointsActivity,
-                        lineActivities: filterLineActivity,
-                        districts: filterDistrict
-                    })
-            })
+            (async function() {
+                await stopMapAnimation();
+                map.setStyle(`mapbox://styles/mapbox/${mapStyles[layers]}-v9`)
+                map.once('styledata', () => {
+                    loadLayers(map, {
+                          sportsIcons: sportsIcons,
+                          districts: props.districts,
+                          activities: filteredData,
+                          events: filteredEventsData
+                      },
+                      mode,
+                      {
+                          pointInLineActivities: filterPointsInLineActivity,
+                          pointActivities: filterPointsActivity,
+                          lineActivities: filterLineActivity,
+                          districts: filterDistrict
+                      })
+
+                })
+            })()
         }
     }, [layers])
 
@@ -510,18 +513,6 @@ const Map = props => {
 
     }, [mode])
 
-    useEffect(() => {
-        if (props.user) {
-            const currentViewEvents = props.session_viewed_events || []
-            setUnreadEventIds(props.events.features.filter(event => {
-              return (
-                !currentViewEvents.includes(event.properties.id) &&
-                new Date(event.properties.modifiedDate) >= new Date(props.user.lastConnection)
-              )
-            }).map(({properties: { id } }) => id))
-        }
-    }, [props.user, props.events, props.session_viewed_events])
-
     return (
         <div style={style.map} ref={el => (mapContainer.current = el)} >
             {props.children}
@@ -532,7 +523,7 @@ const Map = props => {
                         <li className={`has-text-weight-bold ${'activities' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('activities')}><a >{t('activities')}</a></li>
                         <li title={t('eventsDescription')} className={`has-text-weight-bold ${'events' === mode ? 'is-active' : 'has-background'}`} style={style.tabsComponent} onClick={() => changeMode('events')}>
                             <a
-                              className={'unread-link has-badge-rounded has-badge-small'}
+                              className={'unread-link has-badge-danger has-badge-rounded has-badge-small'}
                               data-badge={props.user && unreadEventIds.length ? unreadEventIds.length : undefined}
                             >
                                 {t('events')}
