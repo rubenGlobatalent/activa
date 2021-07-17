@@ -58,6 +58,21 @@ const mapStateToProps = state => ({
     session_viewed_events: state.session_viewed_events
 })
 
+const updatePaintPropertiesFn = multiplier => ({
+    'circle-stroke-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        // zoom is 5 (or less) -> circle radius will be 1px
+        5,
+        getMapUnreadBasedValue(2 * multiplier, 0),
+        // zoom is 10 (or greater) -> circle radius will be 5px
+        12,
+        getMapUnreadBasedValue(8 * multiplier, 0)
+    ],
+    'circle-stroke-opacity': getMapUnreadBasedValue(1 - multiplier, 0)
+});
+
 const loadLayers = (map, sources, mode, filters) => {
     sources.sportsIcons.forEach(icon => {
         map.loadImage(icon.icon, (error, image) => {
@@ -178,33 +193,22 @@ const loadLayers = (map, sources, mode, filters) => {
         },
         paint: {
             'circle-radius': [
-                "interpolate", ["linear"], ["zoom"],
+                'interpolate',
+                ['linear'],
+                ['zoom'],
                 // zoom is 5 (or less) -> circle radius will be 1px
-                5, 2,
+                5,
+                2,
                 // zoom is 10 (or greater) -> circle radius will be 5px
-                12, 10
+                12,
+                10
             ],
             'circle-color': '#ff1f4b',
-            'circle-stroke-color': '#ff1f4b',
+            'circle-stroke-color': '#ff1f4b'
         }
     })
 
-      const updateFn = multiplier => ({
-          'circle-stroke-width': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              // zoom is 5 (or less) -> circle radius will be 1px
-              5,
-              getMapUnreadBasedValue(2 * multiplier, 0),
-              // zoom is 10 (or greater) -> circle radius will be 5px
-              12,
-              getMapUnreadBasedValue(8 * multiplier, 0)
-          ],
-          'circle-stroke-opacity': getMapUnreadBasedValue(1 - multiplier, 0)
-      })
-
-      animatePaintProperties({ map, updateFn })
+    if(mode==='events') animatePaintProperties({ map, updateFn: updatePaintPropertiesFn });
 },
     handleInteraction = (e, data, mode) => {
 
@@ -467,8 +471,11 @@ const Map = props => {
 
     useEffect(() => {
         const activities = ['pointActivities', 'lineActivities', 'pointInLineActivities']
-        if (map) {
-            const oldControl = draw
+        if (!map) return;
+        (async () => {
+            await stopMapAnimation();
+
+            const oldControl = draw;
             switch (mode) {
                 case ('events'):
                     const newEventControl = new MapboxDraw({
@@ -485,6 +492,11 @@ const Map = props => {
                     map.setLayoutProperty('events', 'visibility', 'visible')
                     map.removeControl(oldControl)
                     map.addControl(newEventControl, 'bottom-right')
+
+                    map.once('draw.render', () => {
+                        animatePaintProperties({ map, updateFn: updatePaintPropertiesFn })
+                    });
+
                     map.on('draw.create', e => handleDraw(e, newEventControl, mode))
                     setDraw(newEventControl)
 
@@ -506,11 +518,8 @@ const Map = props => {
                     map.on('draw.create', e => handleDraw(e, newActivityControl, mode))
                     setDraw(newActivityControl)
                     break;
-                default:
-                    break;
             }
-        }
-
+        })();
     }, [mode])
 
     return (
